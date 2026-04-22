@@ -1,3 +1,5 @@
+function enableRunaway() {
+
 // =========================
 // 🎬 GIF STORY MODE
 // =========================
@@ -13,7 +15,7 @@ const gifStages = [
 ]
 
 // =========================
-// 💔 STORY LINES (同步 GIF)
+// 💔 STORY LINES
 // =========================
 const storyLines = [
     "Hi… I’m happy to see you 💕",
@@ -32,20 +34,9 @@ const storyLines = [
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
     "Hmm? You really want YES that badly? 😏",
-    "Not so easy~ try teasing me first 😌",
+    "Slow down… I like being chased 😌",
     "You didn’t even play with me yet 👀",
-    "I think you skipped a step… 😳",
-    "Slow down… I like being chased 😏",
-    "You’re acting too confident right now 😌",
-    "I might say yes… if you behave 😌💖",
-    "Try clicking No just once… I’m curious 👀",
-    "You’re not getting YES that easily 😈",
-    "I think you like me more than you admit 😏",
-    "Hmm… you’re making me shy 🥺",
-    "You really want the ending that fast? 💞",
-    "You’re cute when you rush 😳",
-    "I like watching you try 😏",
-    "Almost there… but not yet 💖"
+    "I might say yes… if you behave 💖"
 ]
 
 // =========================
@@ -53,14 +44,11 @@ const yesTeasePokes = [
 // =========================
 const noMessages = [
     "No",
-    "Are you sure? I'm really cute🥺",
-    "You’re getting punished for that 😤",
-    "Careful… I might fall for you even more 😏.",
-    "Hey… now that actually hurts 💔",
-    "Please don’t do this to me… 🥺",
-    "I thought you liked me… 😢",
-    "Okay… I’ll stop asking… 🥀",
-    "You can't catch me anyway 😜"
+    "Are you sure? 🥺",
+    "You’re breaking my heart 😤",
+    "Please don’t… 💔",
+    "I thought you liked me 😢",
+    "Okay… I’ll run away 😭"
 ]
 
 // =========================
@@ -69,7 +57,6 @@ const noMessages = [
 let yesTeasedCount = 0
 let noClickCount = 0
 let runawayEnabled = false
-let musicPlaying = true
 
 const catGif = document.getElementById('cat-gif')
 const yesBtn = document.getElementById('yes-btn')
@@ -77,31 +64,14 @@ const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 
 // =========================
-// 🎵 MUSIC
+// 🎵 MUSIC SAFE
 // =========================
-music.muted = true
 music.volume = 0.3
-music.play().then(() => {
-    music.muted = false
-}).catch(() => {
+music.play().catch(() => {
     document.addEventListener('click', () => {
-        music.muted = false
         music.play().catch(() => {})
     }, { once: true })
 })
-
-function toggleMusic() {
-    if (musicPlaying) {
-        music.pause()
-        musicPlaying = false
-        document.getElementById('music-toggle').textContent = '🔇'
-    } else {
-        music.muted = false
-        music.play()
-        musicPlaying = true
-        document.getElementById('music-toggle').textContent = '🔊'
-    }
-}
 
 // =========================
 // 💖 YES
@@ -114,15 +84,10 @@ function handleYesClick() {
         return
     }
 
-    showTeaseMessage("Wait... are you really sure? 🥺💞")
+    showTeaseMessage("Okay… 💖")
 
     setTimeout(() => {
-        showTeaseMessage("Okay… I’ll take that as a YES 💖")
-
-        setTimeout(() => {
-            window.location.href = 'yes.html'
-        }, 1200)
-
+        window.location.href = 'yes.html'
     }, 1200)
 }
 
@@ -133,8 +98,11 @@ function showTeaseMessage(msg) {
     let toast = document.getElementById('tease-toast')
     toast.textContent = msg
     toast.classList.add('show')
+
     clearTimeout(toast._timer)
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 2500)
+    toast._timer = setTimeout(() => {
+        toast.classList.remove('show')
+    }, 2000)
 }
 
 // =========================
@@ -143,50 +111,25 @@ function showTeaseMessage(msg) {
 function handleNoClick() {
     noClickCount++
 
-    const msgIndex = Math.min(noClickCount, noMessages.length - 1)
-    noBtn.textContent = noMessages[msgIndex]
+    noBtn.textContent = noMessages[Math.min(noClickCount, noMessages.length - 1)]
 
-    // 💖 YES grows
-    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = `${currentSize * 1.3}px`
+    // YES grows slightly (mobile-safe)
+    const size = parseFloat(window.getComputedStyle(yesBtn).fontSize)
+    yesBtn.style.fontSize = `${Math.min(size * 1.1, 48)}px`
 
-    const padY = Math.min(18 + noClickCount * 5, 70)
-    const padX = Math.min(45 + noClickCount * 10, 140)
-    yesBtn.style.padding = `${padY}px ${padX}px`
-
-    // 💔 NO shrinks
-    if (noClickCount >= 2) {
-        const noSize = parseFloat(window.getComputedStyle(noBtn).fontSize)
-        noBtn.style.fontSize = `${Math.max(noSize * 0.85, 10)}px`
-    }
-
-    // 🎬 GIF + STORY
     const gifIndex = Math.min(noClickCount, gifStages.length - 1)
-    swapGif(gifStages[gifIndex])
+    catGif.src = gifStages[gifIndex]
 
     showTeaseMessage(storyLines[gifIndex])
 
-    // 🏃 runaway last stage
-    if (noClickCount >= gifStages.length - 1 && !runawayEnabled) {
+    if (noClickCount >= 6 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
-        showTeaseMessage("I’m really running away now… 😭")
     }
 }
 
 // =========================
-// 🎬 GIF SWAP
-// =========================
-function swapGif(src) {
-    catGif.style.opacity = '0'
-    setTimeout(() => {
-        catGif.src = src
-        catGif.style.opacity = '1'
-    }, 200)
-}
-
-// =========================
-// 🏃 RUNAWAY
+// 📱 MOBILE SAFE RUNAWAY
 // =========================
 function enableRunaway() {
     noBtn.addEventListener('mouseover', runAway)
@@ -196,26 +139,32 @@ function enableRunaway() {
 }
 
 function runAway() {
-    const margin = 40
-    const btnW = noBtn.offsetWidth
-    const btnH = noBtn.offsetHeight
+    const margin = 16
 
-    const maxX = window.innerWidth - btnW - margin
-    const maxY = window.innerHeight - btnH - margin
+    const rect = noBtn.getBoundingClientRect()
 
-    const intensity = Math.min(noClickCount / 8, 1)
+    const vw = document.documentElement.clientWidth
+    const vh = document.documentElement.clientHeight
 
-    const rangeX = maxX * (0.4 + intensity * 0.6)
-    const rangeY = maxY * (0.4 + intensity * 0.6)
+    const maxX = vw - rect.width - margin
+    const maxY = vh - rect.height - margin
 
-    const randomX = Math.random() * rangeX + margin
-    const randomY = Math.random() * rangeY + margin
+    const x = Math.max(margin, Math.random() * maxX)
+    const y = Math.max(margin, Math.random() * maxY)
 
     noBtn.style.position = 'fixed'
-    noBtn.style.left = `${randomX}px`
-    noBtn.style.top = `${randomY}px`
-    noBtn.style.zIndex = '50'
+    noBtn.style.left = `${x}px`
+    noBtn.style.top = `${y}px`
+    noBtn.style.zIndex = '999'
 
-    noBtn.style.transition =
-        'left 0.35s cubic-bezier(.2,.8,.2,1), top 0.35s cubic-bezier(.2,.8,.2,1)'
+    noBtn.style.transition = 'left 0.2s ease, top 0.2s ease'
 }
+
+// =========================
+// 📱 FIX RESIZE BUG
+// =========================
+window.addEventListener('resize', () => {
+    noBtn.style.position = 'fixed'
+})
+
+} // end enableRunaway
