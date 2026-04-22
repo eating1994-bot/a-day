@@ -12,13 +12,13 @@ body {
     align-items: center;
     overflow: hidden;
 
-    /* 💛 浪漫奶油金背景 */
+    /* 💛 奶油金浪漫背景 */
     background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 40%, #FFD1DC 100%);
 
     position: relative;
 }
 
-/* 🌙 柔光浪漫層 */
+/* 🌙 柔光層 */
 body::before {
     content: "";
     position: absolute;
@@ -32,7 +32,7 @@ body::before {
     z-index: 0;
 }
 
-/* Floating hearts background */
+/* 💖 浮動背景 */
 .hearts-bg {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -59,9 +59,13 @@ body::before {
 }
 
 @keyframes floatHearts {
-    from { transform: translateY(0); opacity: 0.2; }
-    to { transform: translateY(-110vh); opacity: 0; }
+    from { transform: translateY(0); }
+    to { transform: translateY(-110vh); }
 }
+
+/* =========================
+   主要容器
+========================= */
 
 .container {
     position: relative;
@@ -70,20 +74,25 @@ body::before {
     padding: 40px 20px;
 }
 
-/* 💖 標題更浪漫 */
+/* 💖 標題 */
 h1 {
     font-size: 2.4rem;
-    color: #d63384;
+    color: #C2185B;
     font-weight: 900;
     margin-bottom: 20px;
-    text-shadow: 0 6px 20px rgba(214, 51, 132, 0.2);
-    animation: floatTitle 3s ease-in-out infinite;
+    text-shadow: 0 6px 20px rgba(194, 24, 91, 0.2);
 }
 
-@keyframes floatTitle {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
+/* 💬 一般文字 */
+p {
+    color: #5A3E2B;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
+
+/* =========================
+   GIF
+========================= */
 
 .gif-container {
     margin: 20px auto;
@@ -122,12 +131,7 @@ h1 {
     font-weight: 900;
     padding: 18px 45px;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 10px 25px rgba(76, 175, 80, 0.35);
-}
-
-#yes-btn:hover {
-    transform: scale(1.08);
 }
 
 /* ❤️ NO */
@@ -140,8 +144,6 @@ h1 {
     font-weight: 700;
     padding: 12px 28px;
     cursor: pointer;
-    transition: left 0.25s ease, top 0.25s ease;
-    box-shadow: 0 6px 18px rgba(231, 76, 60, 0.35);
 }
 
 /* =========================
@@ -151,12 +153,12 @@ h1 {
 #tease-toast {
     margin-top: 14px;
     font-size: 1rem;
-    color: #d63384;
+    color: #E91E8C;
     font-weight: 700;
     font-style: italic;
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: 0.3s ease;
     min-height: 1.5rem;
 }
 
@@ -166,7 +168,7 @@ h1 {
 }
 
 /* =========================
-   MUSIC BUTTON
+   MUSIC
 ========================= */
 
 #music-toggle {
@@ -181,12 +183,8 @@ h1 {
     font-size: 1.4rem;
     cursor: pointer;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     z-index: 100;
-}
-
-#music-toggle:hover {
-    transform: scale(1.1);
 }
 
 /* =========================
@@ -195,17 +193,17 @@ h1 {
 
 .yes-container h1.yes-title {
     font-size: 2.8rem;
-    animation: bounce 0.6s ease infinite alternate;
+    animation: float 2s ease-in-out infinite;
 }
 
-@keyframes bounce {
-    from { transform: translateY(0); }
-    to { transform: translateY(-10px); }
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .yes-message {
     font-size: 1.4rem;
-    color: #e91e8c;
+    color: #E91E8C;
     font-weight: 700;
     margin-top: 24px;
 }
