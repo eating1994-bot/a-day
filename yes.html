@@ -10,11 +10,32 @@
 
     <link rel="stylesheet" href="style.css">
 
+    <!-- 💥 煙火庫 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body>
+
     <div class="hearts-bg"></div>
+
+    <!-- 🎆 煙火層 -->
+    <canvas class="fireworks"></canvas>
 
     <div class="container yes-container">
 
@@ -39,12 +60,36 @@
 
     </div>
 
-    <audio id="bg-music" loop>
+    <audio id="bg-music" loop autoplay>
         <source src="music/glue-song.mp3" type="audio/mpeg">
     </audio>
 
     <button id="music-toggle" onclick="toggleMusic()" title="Toggle music">🔊</button>
 
-    <script src="yes-script.js"></script>
+    <script>
+        // 🎆 自動煙火（重複爆炸效果）
+        function fire() {
+            confetti({
+                particleCount: 120,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // 一進來就放煙火
+        fire();
+        setInterval(fire, 2000);
+
+        // 音樂控制（如果你 yes-script.js 沒寫）
+        const music = document.getElementById("bg-music");
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+
 </body>
 </html>
