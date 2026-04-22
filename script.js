@@ -1,7 +1,7 @@
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",    // 0 normal
     "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",  // 1 confused
-    "https://media1.tenor.com/m/Rvqhj0q2_BkAAAAC/dudu-bubu-hit.gif",             // 2 angry punishing
+    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",             // 2 angry punishing
     "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",             // 3 naughty 
     "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",                     // 4 sad
     "https://media1.tenor.com/m/EIbExNGsANEAAAAC/%C4%91%E1%BB%A3i.gif",             // 5 devastated
