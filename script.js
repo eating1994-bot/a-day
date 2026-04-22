@@ -122,6 +122,7 @@ function handleNoClick() {
     runawayEnabled = true
     showTeaseMessage("Okay... I can't take it anymore 😭")
 }
+}
 
 /* =========================
    🐻 GIF SWAP
