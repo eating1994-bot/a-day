@@ -12,9 +12,7 @@ body {
     align-items: center;
     overflow: hidden;
 
-    /* 💛 奶油金浪漫背景 */
     background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 40%, #FFD1DC 100%);
-
     position: relative;
 }
 
@@ -83,6 +81,12 @@ h1 {
     text-shadow: 0 6px 20px rgba(194, 24, 91, 0.2);
 }
 
+/* ✅ ⭐ 這就是你要的換行重點 */
+.line1,
+.line2 {
+    display: block;
+}
+
 /* 💬 一般文字 */
 p {
     color: #5A3E2B;
@@ -121,7 +125,6 @@ p {
     flex-wrap: wrap;
 }
 
-/* 💚 YES */
 #yes-btn {
     background: linear-gradient(135deg, #7ED957, #4CAF50);
     color: white;
@@ -134,7 +137,6 @@ p {
     box-shadow: 0 10px 25px rgba(76, 175, 80, 0.35);
 }
 
-/* ❤️ NO */
 #no-btn {
     background: linear-gradient(135deg, #ff6b6b, #e74c3c);
     color: white;
