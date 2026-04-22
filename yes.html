@@ -1,95 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>yes love 💖</title>
+<script>
+    const music = document.getElementById("bg-music");
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css">
-
-    <!-- 💥 煙火庫 -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-
-    <style>
-        body {
-            overflow: hidden;
+    function toggleMusic() {
+        if (music.paused) {
+            music.play();
+        } else {
+            music.pause();
         }
+    }
 
-        .fireworks {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-    </style>
-</head>
+    // 💖 愛心感煙火（穩定版）
+    function loveFire() {
+        confetti({
+            particleCount: 80,
+            spread: 80,
+            startVelocity: 30,
+            origin: { y: 0.6 },
+            colors: ["#ff4d6d", "#ff85a2", "#ffb3c1", "#ffffff"],
+            shapes: ["circle"]
+        });
+    }
 
-<body>
+    // 💥 三連浪漫爆炸（更有層次）
+    function burstLove() {
+        loveFire();
+        setTimeout(loveFire, 250);
+        setTimeout(loveFire, 500);
+    }
 
-    <div class="hearts-bg"></div>
+    window.addEventListener("load", () => {
 
-    <!-- 🎆 煙火層 -->
-    <canvas class="fireworks"></canvas>
+        // 💖 一進來直接告白爆炸
+        burstLove();
 
-    <div class="container yes-container">
+        // 💖 持續心動煙火
+        setInterval(() => {
+            burstLove();
+        }, 2000);
 
-        <h1 class="yes-title">You said YES 💖</h1>
-
-        <div class="gif-container">
-            <img id="cat-gif" src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" alt="love">
-        </div>
-
-        <p class="yes-message">
-            I didn’t need a perfect answer…<br>
-            I just needed you 🫶
-        </p>
-
-        <p class="yes-message">
-            I’m so lucky I met you… my lucky princess 💖
-        </p>
-
-        <h2 style="margin-top:25px; color:#ff2e7a;">
-            I’m really glad it’s you 💞
-        </h2>
-
-    </div>
-
-    <audio id="bg-music" loop autoplay>
-        <source src="music/glue-song.mp3" type="audio/mpeg">
-    </audio>
-
-    <button id="music-toggle" onclick="toggleMusic()" title="Toggle music">🔊</button>
-
-    <script>
-        // 🎆 自動煙火（重複爆炸效果）
-        function fire() {
-            confetti({
-                particleCount: 120,
-                spread: 90,
-                origin: { y: 0.6 }
-            });
-        }
-
-        // 一進來就放煙火
-        fire();
-        setInterval(fire, 2000);
-
-        // 音樂控制（如果你 yes-script.js 沒寫）
-        const music = document.getElementById("bg-music");
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-            } else {
-                music.pause();
-            }
-        }
-    </script>
-
-</body>
-</html>
+        // 🎵 背景音樂
+        music.volume = 0.3;
+        music.play().catch(() => {
+            // 自動播放失敗也不會報錯
+        });
+    });
+</script>
