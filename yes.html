@@ -1,3 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yes love 💖</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 💥 煙火庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+
+<div class="container yes-container">
+
+    <h1 class="yes-title">You said YES 💖</h1>
+
+    <div class="gif-container">
+        <img id="cat-gif" src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" alt="love">
+    </div>
+
+    <p class="yes-message">
+        I didn’t need a perfect answer…<br>
+        I just needed you 🫶
+    </p>
+
+    <p class="yes-message">
+        I’m so lucky I met you… 💖
+    </p>
+
+</div>
+
+<!-- 🎵 音樂 -->
+<audio id="bg-music" loop>
+    <source src="music/glue-song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🔊 音樂按鈕 -->
+<button id="music-toggle" onclick="toggleMusic()">🔊</button>
+
 <script>
     const music = document.getElementById("bg-music");
 
@@ -9,19 +51,17 @@
         }
     }
 
-    // 💖 愛心感煙火（穩定版）
+    // 💖 愛心煙火
     function loveFire() {
         confetti({
             particleCount: 80,
             spread: 80,
             startVelocity: 30,
             origin: { y: 0.6 },
-            colors: ["#ff4d6d", "#ff85a2", "#ffb3c1", "#ffffff"],
-            shapes: ["circle"]
+            colors: ["#ff4d6d", "#ff85a2", "#ffb3c1", "#ffffff"]
         });
     }
 
-    // 💥 三連浪漫爆炸（更有層次）
     function burstLove() {
         loveFire();
         setTimeout(loveFire, 250);
@@ -30,18 +70,17 @@
 
     window.addEventListener("load", () => {
 
-        // 💖 一進來直接告白爆炸
+        // 💖 一進來爆炸
         burstLove();
 
-        // 💖 持續心動煙火
-        setInterval(() => {
-            burstLove();
-        }, 2000);
+        // 💖 持續煙火
+        setInterval(burstLove, 2000);
 
-        // 🎵 背景音樂
+        // 🎵 音樂
         music.volume = 0.3;
-        music.play().catch(() => {
-            // 自動播放失敗也不會報錯
-        });
+        music.play().catch(() => {});
     });
 </script>
+
+</body>
+</html>
