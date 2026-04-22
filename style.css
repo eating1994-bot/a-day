@@ -4,16 +4,28 @@
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* =========================
+   🌼 BASE（手機 + 電腦統一）
+========================= */
+
 body {
     min-height: 100vh;
     font-family: 'Nunito', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
+
     overflow: hidden;
 
     background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 40%, #FFD1DC 100%);
     position: relative;
+    text-align: center;
 }
 
 /* 🌙 柔光層 */
@@ -30,13 +42,15 @@ body::before {
     z-index: 0;
 }
 
-/* 💖 浮動背景 */
+/* =========================
+   💖 背景漂浮
+========================= */
+
 .hearts-bg {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     pointer-events: none;
     z-index: 0;
-    overflow: hidden;
 }
 
 .hearts-bg::before,
@@ -62,17 +76,23 @@ body::before {
 }
 
 /* =========================
-   主要容器
+   📦 主內容
 ========================= */
 
 .container {
     position: relative;
     z-index: 1;
     text-align: center;
+
     padding: 40px 20px;
+    max-width: 600px;
+    width: 100%;
 }
 
-/* 💖 標題 */
+/* =========================
+   💖 標題
+========================= */
+
 h1 {
     font-size: 2.4rem;
     color: #C2185B;
@@ -81,21 +101,19 @@ h1 {
     text-shadow: 0 6px 20px rgba(194, 24, 91, 0.2);
 }
 
-/* ✅ ⭐ 這就是你要的換行重點 */
-.line1,
-.line2 {
-    display: block;
-}
+/* =========================
+   💬 文字
+========================= */
 
-/* 💬 一般文字 */
 p {
     color: #5A3E2B;
     font-size: 1.1rem;
     font-weight: 600;
+    line-height: 1.6;
 }
 
 /* =========================
-   GIF
+   🎞 GIF
 ========================= */
 
 .gif-container {
@@ -113,12 +131,12 @@ p {
 }
 
 /* =========================
-   BUTTONS
+   🔘 BUTTONS（統一尺寸）
 ========================= */
 
 .buttons {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     justify-content: center;
     align-items: center;
     margin-top: 30px;
@@ -130,26 +148,43 @@ p {
     color: white;
     border: none;
     border-radius: 18px;
-    font-size: 1.6rem;
+
+    font-size: 1.4rem;
     font-weight: 900;
-    padding: 18px 45px;
+
+    padding: 16px 38px;
     cursor: pointer;
+
     box-shadow: 0 10px 25px rgba(76, 175, 80, 0.35);
+
+    transition: transform 0.2s ease;
+}
+
+#yes-btn:active {
+    transform: scale(1.05);
 }
 
 #no-btn {
     background: linear-gradient(135deg, #ff6b6b, #e74c3c);
     color: white;
     border: none;
+
     border-radius: 12px;
     font-size: 1rem;
     font-weight: 700;
-    padding: 12px 28px;
+
+    padding: 10px 22px;
     cursor: pointer;
+
+    transition: transform 0.2s ease;
+}
+
+#no-btn:active {
+    transform: scale(0.95);
 }
 
 /* =========================
-   TOAST
+   💬 TOAST
 ========================= */
 
 #tease-toast {
@@ -158,6 +193,7 @@ p {
     color: #E91E8C;
     font-weight: 700;
     font-style: italic;
+
     opacity: 0;
     transform: translateY(6px);
     transition: 0.3s ease;
@@ -170,31 +206,36 @@ p {
 }
 
 /* =========================
-   MUSIC
+   🔊 MUSIC BUTTON
 ========================= */
 
 #music-toggle {
     position: fixed;
     bottom: 20px;
     right: 20px;
+
+    width: 50px;
+    height: 50px;
+
     background: rgba(255, 255, 255, 0.85);
     border: none;
     border-radius: 50%;
-    width: 52px;
-    height: 52px;
-    font-size: 1.4rem;
+
+    font-size: 1.2rem;
     cursor: pointer;
+
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+
     z-index: 100;
 }
 
 /* =========================
-   YES PAGE
+   💛 YES PAGE
 ========================= */
 
 .yes-container h1.yes-title {
-    font-size: 2.8rem;
+    font-size: 2.6rem;
     animation: float 2s ease-in-out infinite;
 }
 
@@ -204,8 +245,9 @@ p {
 }
 
 .yes-message {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #E91E8C;
     font-weight: 700;
-    margin-top: 24px;
+    margin-top: 20px;
+    line-height: 1.6;
 }
