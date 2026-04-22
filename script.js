@@ -1,31 +1,31 @@
 const gifStages = [
-    "https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",    // 0 normal
-    "https://media1.tenor.com/m/uDugCXK4vI4AAAAd/chiikawa-hachiware.gif",  // 1 confused
-    "https://media.tenor.com/f_rkpJbH1s8AAAAj/somsom1012.gif",             // 2 pleading
-    "https://media.tenor.com/OGY9zdREsVAAAAAj/somsom1012.gif",             // 3 sad
-    "https://media1.tenor.com/m/WGfra-Y_Ke0AAAAd/chiikawa-sad.gif",       // 4 sadder
-    "https://media.tenor.com/CivArbX7NzQAAAAj/somsom1012.gif",             // 5 devastated
-    "https://media.tenor.com/5_tv1HquZlcAAAAj/chiikawa.gif",               // 6 very devastated
-    "https://media1.tenor.com/m/uDugCXK4vI4AAAAC/chiikawa-hachiware.gif"  // 7 crying runaway
+    "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",    // 0 normal
+    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",  // 1 confused
+    "https://media1.tenor.com/m/Rvqhj0q2_BkAAAAC/dudu-bubu-hit.gif",             // 2 angry punishing
+    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",             // 3 naughty 
+    "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",                     // 4 sad
+    "https://media1.tenor.com/m/EIbExNGsANEAAAAC/%C4%91%E1%BB%A3i.gif",             // 5 devastated
+    "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",               // 6 very devastated
+    "https://media.tenor.com/mRYP23WO1DYAAAAi/ok.gif"  // 7 crying runaway
 ]
 
 const noMessages = [
     "No",
-    "Are you positive? 🤔",
-    "Pookie please... 🥺",
-    "If you say no, I will be really sad...",
-    "I will be very sad... 😢",
-    "Please??? 💔",
-    "Don't do this to me...",
-    "Last chance! 😭",
+    "Are you sure? I'm really cute🥺",
+    "You’re getting punished for that 😤",
+    "Careful… I might fall for you even more 😏.",
+    "Hey… now that actually hurts 💔",
+    "Please don’t do this to me… 🥺",
+    "I thought you liked me… 😢",
+    "Okay… I’ll stop asking… 🥀",
     "You can't catch me anyway 😜"
 ]
 
 const yesTeasePokes = [
-    "try saying no first... I bet you want to know what happens 😏",
-    "go on, hit no... just once 👀",
-    "you're missing out 😈",
-    "click no, I dare you 😏"
+    "try saying no first… don’t be boring 😏",
+    "go on, hit no… I know you want to 👀",
+    "you’re too curious to stop now 😈",
+    "click no… I dare you 😏"
 ]
 
 let yesTeasedCount = 0
