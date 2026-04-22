@@ -9,6 +9,24 @@
 
     <!-- 💥 煙火庫 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* 🌸 花瓣雨 */
+        .petal {
+            position: fixed;
+            top: -10vh;
+            font-size: 18px;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(120vh) rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -18,7 +36,7 @@
     <h1 class="yes-title">You said YES 💖</h1>
 
     <div class="gif-container">
-        <img id="cat-gif" src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" alt="love">
+        <img id="cat-gif" src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif">
     </div>
 
     <p class="yes-message">
@@ -27,7 +45,7 @@
     </p>
 
     <p class="yes-message">
-        I’m so lucky I met you… 💖
+        I’m so lucky I met you 💖
     </p>
 
 </div>
@@ -37,24 +55,20 @@
     <source src="music/glue-song.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🔊 音樂按鈕 -->
 <button id="music-toggle" onclick="toggleMusic()">🔊</button>
 
 <script>
     const music = document.getElementById("bg-music");
 
     function toggleMusic() {
-        if (music.paused) {
-            music.play();
-        } else {
-            music.pause();
-        }
+        if (music.paused) music.play();
+        else music.pause();
     }
 
     // 💖 愛心煙火
     function loveFire() {
         confetti({
-            particleCount: 80,
+            particleCount: 70,
             spread: 80,
             startVelocity: 30,
             origin: { y: 0.6 },
@@ -64,17 +78,38 @@
 
     function burstLove() {
         loveFire();
-        setTimeout(loveFire, 250);
-        setTimeout(loveFire, 500);
+        setTimeout(loveFire, 200);
+        setTimeout(loveFire, 400);
+    }
+
+    // 🌸 花瓣雨
+    function createPetal() {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+
+        petal.innerText = "🌸";
+
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.fontSize = (Math.random() * 20 + 10) + "px";
+        petal.style.animationDuration = (Math.random() * 3 + 3) + "s";
+
+        document.body.appendChild(petal);
+
+        setTimeout(() => {
+            petal.remove();
+        }, 6000);
     }
 
     window.addEventListener("load", () => {
 
-        // 💖 一進來爆炸
+        // 💖 初始爆炸
         burstLove();
 
-        // 💖 持續煙火
-        setInterval(burstLove, 2000);
+        // 💖 持續愛心煙火
+        setInterval(burstLove, 1800);
+
+        // 🌸 花瓣雨速度
+        setInterval(createPetal, 150);
 
         // 🎵 音樂
         music.volume = 0.3;
