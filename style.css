@@ -11,17 +11,21 @@ html, body {
 }
 
 /* =========================
-   🌼 BASE（手機 + 電腦統一）
+   🌼 BASE
 ========================= */
 
 body {
     min-height: 100vh;
     font-family: 'Nunito', sans-serif;
+
     display: flex;
     justify-content: center;
     align-items: center;
 
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding: 16px;
 
     background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 40%, #FFD1DC 100%);
     position: relative;
@@ -43,7 +47,7 @@ body::before {
 }
 
 /* =========================
-   💖 背景漂浮
+   💖 背景
 ========================= */
 
 .hearts-bg {
@@ -57,7 +61,7 @@ body::before {
 .hearts-bg::after {
     content: '💛 ✨ 💖 💛 ✨ 💖';
     position: absolute;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     opacity: 0.18;
     animation: floatHearts 14s linear infinite;
     white-space: nowrap;
@@ -76,15 +80,16 @@ body::before {
 }
 
 /* =========================
-   📦 主內容
+   📦 容器
 ========================= */
 
 .container {
     position: relative;
     z-index: 1;
-    text-align: center;
 
-    padding: 40px 20px;
+    text-align: center;
+    padding: 20px;
+
     max-width: 600px;
     width: 100%;
 }
@@ -94,10 +99,10 @@ body::before {
 ========================= */
 
 h1 {
-    font-size: 2.4rem;
+    font-size: 2rem;
     color: #C2185B;
     font-weight: 900;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     text-shadow: 0 6px 20px rgba(194, 24, 91, 0.2);
 }
 
@@ -107,7 +112,7 @@ h1 {
 
 p {
     color: #5A3E2B;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.6;
 }
@@ -117,70 +122,60 @@ p {
 ========================= */
 
 .gif-container {
-    margin: 20px auto;
+    margin: 16px auto;
     display: flex;
     justify-content: center;
 }
 
 #cat-gif {
-    width: 200px;
-    height: 200px;
+    width: 160px;
+    height: 160px;
     object-fit: contain;
     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
     transition: opacity 0.3s ease;
 }
 
 /* =========================
-   🔘 BUTTONS（統一尺寸）
+   🔘 BUTTONS
 ========================= */
 
 .buttons {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     justify-content: center;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 24px;
     flex-wrap: wrap;
 }
 
+/* YES */
 #yes-btn {
     background: linear-gradient(135deg, #7ED957, #4CAF50);
     color: white;
     border: none;
-    border-radius: 18px;
 
-    font-size: 1.4rem;
+    border-radius: 18px;
+    font-size: 1.2rem;
     font-weight: 900;
 
-    padding: 16px 38px;
+    padding: 14px 30px;
     cursor: pointer;
 
     box-shadow: 0 10px 25px rgba(76, 175, 80, 0.35);
-
-    transition: transform 0.2s ease;
 }
 
-#yes-btn:active {
-    transform: scale(1.05);
-}
-
+/* NO */
 #no-btn {
     background: linear-gradient(135deg, #ff6b6b, #e74c3c);
     color: white;
     border: none;
 
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
 
-    padding: 10px 22px;
+    padding: 10px 18px;
     cursor: pointer;
-
-    transition: transform 0.2s ease;
-}
-
-#no-btn:active {
-    transform: scale(0.95);
 }
 
 /* =========================
@@ -188,8 +183,8 @@ p {
 ========================= */
 
 #tease-toast {
-    margin-top: 14px;
-    font-size: 1rem;
+    margin-top: 12px;
+    font-size: 0.95rem;
     color: #E91E8C;
     font-weight: 700;
     font-style: italic;
@@ -206,22 +201,22 @@ p {
 }
 
 /* =========================
-   🔊 MUSIC BUTTON
+   🔊 MUSIC
 ========================= */
 
 #music-toggle {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 16px;
+    right: 16px;
 
-    width: 50px;
-    height: 50px;
+    width: 46px;
+    height: 46px;
 
     background: rgba(255, 255, 255, 0.85);
     border: none;
     border-radius: 50%;
 
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
 
     backdrop-filter: blur(10px);
@@ -235,7 +230,7 @@ p {
 ========================= */
 
 .yes-container h1.yes-title {
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     animation: float 2s ease-in-out infinite;
 }
 
@@ -245,9 +240,9 @@ p {
 }
 
 .yes-message {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: #E91E8C;
     font-weight: 700;
-    margin-top: 20px;
+    margin-top: 16px;
     line-height: 1.6;
 }
