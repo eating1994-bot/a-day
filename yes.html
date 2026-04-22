@@ -1,51 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>yes love 💖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1 Year Together 🌼</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <!-- 💥 煙火庫 -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<!-- 💥 confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
-    <style>
-        /* 🌸 花瓣雨 */
-        .petal {
-            position: fixed;
-            top: -10vh;
-            font-size: 18px;
-            pointer-events: none;
-            animation: fall linear forwards;
-            z-index: 9999;
-        }
+<style>
+/* 🌼 一周年專屬背景微調 */
+body{
+    background: linear-gradient(135deg, #FFF6D6, #FFE7A3, #FFF0C9);
+}
 
-        @keyframes fall {
-            to {
-                transform: translateY(120vh) rotate(360deg);
-            }
-        }
-    </style>
+/* 🌼 花瓣 */
+.petal {
+    position: fixed;
+    top: -10vh;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(120vh) rotate(360deg);
+    }
+}
+
+/* 💛 溫柔淡入 */
+.container {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
+
 </head>
 
 <body>
 
 <div class="container yes-container">
 
-    <h1 class="yes-title">You said YES 💖</h1>
+    <h1 class="yes-title">1 Year Together 🌼</h1>
 
     <div class="gif-container">
-        <img id="cat-gif" src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif">
+        <img src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" width="200">
     </div>
 
     <p class="yes-message">
-        I didn’t need a perfect answer…<br>
-        I just needed you 🫶
+        One year ago, I met you 💛<br>
+        and somehow… time became softer with you.
     </p>
 
     <p class="yes-message">
-        I’m so lucky I met you 💖
+        Thank you for staying, laughing, and growing with me 🌼
+    </p>
+
+    <p class="yes-message">
+        I hope we get many more years like this.
     </p>
 
 </div>
@@ -58,63 +78,58 @@
 <button id="music-toggle" onclick="toggleMusic()">🔊</button>
 
 <script>
-    const music = document.getElementById("bg-music");
+const music = document.getElementById("bg-music");
 
-    function toggleMusic() {
-        if (music.paused) music.play();
-        else music.pause();
-    }
+/* 🔊 音樂控制 */
+function toggleMusic(){
+    if(music.paused) music.play();
+    else music.pause();
+}
 
-    // 💖 愛心煙火
-    function loveFire() {
-        confetti({
-            particleCount: 70,
-            spread: 80,
-            startVelocity: 30,
-            origin: { y: 0.6 },
-            colors: ["#ff4d6d", "#ff85a2", "#ffb3c1", "#ffffff"]
-        });
-    }
-
-    function burstLove() {
-        loveFire();
-        setTimeout(loveFire, 200);
-        setTimeout(loveFire, 400);
-    }
-
-    // 🌸 花瓣雨
-    function createPetal() {
-        const petal = document.createElement("div");
-        petal.classList.add("petal");
-
-        petal.innerText = "🌸";
-
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.fontSize = (Math.random() * 20 + 10) + "px";
-        petal.style.animationDuration = (Math.random() * 3 + 3) + "s";
-
-        document.body.appendChild(petal);
-
-        setTimeout(() => {
-            petal.remove();
-        }, 6000);
-    }
-
-    window.addEventListener("load", () => {
-
-        // 💖 初始爆炸
-        burstLove();
-
-        // 💖 持續愛心煙火
-        setInterval(burstLove, 1800);
-
-        // 🌸 花瓣雨速度
-        setInterval(createPetal, 150);
-
-        // 🎵 音樂
-        music.volume = 0.3;
-        music.play().catch(() => {});
+/* 🌼 柔和煙火（不爆炸版） */
+function softFire(){
+    confetti({
+        particleCount: 40,
+        spread: 60,
+        startVelocity: 20,
+        origin: { y: 0.7 },
+        colors: ["#fff", "#ffe680", "#ffdf80", "#ffd966"]
     });
+}
+
+/* 🌼 花瓣（小雛菊風） */
+function createPetal(){
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+
+    const flowers = ["🌼","🌼","💛","✨"];
+    petal.innerText = flowers[Math.floor(Math.random()*flowers.length)];
+
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (Math.random()*3 + 3) + "s";
+    petal.style.fontSize = (Math.random()*18 + 12) + "px";
+
+    document.body.appendChild(petal);
+
+    setTimeout(()=>petal.remove(), 7000);
+}
+
+window.addEventListener("load", () => {
+
+    /* 💛 初次柔和煙火 */
+    softFire();
+
+    /* 🌼 偶爾紀念感煙火（不是狂炸） */
+    setInterval(softFire, 4000);
+
+    /* 🌼 花瓣雨 */
+    setInterval(createPetal, 300);
+
+    /* 🎵 音樂 */
+    music.volume = 0.3;
+    music.play().catch(()=>{});
+
+});
 </script>
 
 </body>
