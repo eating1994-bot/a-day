@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
 // =========================
 // 🎬 GIF STORY MODE
@@ -29,7 +29,7 @@ const storyLines = [
 ]
 
 // =========================
-// 💬 YES TEASE (完整保留版)
+// 💬 YES TEASE
 // =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
@@ -116,11 +116,9 @@ noBtn.addEventListener("click", () => {
 
     noBtn.textContent = noMessages[Math.min(noIndex, noMessages.length - 1)]
 
-    // YES grows
     const size = parseFloat(window.getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.1, 52) + "px"
 
-    // GIF
     if (catGif) {
         catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
     }
