@@ -4,35 +4,19 @@
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-}
-
-/* =========================
-   🌼 BASE
-========================= */
-
 body {
     min-height: 100vh;
     font-family: 'Nunito', sans-serif;
 
-    /* ❗ 修復重點：不要 flex 鎖死 */
-    display: block;
-
-    overflow-x: hidden;
-    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 40%, #FFD1DC 100%);
     position: relative;
-    text-align: center;
 }
 
-/* =========================
-   🌙 背景光層
-========================= */
-
+/* 🌙 柔光層 */
 body::before {
     content: "";
     position: absolute;
@@ -43,39 +27,22 @@ body::before {
         radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.4), transparent 45%);
 
     pointer-events: none;
-    z-index: 0;
 }
 
-/* =========================
-   💖 背景漂浮
-========================= */
-
+/* 💖 背景層 */
 .hearts-bg {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 0;
 }
-
-/* =========================
-   📦 主容器
-========================= */
 
 .container {
     position: relative;
-    z-index: 10;
-
     text-align: center;
     padding: 40px 20px;
-
-    max-width: 600px;
-    margin: 0 auto;
 }
 
-/* =========================
-   💖 標題
-========================= */
-
+/* 💖 標題 */
 h1 {
     font-size: 2.4rem;
     color: #C2185B;
@@ -83,10 +50,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* =========================
-   💬 文字
-========================= */
-
+/* 💬 文字 */
 p {
     color: #5A3E2B;
     font-size: 1.1rem;
@@ -94,10 +58,7 @@ p {
     line-height: 1.6;
 }
 
-/* =========================
-   🎞 GIF
-========================= */
-
+/* 🎞 GIF */
 .gif-container {
     margin: 20px auto;
     display: flex;
@@ -105,115 +66,73 @@ p {
 }
 
 #cat-gif {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
 }
 
-/* =========================
-   🔘 BUTTONS（關鍵修復）
-========================= */
-
+/* 🔘 按鈕 */
 .buttons {
-    position: relative;
-    z-index: 20;
-
     display: flex;
-    gap: 14px;
+    gap: 20px;
     justify-content: center;
-    align-items: center;
-
     margin-top: 30px;
     flex-wrap: wrap;
 }
 
-/* YES */
 #yes-btn {
-    position: relative;
-    z-index: 30;
-
-    background: linear-gradient(135deg, #7ED957, #4CAF50);
+    background: #4CAF50;
     color: white;
-
     border: none;
-    border-radius: 18px;
 
     font-size: 1.3rem;
     font-weight: 900;
 
-    padding: 16px 34px;
-    cursor: pointer;
+    padding: 16px 36px;
+    border-radius: 18px;
 
-    box-shadow: 0 10px 25px rgba(76, 175, 80, 0.35);
+    cursor: pointer;
 }
 
-/* NO */
 #no-btn {
-    position: relative;
-    z-index: 30;
-
-    background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+    background: #e74c3c;
     color: white;
-
     border: none;
-    border-radius: 12px;
 
     font-size: 1rem;
     font-weight: 700;
 
-    padding: 10px 20px;
+    padding: 10px 22px;
+    border-radius: 12px;
+
     cursor: pointer;
 }
 
-/* =========================
-   💬 TOAST
-========================= */
-
+/* 💬 toast */
 #tease-toast {
     margin-top: 14px;
     font-size: 1rem;
     color: #E91E8C;
     font-weight: 700;
-    font-style: italic;
-
     opacity: 0;
-    transform: translateY(6px);
-    transition: 0.3s ease;
-    min-height: 1.5rem;
 }
 
 #tease-toast.show {
     opacity: 1;
-    transform: translateY(0);
 }
 
-/* =========================
-   🔊 MUSIC BUTTON
-========================= */
-
+/* 🔊 音樂按鈕 */
 #music-toggle {
     position: fixed;
-    bottom: 16px;
-    right: 16px;
+    bottom: 20px;
+    right: 20px;
 
-    width: 46px;
-    height: 46px;
+    width: 50px;
+    height: 50px;
 
-    background: rgba(255, 255, 255, 0.85);
-    border: none;
     border-radius: 50%;
+    border: none;
 
-    font-size: 1.1rem;
+    background: rgba(255,255,255,0.85);
     cursor: pointer;
-
-    z-index: 100;
-}
-
-/* =========================
-   ❗ CRITICAL FIX（最重要）
-========================= */
-
-.hearts-bg,
-body::before {
-    pointer-events: none;
 }
