@@ -117,11 +117,10 @@ function handleNoClick() {
     swapGif(gifStages[gifIndex])
 
     // 🏃 啟動 runaway
-    if (noClickCount >= 5 && !runawayEnabled) {
-        enableRunaway()
-        runawayEnabled = true
-        showTeaseMessage("You’re making me shy… 😳")
-    }
+   if (noClickCount >= gifStages.length - 1 && !runawayEnabled) {
+    enableRunaway()
+    runawayEnabled = true
+    showTeaseMessage("Okay... I can't take it anymore 😭")
 }
 
 /* =========================
