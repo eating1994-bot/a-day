@@ -1,3 +1,6 @@
+// =========================
+// 🎬 GIF STORY MODE
+// =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
     "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
@@ -9,18 +12,23 @@ const gifStages = [
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
 
-const noMessages = [
-    "No",
-    "Are you sure? I'm really cute🥺",
-    "You’re getting punished for that 😤",
-    "Careful… I might fall for you even more 😏.",
-    "Hey… now that actually hurts 💔",
-    "Please don’t do this to me… 🥺",
-    "I thought you liked me… 😢",
-    "Okay… I’ll stop asking… 🥀",
-    "You can't catch me anyway 😜"
+// =========================
+// 💔 STORY LINES (同步 GIF)
+// =========================
+const storyLines = [
+    "Hi… I’m happy to see you 💕",
+    "Hmm? you’re clicking me?",
+    "Wait… what are you doing? 👀",
+    "Hey stop that 😤",
+    "I’m getting a bit sad… 💔",
+    "It actually hurts now 🥺",
+    "I don’t like this feeling… 🥀",
+    "I think I’m running away… 😭"
 ]
 
+// =========================
+// 💬 YES TEASE
+// =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
     "Hmm? You really want YES that badly? 😏",
@@ -40,6 +48,24 @@ const yesTeasePokes = [
     "Almost there… but not yet 💖"
 ]
 
+// =========================
+// 💔 NO MESSAGES
+// =========================
+const noMessages = [
+    "No",
+    "Are you sure? I'm really cute🥺",
+    "You’re getting punished for that 😤",
+    "Careful… I might fall for you even more 😏.",
+    "Hey… now that actually hurts 💔",
+    "Please don’t do this to me… 🥺",
+    "I thought you liked me… 😢",
+    "Okay… I’ll stop asking… 🥀",
+    "You can't catch me anyway 😜"
+]
+
+// =========================
+// STATE
+// =========================
 let yesTeasedCount = 0
 let noClickCount = 0
 let runawayEnabled = false
@@ -50,9 +76,9 @@ const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 
-/* =========================
-   🎵 MUSIC
-========================= */
+// =========================
+// 🎵 MUSIC
+// =========================
 music.muted = true
 music.volume = 0.3
 music.play().then(() => {
@@ -77,9 +103,9 @@ function toggleMusic() {
     }
 }
 
-/* =========================
-   💖 YES BUTTON
-========================= */
+// =========================
+// 💖 YES
+// =========================
 function handleYesClick() {
     if (!runawayEnabled) {
         const msg = yesTeasePokes[Math.min(yesTeasedCount, yesTeasePokes.length - 1)]
@@ -87,12 +113,22 @@ function handleYesClick() {
         showTeaseMessage(msg)
         return
     }
-    window.location.href = 'yes.html'
+
+    showTeaseMessage("Wait... are you really sure? 🥺💞")
+
+    setTimeout(() => {
+        showTeaseMessage("Okay… I’ll take that as a YES 💖")
+
+        setTimeout(() => {
+            window.location.href = 'yes.html'
+        }, 1200)
+
+    }, 1200)
 }
 
-/* =========================
-   💬 TOAST MESSAGE
-========================= */
+// =========================
+// 💬 MESSAGE
+// =========================
 function showTeaseMessage(msg) {
     let toast = document.getElementById('tease-toast')
     toast.textContent = msg
@@ -101,16 +137,16 @@ function showTeaseMessage(msg) {
     toast._timer = setTimeout(() => toast.classList.remove('show'), 2500)
 }
 
-/* =========================
-   💔 NO CLICK CORE
-========================= */
+// =========================
+// 💔 NO CLICK
+// =========================
 function handleNoClick() {
     noClickCount++
 
     const msgIndex = Math.min(noClickCount, noMessages.length - 1)
     noBtn.textContent = noMessages[msgIndex]
 
-    // 💖 Yes 變大
+    // 💖 YES grows
     const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = `${currentSize * 1.3}px`
 
@@ -118,27 +154,29 @@ function handleNoClick() {
     const padX = Math.min(45 + noClickCount * 10, 140)
     yesBtn.style.padding = `${padY}px ${padX}px`
 
-    // 💔 No 變小
+    // 💔 NO shrinks
     if (noClickCount >= 2) {
         const noSize = parseFloat(window.getComputedStyle(noBtn).fontSize)
         noBtn.style.fontSize = `${Math.max(noSize * 0.85, 10)}px`
     }
 
-    // 🐻 GIF 變化
+    // 🎬 GIF + STORY
     const gifIndex = Math.min(noClickCount, gifStages.length - 1)
     swapGif(gifStages[gifIndex])
 
-    // 🏃 啟動 runaway
-   if (noClickCount >= gifStages.length - 1 && !runawayEnabled) {
-    enableRunaway()
-    runawayEnabled = true
-    showTeaseMessage("Okay... I can't take it anymore 😭")
-}
+    showTeaseMessage(storyLines[gifIndex])
+
+    // 🏃 runaway last stage
+    if (noClickCount >= gifStages.length - 1 && !runawayEnabled) {
+        enableRunaway()
+        runawayEnabled = true
+        showTeaseMessage("I’m really running away now… 😭")
+    }
 }
 
-/* =========================
-   🐻 GIF SWAP
-========================= */
+// =========================
+// 🎬 GIF SWAP
+// =========================
 function swapGif(src) {
     catGif.style.opacity = '0'
     setTimeout(() => {
@@ -147,9 +185,9 @@ function swapGif(src) {
     }, 200)
 }
 
-/* =========================
-   🏃 RUNAWAY UPGRADED
-========================= */
+// =========================
+// 🏃 RUNAWAY
+// =========================
 function enableRunaway() {
     noBtn.addEventListener('mouseover', runAway)
     noBtn.addEventListener('touchstart', runAway, { passive: true })
@@ -159,14 +197,12 @@ function enableRunaway() {
 
 function runAway() {
     const margin = 40
-
     const btnW = noBtn.offsetWidth
     const btnH = noBtn.offsetHeight
 
     const maxX = window.innerWidth - btnW - margin
     const maxY = window.innerHeight - btnH - margin
 
-    // 💖 越後面越難抓
     const intensity = Math.min(noClickCount / 8, 1)
 
     const rangeX = maxX * (0.4 + intensity * 0.6)
@@ -180,26 +216,6 @@ function runAway() {
     noBtn.style.top = `${randomY}px`
     noBtn.style.zIndex = '50'
 
-    // 💫 更順滑動畫
     noBtn.style.transition =
         'left 0.35s cubic-bezier(.2,.8,.2,1), top 0.35s cubic-bezier(.2,.8,.2,1)'
-
-    // 💬 偶爾說話
-    if (Math.random() < 0.6) {
-        const msgs = [
-            "Nooo 😳",
-            "Stop ittt 😭",
-            "Too close!! 🥺",
-            "I’m shy!! 😳",
-            "Not today 😏"
-        ]
-        showTeaseMessage(msgs[Math.floor(Math.random() * msgs.length)])
-    }
-
-    // 🥺 偶爾假裝停下
-    if (Math.random() < 0.15) {
-        setTimeout(() => {
-            showTeaseMessage("...okay that was close 😳")
-        }, 400)
-    }
 }
