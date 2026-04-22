@@ -1,4 +1,4 @@
-function enableRunaway() {
+window.addEventListener("DOMContentLoaded", () => {
 
 // =========================
 // 🎬 GIF STORY MODE
@@ -9,7 +9,7 @@ const gifStages = [
     "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
-    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-dudu-bubu.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
@@ -29,14 +29,25 @@ const storyLines = [
 ]
 
 // =========================
-// 💬 YES TEASE
+// 💬 YES TEASE (完整保留版)
 // =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
     "Hmm? You really want YES that badly? 😏",
-    "Slow down… I like being chased 😌",
+    "Not so easy~ try teasing me first 😌",
     "You didn’t even play with me yet 👀",
-    "I might say yes… if you behave 💖"
+    "I think you skipped a step… 😳",
+    "Slow down… I like being chased 😏",
+    "You’re acting too confident right now 😌",
+    "I might say yes… if you behave 😌💖",
+    "Try clicking No just once… I’m curious 👀",
+    "You’re not getting YES that easily 😈",
+    "I think you like me more than you admit 😏",
+    "Hmm… you’re making me shy 🥺",
+    "You really want the ending that fast? 💞",
+    "You’re cute when you rush 😳",
+    "I like watching you try 😏",
+    "Almost there… but not yet 💖"
 ]
 
 // =========================
@@ -52,119 +63,118 @@ const noMessages = [
 ]
 
 // =========================
-// STATE
+// ELEMENTS
 // =========================
-let yesTeasedCount = 0
-let noClickCount = 0
-let runawayEnabled = false
-
 const catGif = document.getElementById('cat-gif')
 const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
+const toast = document.getElementById('tease-toast')
+
+if (!yesBtn || !noBtn) return
+
+let yesIndex = 0
+let noIndex = 0
+let runawayEnabled = false
 
 // =========================
 // 🎵 MUSIC SAFE
 // =========================
-music.volume = 0.3
-music.play().catch(() => {
-    document.addEventListener('click', () => {
-        music.play().catch(() => {})
-    }, { once: true })
-})
+if (music) {
+    music.volume = 0.3
+    music.play().catch(() => {
+        document.addEventListener('click', () => {
+            music.play().catch(() => {})
+        }, { once: true })
+    })
+}
 
 // =========================
-// 💖 YES
+// 💖 YES CLICK
 // =========================
-function handleYesClick() {
+yesBtn.addEventListener("click", () => {
+
     if (!runawayEnabled) {
-        const msg = yesTeasePokes[Math.min(yesTeasedCount, yesTeasePokes.length - 1)]
-        yesTeasedCount++
-        showTeaseMessage(msg)
+        showToast(yesTeasePokes[Math.min(yesIndex, yesTeasePokes.length - 1)])
+        yesIndex++
         return
     }
 
-    showTeaseMessage("Okay… 💖")
+    showToast("Okay… 💖")
 
     setTimeout(() => {
-        window.location.href = 'yes.html'
-    }, 1200)
-}
-
-// =========================
-// 💬 MESSAGE
-// =========================
-function showTeaseMessage(msg) {
-    let toast = document.getElementById('tease-toast')
-    toast.textContent = msg
-    toast.classList.add('show')
-
-    clearTimeout(toast._timer)
-    toast._timer = setTimeout(() => {
-        toast.classList.remove('show')
-    }, 2000)
-}
+        window.location.href = "yes.html"
+    }, 800)
+})
 
 // =========================
 // 💔 NO CLICK
 // =========================
-function handleNoClick() {
-    noClickCount++
+noBtn.addEventListener("click", () => {
 
-    noBtn.textContent = noMessages[Math.min(noClickCount, noMessages.length - 1)]
+    noIndex++
 
-    // YES grows slightly (mobile-safe)
+    noBtn.textContent = noMessages[Math.min(noIndex, noMessages.length - 1)]
+
+    // YES grows
     const size = parseFloat(window.getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = `${Math.min(size * 1.1, 48)}px`
+    yesBtn.style.fontSize = Math.min(size * 1.1, 52) + "px"
 
-    const gifIndex = Math.min(noClickCount, gifStages.length - 1)
-    catGif.src = gifStages[gifIndex]
+    // GIF
+    if (catGif) {
+        catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
+    }
 
-    showTeaseMessage(storyLines[gifIndex])
+    showToast(storyLines[Math.min(noIndex, storyLines.length - 1)])
 
-    if (noClickCount >= 6 && !runawayEnabled) {
+    if (noIndex >= 6 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
     }
+})
+
+// =========================
+// 💬 TOAST
+// =========================
+function showToast(msg) {
+    if (!toast) return
+
+    toast.textContent = msg
+    toast.classList.add("show")
+
+    clearTimeout(toast._t)
+    toast._t = setTimeout(() => {
+        toast.classList.remove("show")
+    }, 2000)
 }
 
 // =========================
-// 📱 MOBILE SAFE RUNAWAY
+// 🏃 RUNAWAY
 // =========================
 function enableRunaway() {
-    noBtn.addEventListener('mouseover', runAway)
-    noBtn.addEventListener('touchstart', runAway, { passive: true })
 
-    showTeaseMessage("Catch me if you can 😏")
+    showToast("Catch me if you can 😏")
+
+    noBtn.addEventListener("mouseover", runAway)
+    noBtn.addEventListener("touchstart", runAway, { passive: true })
 }
 
 function runAway() {
-    const margin = 16
 
     const rect = noBtn.getBoundingClientRect()
 
-    const vw = document.documentElement.clientWidth
-    const vh = document.documentElement.clientHeight
+    const vw = window.innerWidth
+    const vh = window.innerHeight
 
-    const maxX = vw - rect.width - margin
-    const maxY = vh - rect.height - margin
+    const x = Math.random() * (vw - rect.width - 20)
+    const y = Math.random() * (vh - rect.height - 20)
 
-    const x = Math.max(margin, Math.random() * maxX)
-    const y = Math.max(margin, Math.random() * maxY)
+    noBtn.style.position = "fixed"
+    noBtn.style.left = x + "px"
+    noBtn.style.top = y + "px"
+    noBtn.style.zIndex = "999"
 
-    noBtn.style.position = 'fixed'
-    noBtn.style.left = `${x}px`
-    noBtn.style.top = `${y}px`
-    noBtn.style.zIndex = '999'
-
-    noBtn.style.transition = 'left 0.2s ease, top 0.2s ease'
+    noBtn.style.transition = "0.15s ease"
 }
 
-// =========================
-// 📱 FIX RESIZE BUG
-// =========================
-window.addEventListener('resize', () => {
-    noBtn.style.position = 'fixed'
 })
-
-} // end enableRunaway
