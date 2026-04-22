@@ -22,10 +22,22 @@ const noMessages = [
 ]
 
 const yesTeasePokes = [
-    "try saying no first… don’t be boring 😏",
-    "go on, hit no… I know you want to 👀",
-    "you’re too curious to stop now 😈",
-    "click no… I dare you 😏"
+    "Wait… you’re going too fast 😳",
+    "Hmm? You really want YES that badly? 😏",
+    "Not so easy~ try teasing me first 😌",
+    "You didn’t even play with me yet 👀",
+    "I think you skipped a step… 😳",
+    "Slow down… I like being chased 😏",
+    "You’re acting too confident right now 😌",
+    "I might say yes… if you behave 😌💖",
+    "Try clicking No just once… I’m curious 👀",
+    "You’re not getting YES that easily 😈",
+    "I think you like me more than you admit 😏",
+    "Hmm… you’re making me shy 🥺",
+    "You really want the ending that fast? 💞",
+    "You’re cute when you rush 😳",
+    "I like watching you try 😏",
+    "Almost there… but not yet 💖"
 ]
 
 let yesTeasedCount = 0
