@@ -9,7 +9,7 @@ const gifStages = [
     "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
-    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-dudu-bubu.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
@@ -71,7 +71,7 @@ const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
 const musicToggle = document.getElementById('music-toggle')
-const runawayText = document.getElementById("runaway-text") // ✅ 加這個
+const runawayText = document.getElementById("runaway-text")
 
 if (!yesBtn || !noBtn) return
 
@@ -79,6 +79,7 @@ let yesIndex = 0
 let noIndex = 0
 let runawayEnabled = false
 let musicStarted = false
+let runawayLoop = null
 
 // =========================
 // 🎵 MUSIC
@@ -87,6 +88,7 @@ function startMusic() {
     if (!music || musicStarted) return
     music.volume = 0.3
     music.muted = false
+
     music.play().then(() => {
         musicStarted = true
     }).catch(() => {})
@@ -170,14 +172,15 @@ function showToast(msg) {
 }
 
 // =========================
-// 🏃 RUNAWAY（已整合文字跟跑🔥）
+// 🏃 RUNAWAY (真正追蹤版)
 // =========================
 function enableRunaway() {
 
     showToast("Catch me if you can 😏")
 
-    noBtn.addEventListener("mouseover", runAway)
-    noBtn.addEventListener("touchstart", runAway, { passive: true })
+    if (runawayLoop) return
+
+    runawayLoop = setInterval(runAway, 120)
 }
 
 function runAway() {
@@ -190,17 +193,16 @@ function runAway() {
     const x = Math.random() * (vw - rect.width - 20)
     const y = Math.random() * (vh - rect.height - 20)
 
-    // 按鈕移動
     noBtn.style.position = "fixed"
     noBtn.style.left = x + "px"
     noBtn.style.top = y + "px"
     noBtn.style.zIndex = "999"
-    noBtn.style.transition = "0.12s ease"
+    noBtn.style.transition = "0.08s ease"
 
-    // 🔥 文字跟著跑
+    // 🔥 文字跟著跑（安全版）
     if (runawayText) {
         runawayText.style.position = "fixed"
-        runawayText.style.left = (x + rect.width + 8) + "px"
+        runawayText.style.left = (x + rect.width + 10) + "px"
         runawayText.style.top = (y + rect.height / 2 - 10) + "px"
         runawayText.style.zIndex = "1000"
     }
