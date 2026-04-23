@@ -24,88 +24,78 @@ const gifStages = [
 ]
 
 // =========================
-// 💬 YES TEASE（已加3句 + 更合理戀愛邏輯）
+// 💖 YES 台詞（每次點）
 // =========================
-const yesTeasePokes = [
-    "Wait… you’re going too fast 😳",
-    "Hmm? You really want YES that badly? 😏",
+const yesTease = [
+    "Wait… too fast 😳",
+    "Hmm? You like me that much? 😏",
     "Not so easy~ 😌",
-    "You didn’t even play with me yet 👀",
-    "Almost there… but not yet 💖",
-
-    // ✨ 新增
-    "You’re getting impatient huh? 😏",
-    "I like how determined you are 💕",
-    "But I still wanna tease you a bit more 😌"
+    "You’re getting impatient huh 💕",
+    "I like teasing you 😏"
 ]
 
 // =========================
-// 💔 NO
+// 💔 NO 台詞
 // =========================
 const noMessages = [
     "No… really? 🥺",
-    "You’re breaking my heart 😤",
-    "Please don’t do this 💔",
-    "I thought you liked me 😢",
-    "This actually hurts… 🥀",
-    "Okay… I might run away 😭"
+    "You’re breaking my heart 💔",
+    "Please don’t 😢",
+    "It hurts a little… 🥀",
+    "I’m getting sad… 😭"
 ]
 
 // =========================
-// ELEMENTS
+// STATE
 // =========================
 let yesIndex = 0
 let noIndex = 0
 let musicStarted = false
 
 // =========================
-// 🎵 MUSIC
+// MUSIC
 // =========================
 function startMusic() {
     if (!music || musicStarted) return
     music.volume = 0.3
-    music.play().then(() => {
-        musicStarted = true
-    }).catch(() => {})
+    music.play().then(() => musicStarted = true).catch(() => {})
 }
 
 document.addEventListener("click", startMusic, { once: true })
 
-window.toggleMusic = function () {
-    if (!music) return
-    if (music.paused) {
-        music.play()
-        musicToggle.textContent = "🔊"
-    } else {
-        music.pause()
-        musicToggle.textContent = "🔇"
-    }
+// =========================
+// TOAST
+// =========================
+function showToast(msg) {
+    toast.textContent = msg
+    toast.classList.add("show")
+
+    clearTimeout(toast._t)
+    toast._t = setTimeout(() => {
+        toast.classList.remove("show")
+    }, 2000)
 }
 
 // =========================
-// 💖 YES
+// 💖 YES（只對話，不跳頁）
 // =========================
 yesBtn.addEventListener("click", () => {
 
     startMusic()
 
-    showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
+    showToast(yesTease[yesIndex % yesTease.length])
     yesIndex++
 })
 
 // =========================
-// 💔 NO（核心修正版）
+// 💔 NO（推進劇情）
 // =========================
 noBtn.addEventListener("click", () => {
 
     startMusic()
 
-    noIndex++
-
-    const lastIndex = noMessages.length
-
-    // ⭐ 最後一次 NO → 跳轉
-    if (noIndex >= lastIndex) {
+    // ⭐ 最後一張
+    if (noIndex >= noMessages.length - 1) {
 
         showToast("Catch me if you can 😏")
 
@@ -117,32 +107,13 @@ noBtn.addEventListener("click", () => {
     }
 
     // 💬 一般 NO
-    showToast(noMessages[noIndex - 1] + " 💔")
+    showToast(noMessages[noIndex])
 
-    // 🎬 GIF 一定會變（已修 cache 問題）
-    if (catGif) {
-        catGif.src = gifStages[Math.min(noIndex - 1, gifStages.length - 1)] + "?v=" + Date.now()
-    }
+    // 🎬 換圖
+    catGif.src = gifStages[noIndex] + "?t=" + Date.now()
 
-    // 💖 YES 變大
-    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
+    noIndex++
+
 })
-
-// =========================
-// 💬 TOAST
-// =========================
-function showToast(msg) {
-
-    if (!toast) return
-
-    toast.textContent = msg
-    toast.classList.add("show")
-
-    clearTimeout(toast._t)
-    toast._t = setTimeout(() => {
-        toast.classList.remove("show")
-    }, 2000)
-}
 
 })
