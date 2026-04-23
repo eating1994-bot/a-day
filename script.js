@@ -29,7 +29,7 @@ const storyLines = [
 ]
 
 // =========================
-// 💬 YES TEASE（完整）
+// 💬 YES TEASE
 // =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
@@ -51,7 +51,7 @@ const yesTeasePokes = [
 ]
 
 // =========================
-// 💔 NO MESSAGES（最後一句改好了）
+// 💔 NO MESSAGES
 // =========================
 const noMessages = [
     "No… really? 🥺",
@@ -71,6 +71,7 @@ const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
 const musicToggle = document.getElementById('music-toggle')
+const runawayText = document.getElementById("runaway-text") // ✅ 加這個
 
 if (!yesBtn || !noBtn) return
 
@@ -80,7 +81,7 @@ let runawayEnabled = false
 let musicStarted = false
 
 // =========================
-// 🎵 音樂（手機解鎖版）
+// 🎵 MUSIC
 // =========================
 function startMusic() {
     if (!music || musicStarted) return
@@ -105,7 +106,7 @@ window.toggleMusic = function () {
 }
 
 // =========================
-// 💖 YES CLICK
+// 💖 YES
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -125,7 +126,7 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// 💔 NO CLICK（固定顯示 No + 傷心句）
+// 💔 NO
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -133,7 +134,6 @@ noBtn.addEventListener("click", () => {
 
     noIndex++
 
-    // ❗ 按鈕文字永遠維持 No
     noBtn.textContent = "No"
 
     const msg1 = noMessages[Math.min(noIndex, noMessages.length - 1)]
@@ -170,7 +170,7 @@ function showToast(msg) {
 }
 
 // =========================
-// 🏃 RUNAWAY
+// 🏃 RUNAWAY（已整合文字跟跑🔥）
 // =========================
 function enableRunaway() {
 
@@ -190,12 +190,20 @@ function runAway() {
     const x = Math.random() * (vw - rect.width - 20)
     const y = Math.random() * (vh - rect.height - 20)
 
+    // 按鈕移動
     noBtn.style.position = "fixed"
     noBtn.style.left = x + "px"
     noBtn.style.top = y + "px"
     noBtn.style.zIndex = "999"
+    noBtn.style.transition = "0.12s ease"
 
-    noBtn.style.transition = "0.15s ease"
+    // 🔥 文字跟著跑
+    if (runawayText) {
+        runawayText.style.position = "fixed"
+        runawayText.style.left = (x + rect.width + 8) + "px"
+        runawayText.style.top = (y + rect.height / 2 - 10) + "px"
+        runawayText.style.zIndex = "1000"
+    }
 }
 
 })
