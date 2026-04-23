@@ -16,40 +16,36 @@
 
     <div class="container">
         <h1>
-           <span class="line1">Happy 1 Year Anniversary ❤️</span>
-           <span class="line2">Will you still be my love 😍?</span>
+            <span class="line1">Happy 1 Year Anniversary ❤️</span>
+            <span class="line2">Will you still be my love 😍?</span>
         </h1>
 
         <div class="gif-container">
             <img id="cat-gif" src="https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif">
         </div>
 
+        <!-- ✅ buttons -->
         <div class="buttons">
             <button id="yes-btn">Yes</button>
             <button id="no-btn">No</button>
         </div>
 
-        <!-- 💬 runaway text（正確位置 + 不會擋 UI） -->
-        <div id="runaway-text"
-             style="
-                position: fixed;
-                pointer-events: none;
-                font-size: 1rem;
-                color: #e91e8c;
-                font-weight: 700;
-                z-index: 1000;
-             ">
+        <!-- 💬 toast（訊息提示） -->
+        <div id="tease-toast"></div>
+
+        <!-- 💬 runaway text -->
+        <div id="runaway-text">
             Catch me if you can 😜
         </div>
-
-        <div id="tease-toast"></div>
     </div>
 
-    <!-- 🎵 音樂（正確版本） -->
+    <!-- 🎵 音樂 -->
     <audio id="bg-music" loop preload="auto">
-        <source src="music/beabadoobee - Glue Song (Lyrics).mp3" type="audio/mpeg">
+        <source src="music/beabadoobee-glue-song.mp3" type="audio/mpeg">
+        Your browser does not support audio playback.
     </audio>
 
+    <!-- 🔊 音樂控制 -->
     <button id="music-toggle" onclick="toggleMusic()" title="Toggle music">🔊</button>
 
     <script src="script.js"></script>
