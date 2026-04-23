@@ -36,6 +36,10 @@ body::before {
     pointer-events: none;
 }
 
+/* =========================
+   主內容
+========================= */
+
 .container {
     position: relative;
     text-align: center;
@@ -115,6 +119,7 @@ p {
     color: #E91E8C;
     font-weight: 700;
     opacity: 0;
+    transition: 0.2s ease;
 }
 
 #tease-toast.show {
@@ -135,4 +140,24 @@ p {
 
     background: rgba(255,255,255,0.85);
     cursor: pointer;
+}
+
+/* =========================
+   💥 這是你要的新增：NO 逃跑文字
+========================= */
+
+#runaway-text {
+    position: fixed;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e91e8c;
+
+    z-index: 1000;
+    pointer-events: none;
+
+    transition: 0.12s ease;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
