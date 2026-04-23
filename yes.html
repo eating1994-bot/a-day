@@ -11,12 +11,10 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
 <style>
-/* 🌼 一周年專屬背景微調 */
 body{
     background: linear-gradient(135deg, #FFF6D6, #FFE7A3, #FFF0C9);
 }
 
-/* 🌼 花瓣 */
 .petal {
     position: fixed;
     top: -10vh;
@@ -32,7 +30,6 @@ body{
     }
 }
 
-/* 💛 溫柔淡入 */
 .container {
     animation: fadeIn 1.5s ease-in-out;
 }
@@ -69,7 +66,7 @@ body{
     </p>
     
     <p class="yes-message">
-        I love you 💛  <br>
+        I love you 💛 <br>
         And this is just the beginning of many more years together 🌼✨
     </p>
 </div>
@@ -82,15 +79,40 @@ body{
 <button id="music-toggle" onclick="toggleMusic()">🔊</button>
 
 <script>
-const music = document.getElementById("bg-music");
+const music = document.getElementById("bg-music")
 
-/* 🔊 音樂控制 */
-function toggleMusic(){
-    if(music.paused) music.play();
-    else music.pause();
+// =========================
+// 🔊 音樂解鎖（關鍵）
+// =========================
+let started = false
+
+function startMusic(){
+    if (started) return
+    music.volume = 0.3
+    music.muted = false
+
+    music.play().then(()=>{
+        started = true
+    }).catch(()=>{})
 }
 
-/* 🌼 柔和煙火（不爆炸版） */
+// 👉 第一次點擊才播放（手機100%有效）
+document.addEventListener("click", startMusic, { once: true })
+
+// 👉 音樂按鈕
+function toggleMusic(){
+    if (music.paused) {
+        music.play()
+        document.getElementById("music-toggle").textContent = "🔊"
+    } else {
+        music.pause()
+        document.getElementById("music-toggle").textContent = "🔇"
+    }
+}
+
+// =========================
+// 💛 煙火
+// =========================
 function softFire(){
     confetti({
         particleCount: 40,
@@ -98,42 +120,40 @@ function softFire(){
         startVelocity: 20,
         origin: { y: 0.7 },
         colors: ["#fff", "#ffe680", "#ffdf80", "#ffd966"]
-    });
+    })
 }
 
-/* 🌼 花瓣（小雛菊風） */
+// =========================
+// 🌼 花瓣
+// =========================
 function createPetal(){
-    const petal = document.createElement("div");
-    petal.classList.add("petal");
+    const petal = document.createElement("div")
+    petal.classList.add("petal")
 
-    const flowers = ["🌼","🌼","💛","✨"];
-    petal.innerText = flowers[Math.floor(Math.random()*flowers.length)];
+    const flowers = ["🌼","🌼","💛","✨"]
+    petal.innerText = flowers[Math.floor(Math.random()*flowers.length)]
 
-    petal.style.left = Math.random() * 100 + "vw";
-    petal.style.animationDuration = (Math.random()*3 + 3) + "s";
-    petal.style.fontSize = (Math.random()*18 + 12) + "px";
+    petal.style.left = Math.random() * 100 + "vw"
+    petal.style.animationDuration = (Math.random()*3 + 3) + "s"
+    petal.style.fontSize = (Math.random()*18 + 12) + "px"
 
-    document.body.appendChild(petal);
+    document.body.appendChild(petal)
 
-    setTimeout(()=>petal.remove(), 7000);
+    setTimeout(()=>petal.remove(), 7000)
 }
 
+// =========================
+// 🚀 LOAD
+// =========================
 window.addEventListener("load", () => {
 
-    /* 💛 初次柔和煙火 */
-    softFire();
+    softFire()
+    setInterval(softFire, 4000)
 
-    /* 🌼 偶爾紀念感煙火（不是狂炸） */
-    setInterval(softFire, 4000);
+    setInterval(createPetal, 300)
 
-    /* 🌼 花瓣雨 */
-    setInterval(createPetal, 300);
-
-    /* 🎵 音樂 */
-    music.volume = 0.3;
-    music.play().catch(()=>{});
-
-});
+    // ❌ 不再自動播放（避免被擋）
+})
 </script>
 
 </body>
