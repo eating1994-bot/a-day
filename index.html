@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 1 Year Anniversary ❤️</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="hearts-bg"></div>
 
@@ -25,10 +28,15 @@
             <button id="yes-btn" onclick="handleYesClick()">Yes</button>
             <button id="no-btn" onclick="handleNoClick()">No</button>
         </div>
+
+        <!-- 💬 跟著跑的文字（已加入） -->
+        <div id="runaway-text">Catch me if you can 😜</div>
+
         <div id="tease-toast"></div>
     </div>
 
-    <audio id="bg-music" loop autoplay muted>
+    <!-- 🎵 音樂（已修正：移除 autoplay muted，手機才會正常） -->
+    <audio id="bg-music" loop>
         <source src="music/beabadoobee - Glue Song (Lyrics).mp3" type="audio/mpeg">
     </audio>
 
