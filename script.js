@@ -8,7 +8,7 @@ const toast = document.getElementById('tease-toast')
 if (!yesBtn || !noBtn || !catGif) return
 
 // =========================
-// DATA
+// DATA（你原本的）
 // =========================
 const gifs = [
   "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -36,13 +36,13 @@ const yesTease = [
   "I like teasing you 💕",
   "You’re impatient huh 😏",
   "Almost… but not yet 💖",
-  "Still here? 😌",
   "You’re cute when you try 😳",
-  "Okay okay… I’m watching you 👀"
+  "I’m watching you 👀",
+  "Still not YES 😌"
 ]
 
 // =========================
-// STATE
+// STATE（修正關鍵）
 // =========================
 let step = 0
 let runawayOn = false
@@ -51,6 +51,8 @@ let runawayOn = false
 // TOAST
 // =========================
 function show(msg){
+  if (!toast) return
+
   toast.textContent = msg
   toast.classList.add("show")
 
@@ -61,18 +63,19 @@ function show(msg){
 }
 
 // =========================
-// NO CLICK
+// NO（修正核心）
 // =========================
 noBtn.addEventListener("click", () => {
 
-  show(noText[Math.min(step, noText.length - 1)])
-
+  // ❗第一次就要變圖（修正點）
   catGif.src = gifs[Math.min(step, gifs.length - 1)]
+
+  show(noText[Math.min(step, noText.length - 1)])
 
   step++
 
-  // 最後才開 runaway
-  if (step === gifs.length && !runawayOn) {
+  // ⭐ 最後一張才開 runaway
+  if (step >= gifs.length && !runawayOn) {
     show("Catch me if you can 😏")
     enableRunaway()
     runawayOn = true
@@ -80,27 +83,29 @@ noBtn.addEventListener("click", () => {
 })
 
 // =========================
-// YES CLICK
+// YES
 // =========================
 yesBtn.addEventListener("click", () => {
 
-  // 如果還沒到最後 → teasing
+  // 還沒到最後 → teasing
   if (step < gifs.length) {
     show(yesTease[step % yesTease.length])
     return
   }
 
-  // 最後才允許跳頁
+  // 最後才跳頁
   show("Okay… 💖")
+
   setTimeout(() => {
     window.location.href = "yes.html"
   }, 800)
 })
 
 // =========================
-// RUNAWAY
+// RUNAWAY（只最後）
 // =========================
 function enableRunaway(){
+
   noBtn.addEventListener("mouseenter", move)
   noBtn.addEventListener("touchstart", move, {passive:true})
 }
@@ -112,7 +117,7 @@ function move(){
   noBtn.style.position = "fixed"
   noBtn.style.left = Math.random() * (window.innerWidth - r.width) + "px"
   noBtn.style.top = Math.random() * (window.innerHeight - r.height) + "px"
-  noBtn.style.transition = "0.15s"
+  noBtn.style.transition = "0.15s ease"
 }
 
 })
