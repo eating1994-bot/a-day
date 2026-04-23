@@ -41,8 +41,7 @@ const yesTease = [
     "Not so easy~ 😌",
     "You’re impatient huh 😏",
     "I like your effort 💕",
-    "Almost there… 💖",
-    "But not yet 😌"
+    "Almost there… 💖"
 ]
 
 // =========================
@@ -51,6 +50,10 @@ const yesTease = [
 let noIndex = 0
 let yesIndex = 0
 let runawayEnabled = false
+
+// YES 成長
+let yesGrowStep = 0
+const yesBaseSize = 24
 
 // =========================
 // MUSIC
@@ -79,30 +82,41 @@ function showToast(msg) {
 }
 
 // =========================
-// YES（每頁循環 + 提示 NO）
+// YES（有終點）
 // =========================
 yesBtn.addEventListener("click", () => {
 
     startMusic()
 
-    yesIndex++
+    // ⭐ runaway 前：YES tease + 終點
+    if (!runawayEnabled) {
 
-    const last = yesTease.length - 1
+        yesIndex++
 
-    // ⭐ 超過就提示 NO + 重置
-    if (yesIndex > last) {
+        const endIndex = yesTease.length - 1
 
-        showToast("Maybe try clicking NO now 😏")
+        if (yesIndex >= endIndex) {
 
-        yesIndex = 0
+            showToast("You really like YES huh 😏 but… try saying NO for once 💔")
+
+            yesIndex = endIndex
+            return
+        }
+
+        showToast(yesTease[yesIndex])
         return
     }
 
-    showToast(yesTease[yesIndex])
+    // ⭐ runaway 後 → 結局
+    showToast("Okay… 💖")
+
+    setTimeout(() => {
+        window.location.href = "yes.html"
+    }, 800)
 })
 
 // =========================
-// NO（主線推進）
+// NO（主線）
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -113,10 +127,10 @@ noBtn.addEventListener("click", () => {
     const lastStage = gifStages.length - 1
     const stage = Math.min(noIndex, lastStage)
 
-    // ⭐ 更新 GIF
+    // ⭐ GIF 更新
     catGif.src = gifStages[stage] + "?v=" + Date.now()
 
-    // ⭐ 對話
+    // ⭐ NO 對話
     if (stage < lastStage) {
         showToast(noMessages[stage])
     } else {
@@ -124,11 +138,12 @@ noBtn.addEventListener("click", () => {
     }
 
     // ⭐ YES 變大
-    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.08, 60) + "px"
+    yesGrowStep++
+    const newSize = yesBaseSize + yesGrowStep * 3
+    yesBtn.style.fontSize = Math.min(newSize, 60) + "px"
     yesBtn.style.transition = "0.2s ease"
 
-    // ⭐ 最後 NO 才開 runaway
+    // ⭐ 最後才啟動 runaway
     if (stage === lastStage && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
