@@ -143,11 +143,12 @@ p {
 }
 
 /* =========================
-   💥 這是你要的新增：NO 逃跑文字
+   💥 RUNAWAY TEXT（已修好）
 ========================= */
 
 #runaway-text {
     position: fixed;
+
     font-size: 1rem;
     font-weight: 700;
     color: #e91e8c;
@@ -155,9 +156,14 @@ p {
     z-index: 1000;
     pointer-events: none;
 
-    transition: 0.12s ease;
+    transition: left 0.3s ease, top 0.3s ease;
 
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    /* ❌ 重點修正：不要再置中 */
+    left: auto;
+    top: auto;
+
+    /* 初始先藏在角落（避免擋 UI） */
+    transform: none;
+
+    opacity: 0.9;
 }
