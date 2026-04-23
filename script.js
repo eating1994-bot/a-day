@@ -10,7 +10,7 @@ const musicToggle = document.getElementById('music-toggle')
 if (!yesBtn || !noBtn) return
 
 // =========================
-// 🎬 GIF（每次 NO 都會換）
+// 🎬 GIF STAGES
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -24,31 +24,31 @@ const gifStages = [
 ]
 
 // =========================
-// 💖 YES teasing（8+句，合理戀愛互動）
+// 💖 YES TEASE (8+句)
 // =========================
 const yesTeasePokes = [
-    "Wait… you’re being a little too eager 😳",
-    "Hmm? Already YES? I didn’t even tease you yet 😏",
-    "Not so fast~ I like to be courted properly 😌",
-    "You really like me that much huh? 💕",
-    "I’m still deciding… don’t rush me 👀",
+    "Wait… you’re being too fast 😳",
+    "Hmm? Already YES? I didn’t even tease you 😏",
+    "Not so easy~ I like being chased 😌",
+    "You really want me that much? 💕",
+    "I’m still thinking… 👀",
     "You’re cute when you’re impatient 😳",
-    "Convince me a little more~ 💖",
-    "I might say yes… if you behave 😏",
-    "You think it’s that easy? 😌",
-    "You’re making my heart flutter… but wait 😳"
+    "Convince me a bit more~ 💖",
+    "I might say yes… maybe 😏",
+    "You think it's that easy? 😌",
+    "You’re making me shy 🥺"
 ]
 
 // =========================
-// 💔 NO messages（每次遞進）
+// 💔 NO MESSAGES
 // =========================
 const noMessages = [
     "No… really? 🥺",
-    "Ouch… that hurts 😢",
+    "That hurts a little 😢",
     "Why would you do that 💔",
     "I thought you liked me… 😭",
-    "I’m starting to feel sad 🥀",
-    "Okay… I’m really hurt now 💔"
+    "I’m getting sad now 🥀",
+    "Okay… I feel like running away 😭"
 ]
 
 // =========================
@@ -58,8 +58,6 @@ let yesIndex = 0
 let noIndex = 0
 let musicStarted = false
 let runawayEnabled = false
-
-const maxStage = gifStages.length - 1
 
 // =========================
 // 🎵 MUSIC
@@ -84,7 +82,7 @@ window.toggleMusic = function () {
 }
 
 // =========================
-// 💖 YES CLICK（永遠只是 tease）
+// 💖 YES CLICK
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -95,29 +93,31 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// 💔 NO CLICK（推進劇情）
+// 💔 NO CLICK (完全修正版)
 // =========================
 noBtn.addEventListener("click", () => {
 
     startMusic()
 
-    // 如果還沒到最後階段
-    if (noIndex < maxStage) {
+    const stage = noIndex
 
-        showToast(noMessages[Math.min(noIndex, noMessages.length - 1)])
+    // ⭐ 還沒到最後
+    if (stage < gifStages.length - 1) {
+
+        showToast(noMessages[Math.min(stage, noMessages.length - 1)])
 
         if (catGif) {
-            catGif.src = gifStages[noIndex]
+            catGif.src = gifStages[stage]
         }
 
-        noIndex++
-
-        // YES 變大（心理壓力😏）
+        // YES 變大
         const size = parseFloat(getComputedStyle(yesBtn).fontSize)
         yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
 
-        // 到最後一階才開 runaway
-        if (noIndex === maxStage && !runawayEnabled) {
+        noIndex++
+
+        // 最後前一階開 runaway
+        if (stage === gifStages.length - 2 && !runawayEnabled) {
             enableRunaway()
             runawayEnabled = true
         }
@@ -125,16 +125,14 @@ noBtn.addEventListener("click", () => {
         return
     }
 
-    // =========================
-    // ⭐ 最後階段：不再進劇情
-    // =========================
-    showToast("You’ve pushed me to the edge… 😏")
+    // ⭐ 最後 NO
+    showToast("You’ve reached the end… 😏")
 
     enableRunaway()
 })
 
 // =========================
-// 🏃 RUNAWAY（只最後一張才開）
+// 🏃 RUNAWAY
 // =========================
 function enableRunaway() {
 
