@@ -1,32 +1,50 @@
 // =========================
-// 🎵 MUSIC AUTO START (BEST POSSIBLE)
+// 🎵 MUSIC AUTO START (FADE-IN VERSION)
 // =========================
 let musicPlaying = false
 
 const music = document.getElementById('bg-music')
 
+// 🎧 預設設定
 if (music) {
-    music.volume = 0.3
+    music.volume = 0
     music.preload = "auto"
 }
 
 // =========================
-// 🚀 TRY PLAY ON LOAD
+// 🎬 FADE-IN MUSIC FUNCTION
 // =========================
-function tryPlayMusic() {
+function fadeInMusic() {
     if (!music || musicPlaying) return
+
+    music.volume = 0
 
     music.play().then(() => {
         musicPlaying = true
-        console.log("🎵 music started on load")
+        console.log("🎬 music started (fade-in)")
+
+        let vol = 0
+        const fade = setInterval(() => {
+            vol += 0.03
+            if (vol >= 0.3) {
+                vol = 0.3
+                clearInterval(fade)
+            }
+            music.volume = vol
+        }, 80)
+
     }).catch(err => {
-        console.log("❌ autoplay blocked, waiting interaction")
+        console.log("❌ autoplay blocked (will wait interaction)", err)
     })
 }
 
-// 👉 一進畫面就試一次
+// =========================
+// 🚀 LOAD EVENT
+// =========================
 window.addEventListener('load', () => {
-    tryPlayMusic()
+
+    // ❗ 嘗試「像自動播放」
+    fadeInMusic()
 
     launchConfetti()
     setInterval(launchConfetti, 4000)
@@ -34,23 +52,37 @@ window.addEventListener('load', () => {
 })
 
 // =========================
-// 🧠 fallback：任何互動自動補播
+// 🧠 FALLBACK：任何互動自動播放（fade-in）
 // =========================
 function unlockAudio() {
     if (!music || musicPlaying) return
 
+    music.volume = 0
+
     music.play().then(() => {
         musicPlaying = true
         console.log("🎵 music unlocked by interaction")
+
+        let vol = 0
+        const fade = setInterval(() => {
+            vol += 0.05
+            if (vol >= 0.3) {
+                vol = 0.3
+                clearInterval(fade)
+            }
+            music.volume = vol
+        }, 60)
+
     }).catch(() => {})
 }
 
-['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
-    document.addEventListener(evt, unlockAudio, { once: true })
-})
+document.addEventListener('click', unlockAudio, { once: true })
+document.addEventListener('touchstart', unlockAudio, { once: true })
+document.addEventListener('keydown', unlockAudio, { once: true })
+document.addEventListener('scroll', unlockAudio, { once: true })
 
 // =========================
-// 🔇 TOGGLE（可選）
+// 🔇 TOGGLE (optional but safe)
 // =========================
 function toggleMusic() {
     if (!music) return
