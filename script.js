@@ -32,8 +32,8 @@ const noMessages = [
     "Please don’t do this 💔",
     "I thought you liked me 😢",
     "This actually hurts… 🥀",
-    "Okay… I’m running away 😭",
-    "Catch me no way 😏"
+    "Okay… I’m getting scared 😭",
+    "I think I’m really going to run away… 😢"
 ]
 
 const yesTease = [
@@ -51,13 +51,16 @@ const yesTease = [
 let noIndex = 0
 let yesIndex = 0
 let runawayEnabled = false
-let musicStarted = false
+
+// ⭐ YES 成長控制（新增）
+let yesGrowStep = 0
+const yesBaseSize = 24
 
 // =========================
 // MUSIC
 // =========================
 function startMusic() {
-    if (!music || musicStarted) return
+    if (!music) return
     music.volume = 0.3
     music.play().catch(() => {})
 }
@@ -80,7 +83,7 @@ function showToast(msg) {
 }
 
 // =========================
-// YES
+// YES CLICK
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -100,7 +103,7 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// NO
+// NO CLICK
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -110,15 +113,19 @@ noBtn.addEventListener("click", () => {
 
     const stage = Math.min(noIndex, gifStages.length - 1)
 
-    // ⭐ 強制刷新 GIF（修電腦不更新）
+    // ⭐ GIF 每次更新（防 cache）
     catGif.src = gifStages[stage] + "?v=" + Date.now()
 
     showToast(noMessages[stage])
 
-    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
+    // ⭐ YES 每次 NO 都變大（重點）
+    yesGrowStep++
 
-    // ⭐ 最後一階段才開 runaway
+    const newSize = yesBaseSize + yesGrowStep * 3
+    yesBtn.style.fontSize = Math.min(newSize, 60) + "px"
+    yesBtn.style.transition = "0.2s ease"
+
+    // ⭐ 最後才開 runaway
     if (stage === gifStages.length - 1 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
@@ -132,15 +139,12 @@ function enableRunaway() {
 
     showToast("Catch me no way 😏")
 
-    // 💻 電腦
     noBtn.addEventListener("mouseenter", runAway)
-
-    // 📱 手機（穩定版）
     noBtn.addEventListener("pointerdown", runAway)
 }
 
 // =========================
-// MOVE BUTTON + TEXT (修正版)
+// RUNAWAY MOVE
 // =========================
 function runAway() {
 
@@ -155,7 +159,6 @@ function runAway() {
     noBtn.style.zIndex = "999"
     noBtn.style.transition = "0.15s ease"
 
-    // 💬 避免重疊 + 自動避開畫面
     if (runawayText) {
 
         runawayText.textContent = "Catch me no way 😏"
@@ -167,7 +170,6 @@ function runAway() {
         let tx = x + rect.width + 20
         let ty = y - 30
 
-        // 防止出界
         if (tx > window.innerWidth - 120) tx = x - 120
         if (ty < 10) ty = y + rect.height + 20
 
