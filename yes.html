@@ -1,37 +1,42 @@
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-
 const music = document.getElementById("bg-music")
-
-if (!music) {
-    console.log("❌ music not found")
-    return
-}
 
 let started = false
 
 function startMusic() {
-    if (started) return
+    if (!music || started) return
 
     music.volume = 0.3
-    music.muted = false
 
-    music.play()
-        .then(() => {
+    const playPromise = music.play()
+
+    if (playPromise) {
+        playPromise.then(() => {
             started = true
-            console.log("🎵 music started")
-        })
-        .catch(err => {
-            console.log("⚠️ music blocked:", err)
-        })
+        }).catch(() => {})
+    }
 }
 
-// ✅ 解鎖音樂
-document.addEventListener("click", startMusic)
-document.addEventListener("touchstart", startMusic)
+// =========================
+// 🎯 只用 ONE event（避免衝突）
+// =========================
+function unlockAudio() {
+    startMusic()
 
+    // 用一次就解除（最穩）
+    document.removeEventListener("click", unlockAudio)
+    document.removeEventListener("touchstart", unlockAudio)
+}
+
+document.addEventListener("click", unlockAudio)
+document.addEventListener("touchstart", unlockAudio)
+
+// =========================
 // 🔊 toggle
+// =========================
 window.toggleMusic = function () {
+    if (!music) return
+
     if (music.paused) {
         music.play()
         document.getElementById("music-toggle").textContent = "🔊"
@@ -41,7 +46,9 @@ window.toggleMusic = function () {
     }
 }
 
-// 💛 煙火（保護版）
+// =========================
+// 💛 confetti safe
+// =========================
 function softFire(){
     if (typeof confetti !== "function") return
 
@@ -54,7 +61,9 @@ function softFire(){
     })
 }
 
-// 🌼 花瓣
+// =========================
+// 🌼 petals
+// =========================
 function createPetal(){
     const petal = document.createElement("div")
     petal.classList.add("petal")
@@ -68,18 +77,18 @@ function createPetal(){
 
     document.body.appendChild(petal)
 
-    setTimeout(()=>petal.remove(), 7000)
+    setTimeout(() => petal.remove(), 7000)
 }
 
-// 🚀 啟動
+// =========================
+// 🚀 start
+// =========================
 window.addEventListener("load", () => {
 
     softFire()
     setInterval(softFire, 4000)
     setInterval(createPetal, 300)
 
-    startMusic()
-})
-
+    // 🔥 不再強制 autoplay（會被擋）
 })
 </script>
