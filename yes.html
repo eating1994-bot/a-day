@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>She said YES ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 💥 confetti library（一定要） -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>She said YES ❤️</h1>
+</div>
+
+<audio id="bg-music" loop>
+    <source src="music/beabadoobee-glue-song.mp3" type="audio/mpeg">
+</audio>
+
+<button id="music-toggle" onclick="toggleMusic()">🔊</button>
+
 <script>
 const music = document.getElementById("bg-music")
 
@@ -7,23 +31,17 @@ function startMusic() {
     if (!music || started) return
 
     music.volume = 0.3
-
-    const playPromise = music.play()
-
-    if (playPromise) {
-        playPromise.then(() => {
-            started = true
-        }).catch(() => {})
-    }
+    music.play().then(() => {
+        started = true
+    }).catch(() => {})
 }
 
 // =========================
-// 🎯 只用 ONE event（避免衝突）
+// unlock audio
 // =========================
 function unlockAudio() {
     startMusic()
 
-    // 用一次就解除（最穩）
     document.removeEventListener("click", unlockAudio)
     document.removeEventListener("touchstart", unlockAudio)
 }
@@ -32,22 +50,24 @@ document.addEventListener("click", unlockAudio)
 document.addEventListener("touchstart", unlockAudio)
 
 // =========================
-// 🔊 toggle
+// toggle music
 // =========================
 window.toggleMusic = function () {
+    const btn = document.getElementById("music-toggle")
+
     if (!music) return
 
     if (music.paused) {
         music.play()
-        document.getElementById("music-toggle").textContent = "🔊"
+        if (btn) btn.textContent = "🔊"
     } else {
         music.pause()
-        document.getElementById("music-toggle").textContent = "🔇"
+        if (btn) btn.textContent = "🔇"
     }
 }
 
 // =========================
-// 💛 confetti safe
+// confetti safe
 // =========================
 function softFire(){
     if (typeof confetti !== "function") return
@@ -55,14 +75,13 @@ function softFire(){
     confetti({
         particleCount: 40,
         spread: 60,
-        startVelocity: 20,
         origin: { y: 0.7 },
         colors: ["#fff", "#ffe680", "#ffdf80", "#ffd966"]
     })
 }
 
 // =========================
-// 🌼 petals
+// petals
 // =========================
 function createPetal(){
     const petal = document.createElement("div")
@@ -81,14 +100,16 @@ function createPetal(){
 }
 
 // =========================
-// 🚀 start
+// start
 // =========================
 window.addEventListener("load", () => {
 
     softFire()
     setInterval(softFire, 4000)
     setInterval(createPetal, 300)
-
-    // 🔥 不再強制 autoplay（會被擋）
 })
+
 </script>
+
+</body>
+</html>
