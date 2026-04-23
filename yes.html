@@ -1,106 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1 Year Together 🌼</title>
-
-<link rel="stylesheet" href="style.css">
-
-<!-- 💥 confetti -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-
-<style>
-body{
-    background: linear-gradient(135deg, #FFF6D6, #FFE7A3, #FFF0C9);
-}
-
-.petal {
-    position: fixed;
-    top: -10vh;
-    font-size: 20px;
-    pointer-events: none;
-    z-index: 9999;
-    animation: fall linear forwards;
-}
-
-@keyframes fall {
-    to {
-        transform: translateY(120vh) rotate(360deg);
-    }
-}
-
-.container {
-    animation: fadeIn 1.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="container yes-container">
-
-    <h1 class="yes-title">1 Year Together 🌼</h1>
-
-    <div class="gif-container">
-        <img src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" width="200">
-    </div>
-
-    <p class="yes-message">
-        One year ago, we officially became a couple 💛<br>
-        and somehow… you still haven’t run away yet. 😂
-    </p>
-
-    <p class="yes-message">
-        Thank you for staying with me, laughing with me, and putting up with my tears 🌼
-    </p>
-
-    <p class="yes-message">
-        I know I’m not perfect… but at least I’m your kind of weird.
-    </p>
-    
-    <p class="yes-message">
-        I love you 💛 <br>
-        And this is just the beginning of many more years together 🌼✨
-    </p>
-</div>
-
-<!-- 🎵 音樂 -->
-<audio id="bg-music" loop>
-    <source src="music/glue-song.mp3" type="audio/mpeg">
-</audio>
-
-<button id="music-toggle" onclick="toggleMusic()">🔊</button>
-
 <script>
 const music = document.getElementById("bg-music")
 
-// =========================
-// 🔊 音樂解鎖（關鍵）
-// =========================
 let started = false
 
-function startMusic(){
-    if (started) return
+function startMusic() {
+    if (!music || started) return
+
     music.volume = 0.3
     music.muted = false
 
-    music.play().then(()=>{
-        started = true
-    }).catch(()=>{})
+    const playPromise = music.play()
+
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                started = true
+                console.log("🎵 music started")
+            })
+            .catch((err) => {
+                console.log("❌ music blocked:", err)
+            })
+    }
 }
 
-// 👉 第一次點擊才播放（手機100%有效）
-document.addEventListener("click", startMusic, { once: true })
+// ✅ 超強保險：任何互動都能解鎖
+document.addEventListener("click", startMusic)
+document.addEventListener("touchstart", startMusic)
 
-// 👉 音樂按鈕
-function toggleMusic(){
+// 🔊 按鈕控制
+function toggleMusic() {
+    if (!music) return
+
     if (music.paused) {
         music.play()
         document.getElementById("music-toggle").textContent = "🔊"
@@ -110,9 +40,7 @@ function toggleMusic(){
     }
 }
 
-// =========================
 // 💛 煙火
-// =========================
 function softFire(){
     confetti({
         particleCount: 40,
@@ -123,9 +51,7 @@ function softFire(){
     })
 }
 
-// =========================
 // 🌼 花瓣
-// =========================
 function createPetal(){
     const petal = document.createElement("div")
     petal.classList.add("petal")
@@ -142,19 +68,13 @@ function createPetal(){
     setTimeout(()=>petal.remove(), 7000)
 }
 
-// =========================
-// 🚀 LOAD
-// =========================
 window.addEventListener("load", () => {
 
     softFire()
     setInterval(softFire, 4000)
-
     setInterval(createPetal, 300)
 
-    // ❌ 不再自動播放（避免被擋）
+    // 🔥 關鍵：立刻嘗試一次（避免第一點沒聲音）
+    startMusic()
 })
 </script>
-
-</body>
-</html>
