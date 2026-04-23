@@ -1,20 +1,18 @@
 // =========================
-// 🎵 MUSIC AUTO START (FADE-IN VERSION)
+// 🎵 MUSIC AUTO START (FIXED VERSION)
 // =========================
 let musicPlaying = false
-
-const music = document.getElementById('bg-music')
-
-// 🎧 預設設定
-if (music) {
-    music.volume = 0
-    music.preload = "auto"
-}
+let music = null  // ❗ 不要一開始抓
 
 // =========================
 // 🎬 FADE-IN MUSIC FUNCTION
 // =========================
 function fadeInMusic() {
+
+    if (!music) {
+        music = document.getElementById('bg-music')
+    }
+
     if (!music || musicPlaying) return
 
     music.volume = 0
@@ -34,16 +32,20 @@ function fadeInMusic() {
         }, 80)
 
     }).catch(err => {
-        console.log("❌ autoplay blocked (will wait interaction)", err)
+        console.log("❌ autoplay blocked (waiting interaction)", err)
     })
 }
 
 // =========================
-// 🚀 LOAD EVENT
+// 🚀 LOAD EVENT（關鍵修正）
 // =========================
 window.addEventListener('load', () => {
 
-    // ❗ 嘗試「像自動播放」
+    // ⭐ DOM ready 後再抓
+    music = document.getElementById('bg-music')
+
+    console.log("music element:", music)
+
     fadeInMusic()
 
     launchConfetti()
@@ -55,6 +57,11 @@ window.addEventListener('load', () => {
 // 🧠 FALLBACK：任何互動自動播放（fade-in）
 // =========================
 function unlockAudio() {
+
+    if (!music) {
+        music = document.getElementById('bg-music')
+    }
+
     if (!music || musicPlaying) return
 
     music.volume = 0
@@ -73,7 +80,9 @@ function unlockAudio() {
             music.volume = vol
         }, 60)
 
-    }).catch(() => {})
+    }).catch(err => {
+        console.log("unlock failed:", err)
+    })
 }
 
 document.addEventListener('click', unlockAudio, { once: true })
@@ -82,9 +91,14 @@ document.addEventListener('keydown', unlockAudio, { once: true })
 document.addEventListener('scroll', unlockAudio, { once: true })
 
 // =========================
-// 🔇 TOGGLE (optional but safe)
+// 🔇 TOGGLE（可選）
 // =========================
 function toggleMusic() {
+
+    if (!music) {
+        music = document.getElementById('bg-music')
+    }
+
     if (!music) return
 
     if (music.paused) {
