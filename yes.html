@@ -7,7 +7,6 @@
 
 <link rel="stylesheet" href="style.css">
 
-<!-- 💥 confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
 <style>
@@ -39,7 +38,6 @@ body{
     to {opacity: 1; transform: translateY(0);}
 }
 </style>
-
 </head>
 
 <body>
@@ -80,22 +78,37 @@ body{
 <button id="music-toggle" onclick="toggleMusic()">🔊</button>
 
 <script>
-const music = document.getElementById("bg-music")
-
+let music = null
 let started = false
 
+// 🎵 fade-in 播放
 function startMusic(){
     if(!music || started) return
 
-    music.volume = 0.3
+    music.volume = 0
+
     music.play().then(()=>{
         started = true
-    }).catch(()=>{})
+
+        let vol = 0
+        const fade = setInterval(()=>{
+            vol += 0.03
+            if(vol >= 0.3){
+                vol = 0.3
+                clearInterval(fade)
+            }
+            music.volume = vol
+        }, 80)
+
+    }).catch(err=>{
+        console.log("play blocked:", err)
+    })
 }
 
-// 🔊 unlock audio
+// 🔊 使用者第一次互動就播放（關鍵）
 document.addEventListener("click", startMusic, { once:true })
 document.addEventListener("touchstart", startMusic, { once:true })
+document.addEventListener("scroll", startMusic, { once:true })
 
 // 🔊 toggle
 function toggleMusic(){
@@ -140,13 +153,14 @@ function createPetal(){
     setTimeout(()=>petal.remove(), 7000)
 }
 
+// 🚀 初始化（不播放音樂！）
 window.addEventListener("load", () => {
+
+    music = document.getElementById("bg-music")
 
     softFire()
     setInterval(softFire, 4000)
     setInterval(createPetal, 300)
-
-    startMusic()
 })
 </script>
 
