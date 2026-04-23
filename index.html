@@ -15,27 +15,32 @@
     <div class="hearts-bg"></div>
 
     <div class="container">
+
         <h1>
            <span class="line1">Happy 1 Year Anniversary ❤️</span>
            <span class="line2">Will you still be my love 😍?</span>
         </h1>
 
         <div class="gif-container">
-            <img id="cat-gif" src="https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif">
+            <img id="cat-gif"
+                 src="https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif">
         </div>
 
+        <!-- 🔘 buttons -->
         <div class="buttons">
-            <button id="yes-btn" onclick="handleYesClick()">Yes</button>
-            <button id="no-btn" onclick="handleNoClick()">No</button>
+            <button id="yes-btn">Yes</button>
+            <button id="no-btn">No</button>
         </div>
 
-        <!-- 💬 跟著跑的文字（已加入） -->
-        <div id="runaway-text">Catch me if you can 😜</div>
-
+        <!-- 💬 toast -->
         <div id="tease-toast"></div>
+
     </div>
 
-    <!-- 🎵 音樂（已修正：移除 autoplay muted，手機才會正常） -->
+    <!-- 💬 只會在最後 NO 才動態出現 -->
+    <div id="runaway-text"></div>
+
+    <!-- 🎵 音樂 -->
     <audio id="bg-music" loop>
         <source src="music/beabadoobee - Glue Song (Lyrics).mp3" type="audio/mpeg">
     </audio>
