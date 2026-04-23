@@ -1,31 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-const catGif = document.getElementById("cat-gif")
-const yesBtn = document.getElementById("yes-btn")
-const noBtn = document.getElementById("no-btn")
-const music = document.getElementById("bg-music")
-const toast = document.getElementById("tease-toast")
-const musicToggle = document.getElementById("music-toggle")
+// =========================
+// ELEMENTS
+// =========================
+const catGif = document.getElementById('cat-gif')
+const yesBtn = document.getElementById('yes-btn')
+const noBtn = document.getElementById('no-btn')
+const music = document.getElementById('bg-music')
+const toast = document.getElementById('tease-toast')
+const musicToggle = document.getElementById('music-toggle')
 
 if (!yesBtn || !noBtn || !catGif) return
 
 // =========================
-// 🎬 GIF STAGES
+// DATA
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
-    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
-    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
-    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
     "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
 
-// =========================
-// 💬 YES TEASE（>=8句）
-// =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
     "Hmm? You really want YES that badly? 😏",
@@ -34,23 +34,16 @@ const yesTeasePokes = [
     "Almost there… but not yet 💖",
     "You’re getting impatient huh? 😏",
     "I like how determined you are 💕",
-    "But I still wanna tease you a bit 😌",
-    "If I say yes too early… it's boring 😳",
-    "Be patient a little more 💞"
+    "But I still wanna tease you a bit more 😌"
 ]
 
-// =========================
-// 💔 NO MESSAGES
-// =========================
 const noMessages = [
     "No… really? 🥺",
     "You’re breaking my heart 😤",
     "Please don’t do this 💔",
     "I thought you liked me 😢",
     "This actually hurts… 🥀",
-    "I’m starting to run away… 😭",
-    "Last warning… 😔",
-    "..."
+    "I might disappear soon… 😭"
 ]
 
 // =========================
@@ -58,10 +51,8 @@ const noMessages = [
 // =========================
 let yesIndex = 0
 let noIndex = 0
+let runawayTriggered = false
 let musicStarted = false
-let runawayEnabled = false
-
-const maxIndex = gifStages.length - 1
 
 // =========================
 // MUSIC
@@ -69,7 +60,9 @@ const maxIndex = gifStages.length - 1
 function startMusic() {
     if (!music || musicStarted) return
     music.volume = 0.3
-    music.play().then(() => musicStarted = true).catch(() => {})
+    music.play().then(() => {
+        musicStarted = true
+    }).catch(() => {})
 }
 
 document.addEventListener("click", startMusic, { once: true })
@@ -86,74 +79,61 @@ window.toggleMusic = function () {
 }
 
 // =========================
-// 💖 YES BUTTON
+// YES BUTTON
 // =========================
 yesBtn.addEventListener("click", () => {
 
     startMusic()
 
-    // ❗ 前期只能 tease
-    if (noIndex < maxIndex) {
-        showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
-        yesIndex++
-        return
-    }
-
-    // ❗ 最後才允許結局
-    showToast("…okay 💖 I waited long enough")
-
-    setTimeout(() => {
-        window.location.href = "yes.html"
-    }, 900)
+    showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
+    yesIndex++
 })
 
 // =========================
-// 💔 NO BUTTON（核心修正版）
+// NO BUTTON
 // =========================
 noBtn.addEventListener("click", () => {
 
     startMusic()
 
-    // =========================
-    // ❗ 已經到最後一張圖
-    // =========================
-    if (noIndex >= maxIndex) {
+    const lastIndex = noMessages.length - 1
 
-        if (!runawayEnabled) {
-            showToast("Catch me if you can 😏")
+    // ⭐ 最後一次 NO → 開始逃跑模式
+    if (noIndex === lastIndex) {
+
+        showToast("Catch me if you can 😏")
+
+        if (!runawayTriggered) {
             enableRunaway()
-            runawayEnabled = true
+            runawayTriggered = true
         }
 
         return
     }
 
-    // =========================
-    // ❗ 先顯示，再更新（修你 bug）
-    // =========================
+    // 👉 正常 NO（一定會換圖）
     showToast(noMessages[noIndex])
 
-    // 🎬 一定換圖（已修第一次不變 bug）
+    // 🔥 強制更新圖片（避免 cache）
     catGif.src = gifStages[noIndex] + "?v=" + Date.now()
 
-    // 👉 index 後移動
-    noIndex++
-
-    // 💖 YES 變大（壓力）
+    // YES 變大
     const size = parseFloat(getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
+
+    noIndex++
 })
 
 // =========================
-// 🏃 RUNAWAY（最後才開）
+// RUNAWAY
 // =========================
 function enableRunaway() {
 
-    noBtn.addEventListener("mouseenter", runAway)
-    noBtn.addEventListener("touchstart", runAway, { passive: true })
+    noBtn.addEventListener("mouseenter", moveNo)
+    noBtn.addEventListener("touchstart", moveNo, { passive: true })
 }
 
-function runAway() {
+function moveNo() {
 
     const rect = noBtn.getBoundingClientRect()
 
@@ -164,11 +144,11 @@ function runAway() {
     noBtn.style.left = x + "px"
     noBtn.style.top = y + "px"
     noBtn.style.zIndex = "999"
-    noBtn.style.transition = "0.2s ease"
+    noBtn.style.transition = "0.15s ease"
 }
 
 // =========================
-// 💬 TOAST
+// TOAST
 // =========================
 function showToast(msg) {
 
