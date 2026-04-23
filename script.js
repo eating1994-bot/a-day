@@ -9,7 +9,7 @@ const gifStages = [
     "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
-    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-dudu-bubu.gif",
     "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
@@ -29,7 +29,7 @@ const storyLines = [
 ]
 
 // =========================
-// 💬 YES TEASE
+// 💬 YES TEASE（完整）
 // =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
@@ -51,14 +51,14 @@ const yesTeasePokes = [
 ]
 
 // =========================
-// 💔 NO MESSAGES
+// 💔 NO MESSAGES（傷心句）
 // =========================
 const noMessages = [
-    "No",
-    "Are you sure? 🥺",
+    "No… really? 🥺",
     "You’re breaking my heart 😤",
-    "Please don’t… 💔",
+    "Please don’t do this 💔",
     "I thought you liked me 😢",
+    "This actually hurts… 🥀",
     "Okay… I’ll run away 😭"
 ]
 
@@ -70,29 +70,48 @@ const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
+const musicToggle = document.getElementById('music-toggle')
 
 if (!yesBtn || !noBtn) return
 
 let yesIndex = 0
 let noIndex = 0
 let runawayEnabled = false
+let musicStarted = false
 
 // =========================
-// 🎵 MUSIC SAFE
+// 🎵 音樂（手機解鎖版）
 // =========================
-if (music) {
+function startMusic() {
+    if (!music || musicStarted) return
     music.volume = 0.3
-    music.play().catch(() => {
-        document.addEventListener('click', () => {
-            music.play().catch(() => {})
-        }, { once: true })
-    })
+    music.muted = false
+    music.play().then(() => {
+        musicStarted = true
+    }).catch(() => {})
+}
+
+// 👉 第一次點擊啟動音樂（關鍵）
+document.addEventListener("click", startMusic, { once: true })
+
+// 👉 音樂按鈕
+window.toggleMusic = function () {
+    if (!music) return
+    if (music.paused) {
+        music.play()
+        musicToggle.textContent = "🔊"
+    } else {
+        music.pause()
+        musicToggle.textContent = "🔇"
+    }
 }
 
 // =========================
 // 💖 YES CLICK
 // =========================
 yesBtn.addEventListener("click", () => {
+
+    startMusic()
 
     if (!runawayEnabled) {
         showToast(yesTeasePokes[Math.min(yesIndex, yesTeasePokes.length - 1)])
@@ -108,23 +127,31 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// 💔 NO CLICK
+// 💔 NO CLICK（你要的版本）
 // =========================
 noBtn.addEventListener("click", () => {
 
+    startMusic()
+
     noIndex++
 
-    noBtn.textContent = noMessages[Math.min(noIndex, noMessages.length - 1)]
+    // ❗ 按鈕永遠維持 No（不改文字）
 
+    // 💔 顯示傷心 + 劇情（升級版）
+    const msg1 = noMessages[Math.min(noIndex, noMessages.length - 1)]
+    const msg2 = storyLines[Math.min(noIndex, storyLines.length - 1)]
+    showToast(msg1 + " " + msg2)
+
+    // 💖 YES 變大
     const size = parseFloat(window.getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.1, 52) + "px"
 
+    // 🎬 GIF 變
     if (catGif) {
         catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
     }
 
-    showToast(storyLines[Math.min(noIndex, storyLines.length - 1)])
-
+    // 🏃 runaway
     if (noIndex >= 6 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
