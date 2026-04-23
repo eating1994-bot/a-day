@@ -1,47 +1,8 @@
-<script>
-const music = document.getElementById("bg-music")
+let musicPlaying = false
 
-let started = false
+function safeConfetti(){
+    if (typeof confetti !== "function") return
 
-function startMusic() {
-    if (!music || started) return
-
-    music.volume = 0.3
-    music.muted = false
-
-    const playPromise = music.play()
-
-    if (playPromise !== undefined) {
-        playPromise
-            .then(() => {
-                started = true
-                console.log("🎵 music started")
-            })
-            .catch((err) => {
-                console.log("❌ music blocked:", err)
-            })
-    }
-}
-
-// ✅ 超強保險：任何互動都能解鎖
-document.addEventListener("click", startMusic)
-document.addEventListener("touchstart", startMusic)
-
-// 🔊 按鈕控制
-function toggleMusic() {
-    if (!music) return
-
-    if (music.paused) {
-        music.play()
-        document.getElementById("music-toggle").textContent = "🔊"
-    } else {
-        music.pause()
-        document.getElementById("music-toggle").textContent = "🔇"
-    }
-}
-
-// 💛 煙火
-function softFire(){
     confetti({
         particleCount: 40,
         spread: 60,
@@ -51,30 +12,51 @@ function softFire(){
     })
 }
 
-// 🌼 花瓣
 function createPetal(){
     const petal = document.createElement("div")
     petal.classList.add("petal")
 
-    const flowers = ["🌼","🌼","💛","✨"]
-    petal.innerText = flowers[Math.floor(Math.random()*flowers.length)]
+    petal.innerText = ["🌼","💛","✨"][Math.floor(Math.random()*3)]
 
-    petal.style.left = Math.random() * 100 + "vw"
+    petal.style.left = Math.random()*100 + "vw"
     petal.style.animationDuration = (Math.random()*3 + 3) + "s"
-    petal.style.fontSize = (Math.random()*18 + 12) + "px"
 
     document.body.appendChild(petal)
 
-    setTimeout(()=>petal.remove(), 7000)
+    setTimeout(() => petal.remove(), 7000)
+}
+
+function startMusic(){
+    const music = document.getElementById("bg-music")
+    if(!music) return
+
+    music.volume = 0.3
+    music.play().catch(()=>{})
+}
+
+function toggleMusic(){
+    const music = document.getElementById("bg-music")
+    const btn = document.getElementById("music-toggle")
+
+    if(!music) return
+
+    if(music.paused){
+        music.play()
+        if(btn) btn.textContent = "🔊"
+    }else{
+        music.pause()
+        if(btn) btn.textContent = "🔇"
+    }
 }
 
 window.addEventListener("load", () => {
 
-    softFire()
-    setInterval(softFire, 4000)
+    safeConfetti()
+    setInterval(safeConfetti, 4000)
     setInterval(createPetal, 300)
 
-    // 🔥 關鍵：立刻嘗試一次（避免第一點沒聲音）
     startMusic()
 })
-</script>
+
+// unlock audio
+document.addEventListener("click", startMusic, { once:true })
