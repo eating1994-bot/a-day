@@ -51,7 +51,7 @@ const yesTeasePokes = [
 ]
 
 // =========================
-// 💔 NO MESSAGES（傷心句）
+// 💔 NO MESSAGES（最後一句改好了）
 // =========================
 const noMessages = [
     "No… really? 🥺",
@@ -59,7 +59,7 @@ const noMessages = [
     "Please don’t do this 💔",
     "I thought you liked me 😢",
     "This actually hurts… 🥀",
-    "Okay… I’ll run away 😭"
+    "Catch me if you can haha 😜"
 ]
 
 // =========================
@@ -91,10 +91,8 @@ function startMusic() {
     }).catch(() => {})
 }
 
-// 👉 第一次點擊啟動音樂（關鍵）
 document.addEventListener("click", startMusic, { once: true })
 
-// 👉 音樂按鈕
 window.toggleMusic = function () {
     if (!music) return
     if (music.paused) {
@@ -127,7 +125,7 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// 💔 NO CLICK（你要的版本）
+// 💔 NO CLICK（固定顯示 No + 傷心句）
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -135,23 +133,21 @@ noBtn.addEventListener("click", () => {
 
     noIndex++
 
-    // ❗ 按鈕永遠維持 No（不改文字）
+    // ❗ 按鈕文字永遠維持 No
+    noBtn.textContent = "No"
 
-    // 💔 顯示傷心 + 劇情（升級版）
     const msg1 = noMessages[Math.min(noIndex, noMessages.length - 1)]
     const msg2 = storyLines[Math.min(noIndex, storyLines.length - 1)]
+
     showToast(msg1 + " " + msg2)
 
-    // 💖 YES 變大
     const size = parseFloat(window.getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.1, 52) + "px"
 
-    // 🎬 GIF 變
     if (catGif) {
         catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
     }
 
-    // 🏃 runaway
     if (noIndex >= 6 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
