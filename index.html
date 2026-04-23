@@ -25,18 +25,28 @@
         </div>
 
         <div class="buttons">
-            <button id="yes-btn" onclick="handleYesClick()">Yes</button>
-            <button id="no-btn" onclick="handleNoClick()">No</button>
+            <button id="yes-btn">Yes</button>
+            <button id="no-btn">No</button>
         </div>
 
-        <!-- 💬 跟著跑的文字（已加入） -->
-        <div id="runaway-text">Catch me if you can 😜</div>
+        <!-- 💬 runaway text（正確位置 + 不會擋 UI） -->
+        <div id="runaway-text"
+             style="
+                position: fixed;
+                pointer-events: none;
+                font-size: 1rem;
+                color: #e91e8c;
+                font-weight: 700;
+                z-index: 1000;
+             ">
+            Catch me if you can 😜
+        </div>
 
         <div id="tease-toast"></div>
     </div>
 
-    <!-- 🎵 音樂（已修正：移除 autoplay muted，手機才會正常） -->
-    <audio id="bg-music" loop>
+    <!-- 🎵 音樂（正確版本） -->
+    <audio id="bg-music" loop preload="auto">
         <source src="music/beabadoobee - Glue Song (Lyrics).mp3" type="audio/mpeg">
     </audio>
 
