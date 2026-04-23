@@ -81,49 +81,64 @@ body{
 let music = null
 let started = false
 
-// 🎵 fade-in 播放
-function startMusic(){
-    if(!music || started) return
+// =========================
+// 🎵 MUSIC (CLICK TO START MODE)
+// =========================
+function startMusic() {
+
+    if (!music) {
+        music = document.getElementById("bg-music")
+    }
+
+    if (!music || started) return
 
     music.volume = 0
 
-    music.play().then(()=>{
+    music.play().then(() => {
         started = true
+        console.log("🎵 music started")
 
+        // 🌊 fade-in
         let vol = 0
-        const fade = setInterval(()=>{
+        const fade = setInterval(() => {
             vol += 0.03
-            if(vol >= 0.3){
+            if (vol >= 0.3) {
                 vol = 0.3
                 clearInterval(fade)
             }
             music.volume = vol
         }, 80)
 
-    }).catch(err=>{
+    }).catch(err => {
         console.log("play blocked:", err)
     })
 }
 
-// 🔊 使用者第一次互動就播放（關鍵）
-document.addEventListener("click", startMusic, { once:true })
-document.addEventListener("touchstart", startMusic, { once:true })
-document.addEventListener("scroll", startMusic, { once:true })
+// 👉 跟你成功版本一樣：user gesture 才播
+document.addEventListener("click", startMusic, { once: true })
+document.addEventListener("touchstart", startMusic, { once: true })
+document.addEventListener("keydown", startMusic, { once: true })
 
-// 🔊 toggle
+// =========================
+// 🔇 toggle
+// =========================
 function toggleMusic(){
-    if(!music) return
+    if (!music) music = document.getElementById("bg-music")
 
-    if(music.paused){
+    if (!music) return
+
+    if (music.paused){
         music.play()
         document.getElementById("music-toggle").textContent = "🔊"
-    }else{
+    } else {
         music.pause()
         document.getElementById("music-toggle").textContent = "🔇"
     }
 }
 
+// =========================
 // 💥 confetti
+// =========================
 function softFire(){
     if(typeof confetti !== "function") return
 
@@ -136,7 +151,9 @@ function softFire(){
     })
 }
 
+// =========================
 // 🌼 petals
+// =========================
 function createPetal(){
     const petal = document.createElement("div")
     petal.classList.add("petal")
@@ -153,14 +170,15 @@ function createPetal(){
     setTimeout(()=>petal.remove(), 7000)
 }
 
-// 🚀 初始化（不播放音樂！）
+// =========================
+// 🚀 INIT（不在這裡播音樂！）
+// =========================
 window.addEventListener("load", () => {
-
-    music = document.getElementById("bg-music")
 
     softFire()
     setInterval(softFire, 4000)
     setInterval(createPetal, 300)
+
 })
 </script>
 
