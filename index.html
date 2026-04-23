@@ -37,8 +37,8 @@
 
     </div>
 
-    <!-- 💬 只會在最後 NO 才動態出現 -->
-    <div id="runaway-text"></div>
+    <!-- ⚠️ runaway text：不要預先寫內容（避免 JS 提前觸發） -->
+    <div id="runaway-text" style="position:fixed; pointer-events:none;"></div>
 
     <!-- 🎵 音樂 -->
     <audio id="bg-music" loop>
