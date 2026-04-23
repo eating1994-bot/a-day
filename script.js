@@ -1,11 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+console.log("script loaded")
+
 const catGif = document.getElementById('cat-gif')
 const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const toast = document.getElementById('tease-toast')
 
-if (!yesBtn || !noBtn || !catGif) return
+if (!catGif || !yesBtn || !noBtn) {
+  console.error("missing elements")
+  return
+}
 
 // =========================
 // DATA
@@ -36,16 +41,16 @@ const yesTease = [
   "I like teasing you 💕",
   "You’re impatient huh 😏",
   "Almost… but not yet 💖",
-  "You’re cute when you try 😳",
   "Still not YES 👀",
-  "I’m watching you 😏"
+  "I’m watching you 😏",
+  "You really think it’s that easy? 😌"
 ]
 
 // =========================
 // STATE
 // =========================
 let step = 0
-let runawayOn = false
+let runaway = false
 
 // =========================
 // TOAST
@@ -63,41 +68,45 @@ function show(msg){
 }
 
 // =========================
-// NO CLICK（穩定版核心）
+// NO CLICK (FIXED)
 // =========================
 noBtn.addEventListener("click", () => {
 
-  // 👉 防呆 index
+  console.log("NO clicked:", step)
+
   const index = Math.min(step, gifs.length - 1)
 
-  // 💬 文字
-  show(noText[Math.min(step, noText.length - 1)])
+  show(noText[index])
 
-  // 🖼️ 圖片（強制刷新避免卡圖）
-  catGif.src = gifs[index] + "?v=" + Date.now()
+  // 🔥 強制 reload（關鍵修正）
+  const newUrl = gifs[index] + "?t=" + Date.now()
+
+  catGif.onload = () => {
+    console.log("image loaded:", newUrl)
+  }
+
+  catGif.src = newUrl
 
   step++
 
-  // ⭐ 最後一張 NO 才啟動 runaway
-  if (step >= gifs.length && !runawayOn) {
+  // ⭐ 最後才 runaway
+  if (step >= gifs.length && !runaway) {
     show("Catch me if you can 😏")
     enableRunaway()
-    runawayOn = true
+    runaway = true
   }
 })
 
 // =========================
-// YES CLICK（穩定版）
+// YES CLICK
 // =========================
 yesBtn.addEventListener("click", () => {
 
-  // 👉 還沒到最後 → teasing
   if (step < gifs.length) {
     show(yesTease[step % yesTease.length])
     return
   }
 
-  // 👉 最後才允許結局
   show("Okay… 💖")
 
   setTimeout(() => {
@@ -106,20 +115,20 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// RUNAWAY（只最後才出現）
+// RUNAWAY
 // =========================
 function enableRunaway(){
+  console.log("runaway enabled")
 
   noBtn.addEventListener("mouseenter", move)
   noBtn.addEventListener("touchstart", move, {passive:true})
 }
 
 function move(){
+  const r = noBtn.getBoundingClientRect()
 
-  const rect = noBtn.getBoundingClientRect()
-
-  const x = Math.random() * (window.innerWidth - rect.width - 20)
-  const y = Math.random() * (window.innerHeight - rect.height - 20)
+  const x = Math.random() * (window.innerWidth - r.width)
+  const y = Math.random() * (window.innerHeight - r.height)
 
   noBtn.style.position = "fixed"
   noBtn.style.left = x + "px"
