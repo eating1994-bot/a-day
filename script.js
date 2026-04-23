@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 // =========================
-// 🎬 GIF STORY MODE
+// GIF / STORY
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -14,9 +14,6 @@ const gifStages = [
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
 
-// =========================
-// 💔 STORY LINES
-// =========================
 const storyLines = [
     "Hi… I’m happy to see you 💕",
     "Hmm? you’re clicking me?",
@@ -28,38 +25,23 @@ const storyLines = [
     "I think I’m running away… 😭"
 ]
 
-// =========================
-// 💬 YES TEASE
-// =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
     "Hmm? You really want YES that badly? 😏",
-    "Not so easy~ try teasing me first 😌",
+    "Not so easy~ 😌",
     "You didn’t even play with me yet 👀",
-    "I think you skipped a step… 😳",
     "Slow down… I like being chased 😏",
-    "You’re acting too confident right now 😌",
-    "I might say yes… if you behave 😌💖",
-    "Try clicking No just once… I’m curious 👀",
-    "You’re not getting YES that easily 😈",
-    "I think you like me more than you admit 😏",
-    "Hmm… you’re making me shy 🥺",
-    "You really want the ending that fast? 💞",
     "You’re cute when you rush 😳",
-    "I like watching you try 😏",
     "Almost there… but not yet 💖"
 ]
 
-// =========================
-// 💔 NO MESSAGES
-// =========================
 const noMessages = [
     "No… really? 🥺",
     "You’re breaking my heart 😤",
     "Please don’t do this 💔",
     "I thought you liked me 😢",
     "This actually hurts… 🥀",
-    "Catch me if you can haha 😜"
+    "Catch me if you can 😜"
 ]
 
 // =========================
@@ -70,65 +52,41 @@ const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
-const musicToggle = document.getElementById('music-toggle')
 const runawayText = document.getElementById("runaway-text")
-
-if (!yesBtn || !noBtn) return
 
 let yesIndex = 0
 let noIndex = 0
 let runawayEnabled = false
-let musicStarted = false
-let runawayLoop = null
 
 // =========================
-// 🎵 MUSIC
+// MUSIC FIX
 // =========================
 function startMusic() {
-    if (!music || musicStarted) return
+    if (!music) return
     music.volume = 0.3
-    music.muted = false
-
-    music.play().then(() => {
-        musicStarted = true
-    }).catch(() => {})
+    music.play().catch(() => {})
 }
 
 document.addEventListener("click", startMusic, { once: true })
 
-window.toggleMusic = function () {
-    if (!music) return
-    if (music.paused) {
-        music.play()
-        musicToggle.textContent = "🔊"
-    } else {
-        music.pause()
-        musicToggle.textContent = "🔇"
-    }
-}
-
 // =========================
-// 💖 YES
+// YES
 // =========================
 yesBtn.addEventListener("click", () => {
 
     startMusic()
 
     if (!runawayEnabled) {
-        showToast(yesTeasePokes[Math.min(yesIndex, yesTeasePokes.length - 1)])
-        yesIndex++
+        showToast(yesTeasePokes[Math.min(yesIndex++, yesTeasePokes.length - 1)])
         return
     }
 
     showToast("Okay… 💖")
-
-    setTimeout(() => {
-        window.location.href = "yes.html"
-    }, 800)
+    setTimeout(() => window.location.href = "yes.html", 800)
 })
 
 // =========================
-// 💔 NO
+// NO
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -138,26 +96,27 @@ noBtn.addEventListener("click", () => {
 
     noBtn.textContent = "No"
 
-    const msg1 = noMessages[Math.min(noIndex, noMessages.length - 1)]
-    const msg2 = storyLines[Math.min(noIndex, storyLines.length - 1)]
+    const msg =
+        noMessages[Math.min(noIndex, noMessages.length - 1)] + " " +
+        storyLines[Math.min(noIndex, storyLines.length - 1)]
 
-    showToast(msg1 + " " + msg2)
+    showToast(msg)
 
-    const size = parseFloat(window.getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.1, 52) + "px"
+    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
+    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
 
     if (catGif) {
         catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
     }
 
-    if (noIndex >= 6 && !runawayEnabled) {
+    if (noIndex >= 5 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
     }
 })
 
 // =========================
-// 💬 TOAST
+// TOAST
 // =========================
 function showToast(msg) {
     if (!toast) return
@@ -168,21 +127,20 @@ function showToast(msg) {
     clearTimeout(toast._t)
     toast._t = setTimeout(() => {
         toast.classList.remove("show")
-    }, 2000)
+    }, 2200)
 }
 
 // =========================
-// 🏃 RUNAWAY (真正追蹤版)
+// RUNAWAY (平滑版🔥)
 // =========================
 function enableRunaway() {
-
     showToast("Catch me if you can 😏")
 
-    if (runawayLoop) return
-
-    runawayLoop = setInterval(runAway, 120)
+    noBtn.addEventListener("mouseenter", runAway)
+    noBtn.addEventListener("touchstart", runAway, { passive: true })
 }
 
+// 🔥 變成「滑走」不是瞬移
 function runAway() {
 
     const rect = noBtn.getBoundingClientRect()
@@ -190,20 +148,21 @@ function runAway() {
     const vw = window.innerWidth
     const vh = window.innerHeight
 
-    const x = Math.random() * (vw - rect.width - 20)
-    const y = Math.random() * (vh - rect.height - 20)
+    const x = Math.random() * (vw - rect.width - 40)
+    const y = Math.random() * (vh - rect.height - 40)
 
     noBtn.style.position = "fixed"
+    noBtn.style.transition = "0.4s ease"
     noBtn.style.left = x + "px"
     noBtn.style.top = y + "px"
     noBtn.style.zIndex = "999"
-    noBtn.style.transition = "0.08s ease"
 
-    // 🔥 文字跟著跑（安全版）
+    // 💬 文字慢慢跟著（不爆衝）
     if (runawayText) {
         runawayText.style.position = "fixed"
+        runawayText.style.transition = "0.5s ease"
         runawayText.style.left = (x + rect.width + 10) + "px"
-        runawayText.style.top = (y + rect.height / 2 - 10) + "px"
+        runawayText.style.top = (y + rect.height / 2) + "px"
         runawayText.style.zIndex = "1000"
     }
 }
