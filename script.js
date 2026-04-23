@@ -24,7 +24,7 @@ const gifStages = [
 ]
 
 // =========================
-// NO TEXT
+// TEXT
 // =========================
 const noMessages = [
     "No… really? 🥺",
@@ -36,9 +36,6 @@ const noMessages = [
     "I think I’m really going to run away… 😢"
 ]
 
-// =========================
-// YES TEASE
-// =========================
 const yesTease = [
     "Wait… too fast 😳",
     "Not so easy~ 😌",
@@ -91,16 +88,18 @@ yesBtn.addEventListener("click", () => {
 
     startMusic()
 
-    // ⭐ runaway 前：tease + 終點
+    // ⭐ runaway 前：YES tease + 終點
     if (!runawayEnabled) {
 
         yesIndex++
 
-        const last = yesTease.length - 1
+        const endIndex = yesTease.length - 1
 
-        if (yesIndex >= last) {
-            showToast("You can keep saying YES... but maybe try NO 😏")
-            yesIndex = last
+        if (yesIndex >= endIndex) {
+
+            showToast("You really like YES huh 😏 but… try saying NO for once 💔")
+
+            yesIndex = endIndex
             return
         }
 
@@ -131,14 +130,14 @@ noBtn.addEventListener("click", () => {
     // ⭐ GIF 更新
     catGif.src = gifStages[stage] + "?v=" + Date.now()
 
-    // ⭐ 對話（最後一張不重複 runaway 台詞）
+    // ⭐ NO 對話
     if (stage < lastStage) {
         showToast(noMessages[stage])
     } else {
         showToast("I think I'm really going to run away… 😭")
     }
 
-    // ⭐ YES 成長
+    // ⭐ YES 變大
     yesGrowStep++
     const newSize = yesBaseSize + yesGrowStep * 3
     yesBtn.style.fontSize = Math.min(newSize, 60) + "px"
@@ -163,7 +162,7 @@ function enableRunaway() {
 }
 
 // =========================
-// MOVE
+// MOVE BUTTON + TEXT
 // =========================
 function runAway() {
 
