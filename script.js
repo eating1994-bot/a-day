@@ -7,13 +7,53 @@ const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
 const runawayText = document.getElementById('runaway-text')
 
-if (!yesBtn || !noBtn || !catGif) {
-    console.error("Missing core elements")
-    return
-}
+if (!yesBtn || !noBtn || !catGif) return
 
 // =========================
-// 🎵 音樂（獨立安全版）
+// 🎬 GIF
+// =========================
+const gifStages = [
+    "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
+    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
+]
+
+// =========================
+// 💬 文案
+// =========================
+const noMessages = [
+    "No… really? 🥺",
+    "You’re breaking my heart 😤",
+    "Please don’t do this 💔",
+    "I thought you liked me 😢",
+    "This actually hurts… 🥀",
+    "Okay… I’m scared 😭",
+    "I think I’ll run away… 😢"
+]
+
+const yesTease = [
+    "Wait… too fast 😳",
+    "Not so easy~ 😌",
+    "You’re impatient huh 😏",
+    "I like your effort 💕",
+    "Almost there… 💖",
+    "But not yet 😌"
+]
+
+// =========================
+// STATE
+// =========================
+let noIndex = 0
+let yesIndex = 0
+let runawayEnabled = false
+
+// =========================
+// 🎵 音樂
 // =========================
 function startMusic() {
     if (!music) return
@@ -21,13 +61,10 @@ function startMusic() {
     music.play().catch(() => {})
 }
 
-// 👉 保證任何 click 都能觸發（不依賴其他 JS）
-document.addEventListener("click", () => {
-    startMusic()
-}, { once: true })
+document.addEventListener("click", startMusic, { once: true })
 
 // =========================
-// TOAST（安全）
+// 💬 TOAST
 // =========================
 function showToast(msg) {
     if (!toast) return
@@ -42,47 +79,7 @@ function showToast(msg) {
 }
 
 // =========================
-// DATA
-// =========================
-const gifStages = [
-    "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
-    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
-    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
-    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
-    "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
-    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
-    "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
-    "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
-]
-
-const noMessages = [
-    "No… 🥺",
-    "You’re breaking my heart 😤",
-    "Please don’t do this 💔",
-    "I thought you liked me 😢",
-    "This hurts… 🥀",
-    "I’m scared 😭",
-    "I think I’ll run away… 😢"
-]
-
-const yesTease = [
-    "Wait… 😳",
-    "Not so easy~ 😌",
-    "You’re impatient 😏",
-    "I like your effort 💕",
-    "Almost there 💖",
-    "But not yet 😌"
-]
-
-// =========================
-// STATE
-// =========================
-let noIndex = 0
-let yesIndex = 0
-let runawayEnabled = false
-
-// =========================
-// YES
+// 💖 YES（不再變大）
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -93,19 +90,16 @@ yesBtn.addEventListener("click", () => {
         yesIndex++
 
         if (yesIndex >= yesTease.length) {
-            showToast("Try NO 😏")
+            showToast("Try clicking NO 😏")
             yesIndex = yesTease.length - 1
             return
         }
 
         showToast(yesTease[yesIndex])
-
-        const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-        yesBtn.style.fontSize = Math.min(size * 1.15, 80) + "px"
-
         return
     }
 
+    // ⭐ 最後才進結局
     showToast("Okay… 💖")
 
     setTimeout(() => {
@@ -114,7 +108,7 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// NO
+// 💔 NO（推進主線 + YES變大）
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -124,13 +118,18 @@ noBtn.addEventListener("click", () => {
 
     const stage = Math.min(noIndex, gifStages.length - 1)
 
+    // 🎬 換圖（防 cache）
     catGif.src = gifStages[stage] + "?v=" + Date.now()
 
+    // 💬 對話
     showToast(noMessages[stage])
 
+    // ⭐ 只有 NO 才讓 YES 變大
     const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.12, 80) + "px"
+    yesBtn.style.fontSize = Math.min(size * 1.15, 80) + "px"
+    yesBtn.style.transition = "0.2s ease"
 
+    // ⭐ 最後才開 runaway
     if (stage === gifStages.length - 1 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
@@ -138,39 +137,35 @@ noBtn.addEventListener("click", () => {
 })
 
 // =========================
-// RUNAWAY（安全版）
+// 🏃 RUNAWAY（不破版版本）
 // =========================
 function enableRunaway() {
 
-    showToast("Catch me 😏")
+    showToast("Catch me no way 😏")
 
     noBtn.addEventListener("mouseenter", moveNo)
     noBtn.addEventListener("pointerdown", moveNo)
 }
 
 // =========================
-// MOVE SAFE
+// MOVE（用 % 不會破版）
 // =========================
 function moveNo() {
 
-    if (!noBtn) return
+    const x = Math.random() * 80 + 10
+    const y = Math.random() * 80 + 10
 
-    const rect = noBtn.getBoundingClientRect()
+    noBtn.style.position = "absolute"
+    noBtn.style.left = x + "%"
+    noBtn.style.top = y + "%"
+    noBtn.style.transform = "translate(-50%, -50%)"
 
-    const x = Math.random() * (window.innerWidth - rect.width - 20)
-    const y = Math.random() * (window.innerHeight - rect.height - 20)
-
-    noBtn.style.position = "fixed"
-    noBtn.style.left = x + "px"
-    noBtn.style.top = y + "px"
-    noBtn.style.zIndex = "999"
-
+    // 💬 文字（避免重疊）
     if (runawayText) {
-        runawayText.textContent = "Catch me 😏"
-        runawayText.style.position = "fixed"
-        runawayText.style.zIndex = "1000"
-        runawayText.style.left = (x + 40) + "px"
-        runawayText.style.top = (y - 20) + "px"
+        runawayText.textContent = "Catch me no way 😏"
+        runawayText.style.position = "absolute"
+        runawayText.style.left = (x + 5) + "%"
+        runawayText.style.top = (y - 5) + "%"
     }
 }
 
