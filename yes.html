@@ -1,36 +1,37 @@
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+
 const music = document.getElementById("bg-music")
+
+if (!music) {
+    console.log("❌ music not found")
+    return
+}
 
 let started = false
 
 function startMusic() {
-    if (!music || started) return
+    if (started) return
 
     music.volume = 0.3
     music.muted = false
 
-    const playPromise = music.play()
-
-    if (playPromise !== undefined) {
-        playPromise
-            .then(() => {
-                started = true
-                console.log("🎵 music started")
-            })
-            .catch((err) => {
-                console.log("❌ music blocked:", err)
-            })
-    }
+    music.play()
+        .then(() => {
+            started = true
+            console.log("🎵 music started")
+        })
+        .catch(err => {
+            console.log("⚠️ music blocked:", err)
+        })
 }
 
-// ✅ 超強保險：任何互動都能解鎖
+// ✅ 解鎖音樂
 document.addEventListener("click", startMusic)
 document.addEventListener("touchstart", startMusic)
 
-// 🔊 按鈕控制
-function toggleMusic() {
-    if (!music) return
-
+// 🔊 toggle
+window.toggleMusic = function () {
     if (music.paused) {
         music.play()
         document.getElementById("music-toggle").textContent = "🔊"
@@ -40,8 +41,10 @@ function toggleMusic() {
     }
 }
 
-// 💛 煙火
+// 💛 煙火（保護版）
 function softFire(){
+    if (typeof confetti !== "function") return
+
     confetti({
         particleCount: 40,
         spread: 60,
@@ -68,13 +71,15 @@ function createPetal(){
     setTimeout(()=>petal.remove(), 7000)
 }
 
+// 🚀 啟動
 window.addEventListener("load", () => {
 
     softFire()
     setInterval(softFire, 4000)
     setInterval(createPetal, 300)
 
-    // 🔥 關鍵：立刻嘗試一次（避免第一點沒聲音）
     startMusic()
+})
+
 })
 </script>
