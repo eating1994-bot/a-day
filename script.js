@@ -5,12 +5,12 @@ const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
-const musicToggle = document.getElementById('music-toggle')
+const runawayText = document.getElementById('runaway-text')
 
-if (!yesBtn || !noBtn) return
+if (!yesBtn || !noBtn || !catGif) return
 
 // =========================
-// 🎬 GIF（修正：穩定更新）
+// GIF
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -24,23 +24,7 @@ const gifStages = [
 ]
 
 // =========================
-// 💬 YES（8+句）
-// =========================
-const yesTeasePokes = [
-    "Wait… you’re going too fast 😳",
-    "Hmm? You really want YES that badly? 😏",
-    "Not so easy~ 😌",
-    "You didn’t even play with me yet 👀",
-    "Almost there… but not yet 💖",
-    "You’re getting impatient huh? 😏",
-    "I like how determined you are 💕",
-    "But I still wanna tease you a bit more 😌",
-    "If you keep clicking YES I might just run 😳",
-    "Be patient… I like slow love 💛"
-]
-
-// =========================
-// 💔 NO（每次都會變）
+// TEXT
 // =========================
 const noMessages = [
     "No… really? 🥺",
@@ -49,17 +33,24 @@ const noMessages = [
     "I thought you liked me 😢",
     "This actually hurts… 🥀",
     "Okay… I’m running away 😭",
-    "Catch me if you can 😏"
+    "Catch me no way 😏"
+]
+
+const yesTease = [
+    "Wait… too fast 😳",
+    "Not so easy~ 😌",
+    "You’re impatient huh 😏",
+    "I like your effort 💕",
+    "Almost there… 💖",
+    "But not yet 😌"
 ]
 
 // =========================
 // STATE
 // =========================
-let yesIndex = 0
 let noIndex = 0
-
-// 👉 最後一階才允許結局
-const FINAL_STAGE = gifStages.length - 1
+let yesIndex = 0
+let runawayEnabled = false
 
 // =========================
 // MUSIC
@@ -72,70 +63,11 @@ function startMusic() {
 
 document.addEventListener("click", startMusic, { once: true })
 
-window.toggleMusic = function () {
-    if (!music) return
-    if (music.paused) {
-        music.play()
-        musicToggle.textContent = "🔊"
-    } else {
-        music.pause()
-        musicToggle.textContent = "🔇"
-    }
-}
-
-// =========================
-// YES（只有最後一關才能結局）
-// =========================
-yesBtn.addEventListener("click", () => {
-
-    startMusic()
-
-    // ❗還沒到最後 → 只 teasing
-    if (noIndex < FINAL_STAGE) {
-        showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
-        yesIndex++
-        return
-    }
-
-    // ❤️ 最後才允許結局
-    showToast("Okay… I choose you 💖")
-
-    setTimeout(() => {
-        window.location.href = "yes.html"
-    }, 900)
-})
-
-// =========================
-// NO（核心修正版）
-// =========================
-noBtn.addEventListener("click", () => {
-
-    startMusic()
-
-    noIndex++
-
-    // ✅ 修正 GIF 更新（避免 cache）
-    const stage = Math.min(noIndex, FINAL_STAGE)
-
-    if (catGif) {
-        catGif.src = gifStages[stage] + "?v=" + Date.now()
-    }
-
-    // 💬 對話
-    const msg = noMessages[stage] + " 💔"
-    showToast(msg)
-
-    // 💖 YES 變大
-    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
-})
-
 // =========================
 // TOAST
 // =========================
 function showToast(msg) {
     if (!toast) return
-
     toast.textContent = msg
     toast.classList.add("show")
 
@@ -143,6 +75,96 @@ function showToast(msg) {
     toast._t = setTimeout(() => {
         toast.classList.remove("show")
     }, 2000)
+}
+
+// =========================
+// YES
+// =========================
+yesBtn.addEventListener("click", () => {
+
+    startMusic()
+
+    if (!runawayEnabled) {
+        showToast(yesTease[yesIndex % yesTease.length])
+        yesIndex++
+        return
+    }
+
+    showToast("Okay… 💖")
+    setTimeout(() => {
+        window.location.href = "yes.html"
+    }, 800)
+})
+
+// =========================
+// NO
+// =========================
+noBtn.addEventListener("click", () => {
+
+    startMusic()
+
+    noIndex++
+
+    const stage = Math.min(noIndex, gifStages.length - 1)
+
+    // ⭐ 一定更新（解 cache）
+    catGif.src = gifStages[stage] + "?v=" + Date.now()
+
+    showToast(noMessages[stage])
+
+    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
+    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
+
+    // ⭐ 最後一個 NO 才啟動 runaway
+    if (stage === gifStages.length - 1 && !runawayEnabled) {
+        enableRunaway()
+        runawayEnabled = true
+    }
+})
+
+// =========================
+// RUNAWAY
+// =========================
+function enableRunaway() {
+
+    showToast("Catch me no way 😏")
+
+    // 電腦
+    noBtn.addEventListener("mouseenter", runAway)
+
+    // 手機
+    noBtn.addEventListener("touchstart", runAway, { passive: true })
+
+    // 保險
+    noBtn.addEventListener("click", runAway)
+}
+
+// =========================
+// MOVE BUTTON + TEXT
+// =========================
+function runAway() {
+
+    const rect = noBtn.getBoundingClientRect()
+
+    const x = Math.random() * (window.innerWidth - rect.width - 20)
+    const y = Math.random() * (window.innerHeight - rect.height - 20)
+
+    noBtn.style.position = "fixed"
+    noBtn.style.left = x + "px"
+    noBtn.style.top = y + "px"
+    noBtn.style.zIndex = "999"
+    noBtn.style.transition = "0.15s ease"
+
+    // ⭐ 文字跟著跑
+    if (runawayText) {
+        runawayText.textContent = "Catch me no way 😏"
+
+        runawayText.style.position = "fixed"
+        runawayText.style.left = (x + rect.width + 10) + "px"
+        runawayText.style.top = (y + rect.height / 2) + "px"
+        runawayText.style.zIndex = "1000"
+        runawayText.style.transition = "0.2s ease"
+    }
 }
 
 })
