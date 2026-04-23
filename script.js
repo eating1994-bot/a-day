@@ -51,12 +51,13 @@ const yesTease = [
 let noIndex = 0
 let yesIndex = 0
 let runawayEnabled = false
+let musicStarted = false
 
 // =========================
 // MUSIC
 // =========================
 function startMusic() {
-    if (!music) return
+    if (!music || musicStarted) return
     music.volume = 0.3
     music.play().catch(() => {})
 }
@@ -68,6 +69,7 @@ document.addEventListener("click", startMusic, { once: true })
 // =========================
 function showToast(msg) {
     if (!toast) return
+
     toast.textContent = msg
     toast.classList.add("show")
 
@@ -91,6 +93,7 @@ yesBtn.addEventListener("click", () => {
     }
 
     showToast("Okay… 💖")
+
     setTimeout(() => {
         window.location.href = "yes.html"
     }, 800)
@@ -107,7 +110,7 @@ noBtn.addEventListener("click", () => {
 
     const stage = Math.min(noIndex, gifStages.length - 1)
 
-    // ⭐ 一定更新（解 cache）
+    // ⭐ 強制刷新 GIF（修電腦不更新）
     catGif.src = gifStages[stage] + "?v=" + Date.now()
 
     showToast(noMessages[stage])
@@ -115,7 +118,7 @@ noBtn.addEventListener("click", () => {
     const size = parseFloat(getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
 
-    // ⭐ 最後一個 NO 才啟動 runaway
+    // ⭐ 最後一階段才開 runaway
     if (stage === gifStages.length - 1 && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
@@ -129,25 +132,22 @@ function enableRunaway() {
 
     showToast("Catch me no way 😏")
 
-    // 電腦
+    // 💻 電腦
     noBtn.addEventListener("mouseenter", runAway)
 
-    // 手機
-    noBtn.addEventListener("touchstart", runAway, { passive: true })
-
-    // 保險
-    noBtn.addEventListener("click", runAway)
+    // 📱 手機（穩定版）
+    noBtn.addEventListener("pointerdown", runAway)
 }
 
 // =========================
-// MOVE BUTTON + TEXT
+// MOVE BUTTON + TEXT (修正版)
 // =========================
 function runAway() {
 
     const rect = noBtn.getBoundingClientRect()
 
-    const x = Math.random() * (window.innerWidth - rect.width - 20)
-    const y = Math.random() * (window.innerHeight - rect.height - 20)
+    const x = Math.random() * (window.innerWidth - rect.width - 40)
+    const y = Math.random() * (window.innerHeight - rect.height - 40)
 
     noBtn.style.position = "fixed"
     noBtn.style.left = x + "px"
@@ -155,15 +155,24 @@ function runAway() {
     noBtn.style.zIndex = "999"
     noBtn.style.transition = "0.15s ease"
 
-    // ⭐ 文字跟著跑
+    // 💬 避免重疊 + 自動避開畫面
     if (runawayText) {
+
         runawayText.textContent = "Catch me no way 😏"
 
         runawayText.style.position = "fixed"
-        runawayText.style.left = (x + rect.width + 10) + "px"
-        runawayText.style.top = (y + rect.height / 2) + "px"
         runawayText.style.zIndex = "1000"
         runawayText.style.transition = "0.2s ease"
+
+        let tx = x + rect.width + 20
+        let ty = y - 30
+
+        // 防止出界
+        if (tx > window.innerWidth - 120) tx = x - 120
+        if (ty < 10) ty = y + rect.height + 20
+
+        runawayText.style.left = tx + "px"
+        runawayText.style.top = ty + "px"
     }
 }
 
