@@ -13,7 +13,7 @@ const musicToggle = document.getElementById('music-toggle')
 if (!yesBtn || !noBtn) return
 
 // =========================
-// DATA（你原本的保留）
+// GIF STORY
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -26,6 +26,9 @@ const gifStages = [
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
 
+// =========================
+// STORY
+// =========================
 const storyLines = [
     "Hi… I’m happy to see you 💕",
     "Hmm? you’re clicking me?",
@@ -37,14 +40,25 @@ const storyLines = [
     "I think I’m running away… 😭"
 ]
 
+// =========================
+// YES TEASE (+3句已加)
+// =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
     "Hmm? You really want YES that badly? 😏",
     "Not so easy~ 😌",
     "You didn’t even play with me yet 👀",
-    "Almost there… but not yet 💖"
+    "Almost there… but not yet 💖",
+
+    // ✨ 新增三句
+    "You’re getting impatient huh? 😏",
+    "I like how determined you are 💕",
+    "But I still wanna tease you a bit more 😌"
 ]
 
+// =========================
+// NO MESSAGES
+// =========================
 const noMessages = [
     "No… really? 🥺",
     "You’re breaking my heart 😤",
@@ -115,24 +129,22 @@ noBtn.addEventListener("click", () => {
 
     noIndex++
 
-    const lastIndex = noMessages.length - 1
+    const isLastNo = noIndex >= 6
 
-    const msg1 = noMessages[Math.min(noIndex, lastIndex)]
+    const msg1 = noMessages[Math.min(noIndex, noMessages.length - 1)]
     const msg2 = storyLines[Math.min(noIndex, storyLines.length - 1)]
 
     showToast(msg1 + " " + msg2)
 
     // YES 變大
     const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = Math.min(size * 1.1, 52) + "px"
+    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
 
-    // GIF
-    if (catGif) {
-        catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
-    }
+    // GIF（正常輪播）
+    catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
 
-    // ⭐ 最後一次 NO 才觸發
-    if (noIndex === lastIndex && !runawayEnabled) {
+    // 💥 只在最後 NO 觸發 runaway
+    if (isLastNo && !runawayEnabled) {
 
         showToast("Catch me if you can 😏")
 
