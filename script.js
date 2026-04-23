@@ -8,7 +8,7 @@ const toast = document.getElementById('tease-toast')
 if (!yesBtn || !noBtn || !catGif) return
 
 // =========================
-// DATA（你原本的）
+// DATA
 // =========================
 const gifs = [
   "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -37,12 +37,12 @@ const yesTease = [
   "You’re impatient huh 😏",
   "Almost… but not yet 💖",
   "You’re cute when you try 😳",
-  "I’m watching you 👀",
-  "Still not YES 😌"
+  "Still not YES 👀",
+  "I’m watching you 😏"
 ]
 
 // =========================
-// STATE（修正關鍵）
+// STATE
 // =========================
 let step = 0
 let runawayOn = false
@@ -63,18 +63,22 @@ function show(msg){
 }
 
 // =========================
-// NO（修正核心）
+// NO CLICK（穩定版核心）
 // =========================
 noBtn.addEventListener("click", () => {
 
-  // ❗第一次就要變圖（修正點）
-  catGif.src = gifs[Math.min(step, gifs.length - 1)]
+  // 👉 防呆 index
+  const index = Math.min(step, gifs.length - 1)
 
+  // 💬 文字
   show(noText[Math.min(step, noText.length - 1)])
+
+  // 🖼️ 圖片（強制刷新避免卡圖）
+  catGif.src = gifs[index] + "?v=" + Date.now()
 
   step++
 
-  // ⭐ 最後一張才開 runaway
+  // ⭐ 最後一張 NO 才啟動 runaway
   if (step >= gifs.length && !runawayOn) {
     show("Catch me if you can 😏")
     enableRunaway()
@@ -83,17 +87,17 @@ noBtn.addEventListener("click", () => {
 })
 
 // =========================
-// YES
+// YES CLICK（穩定版）
 // =========================
 yesBtn.addEventListener("click", () => {
 
-  // 還沒到最後 → teasing
+  // 👉 還沒到最後 → teasing
   if (step < gifs.length) {
     show(yesTease[step % yesTease.length])
     return
   }
 
-  // 最後才跳頁
+  // 👉 最後才允許結局
   show("Okay… 💖")
 
   setTimeout(() => {
@@ -102,7 +106,7 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// RUNAWAY（只最後）
+// RUNAWAY（只最後才出現）
 // =========================
 function enableRunaway(){
 
@@ -112,11 +116,15 @@ function enableRunaway(){
 
 function move(){
 
-  const r = noBtn.getBoundingClientRect()
+  const rect = noBtn.getBoundingClientRect()
+
+  const x = Math.random() * (window.innerWidth - rect.width - 20)
+  const y = Math.random() * (window.innerHeight - rect.height - 20)
 
   noBtn.style.position = "fixed"
-  noBtn.style.left = Math.random() * (window.innerWidth - r.width) + "px"
-  noBtn.style.top = Math.random() * (window.innerHeight - r.height) + "px"
+  noBtn.style.left = x + "px"
+  noBtn.style.top = y + "px"
+  noBtn.style.zIndex = "999"
   noBtn.style.transition = "0.15s ease"
 }
 
