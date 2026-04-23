@@ -24,7 +24,7 @@ const gifStages = [
 ]
 
 // =========================
-// 💖 YES TEASE (8+)
+// 💬 YES TEASE（>=8句）
 // =========================
 const yesTeasePokes = [
     "Wait… you’re going too fast 😳",
@@ -34,9 +34,9 @@ const yesTeasePokes = [
     "Almost there… but not yet 💖",
     "You’re getting impatient huh? 😏",
     "I like how determined you are 💕",
-    "But I still wanna tease you a bit more 😌",
-    "If I say yes too early… it’s boring 😳",
-    "You need to work a little harder 😏"
+    "But I still wanna tease you a bit 😌",
+    "If I say yes too early… it's boring 😳",
+    "Be patient a little more 💞"
 ]
 
 // =========================
@@ -48,9 +48,9 @@ const noMessages = [
     "Please don’t do this 💔",
     "I thought you liked me 😢",
     "This actually hurts… 🥀",
-    "I feel like I’m disappearing… 😭",
-    "Okay… I’m starting to run away 💨",
-    "Last chance… 😔"
+    "I’m starting to run away… 😭",
+    "Last warning… 😔",
+    "..."
 ]
 
 // =========================
@@ -92,14 +92,14 @@ yesBtn.addEventListener("click", () => {
 
     startMusic()
 
-    // ❗ 前期：一直 tease，不讓你太早贏
+    // ❗ 前期只能 tease
     if (noIndex < maxIndex) {
         showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
         yesIndex++
         return
     }
 
-    // ❗ 最後才可以結局
+    // ❗ 最後才允許結局
     showToast("…okay 💖 I waited long enough")
 
     setTimeout(() => {
@@ -108,42 +108,44 @@ yesBtn.addEventListener("click", () => {
 })
 
 // =========================
-// 💔 NO BUTTON
+// 💔 NO BUTTON（核心修正版）
 // =========================
 noBtn.addEventListener("click", () => {
 
     startMusic()
 
-    // ❗ 每次 NO 都會變圖（修你 bug）
-    if (noIndex < maxIndex) {
+    // =========================
+    // ❗ 已經到最後一張圖
+    // =========================
+    if (noIndex >= maxIndex) {
 
-        showToast(noMessages[noIndex])
-
-        catGif.src = gifStages[noIndex] + "?v=" + Date.now()
-
-        noIndex++
-
-        // YES 變大（壓力感）
-        const size = parseFloat(getComputedStyle(yesBtn).fontSize)
-        yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
+        if (!runawayEnabled) {
+            showToast("Catch me if you can 😏")
+            enableRunaway()
+            runawayEnabled = true
+        }
 
         return
     }
 
     // =========================
-    // 🏃 最後 NO 才 runaway
+    // ❗ 先顯示，再更新（修你 bug）
     // =========================
-    if (!runawayEnabled) {
+    showToast(noMessages[noIndex])
 
-        showToast("Catch me if you can 😏")
+    // 🎬 一定換圖（已修第一次不變 bug）
+    catGif.src = gifStages[noIndex] + "?v=" + Date.now()
 
-        enableRunaway()
-        runawayEnabled = true
-    }
+    // 👉 index 後移動
+    noIndex++
+
+    // 💖 YES 變大（壓力）
+    const size = parseFloat(getComputedStyle(yesBtn).fontSize)
+    yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
 })
 
 // =========================
-// 🏃 RUNAWAY (only last stage)
+// 🏃 RUNAWAY（最後才開）
 // =========================
 function enableRunaway() {
 
@@ -162,7 +164,7 @@ function runAway() {
     noBtn.style.left = x + "px"
     noBtn.style.top = y + "px"
     noBtn.style.zIndex = "999"
-    noBtn.style.transition = "0.15s ease"
+    noBtn.style.transition = "0.2s ease"
 }
 
 // =========================
