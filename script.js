@@ -1,19 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-// =========================
-// ELEMENTS
-// =========================
 const catGif = document.getElementById('cat-gif')
 const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
-const musicToggle = document.getElementById('music-toggle')
 
 if (!yesBtn || !noBtn) return
 
 // =========================
-// GIF STORY
+// 🎬 GIF（全部都會輪到）
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -21,52 +17,40 @@ const gifStages = [
     "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
     "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
-    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-bubu.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
     "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
 
 // =========================
-// STORY
-// =========================
-const storyLines = [
-    "Hi… I’m happy to see you 💕",
-    "Hmm? you’re clicking me?",
-    "Wait… what are you doing? 👀",
-    "Hey stop that 😤",
-    "I’m getting a bit sad… 💔",
-    "It actually hurts now 🥺",
-    "I don’t like this feeling… 🥀",
-    "I think I’m running away… 😭"
-]
-
-// =========================
-// YES TEASE (+3句已加)
+// 💖 YES（變成撩人 + 不會太快結束）
 // =========================
 const yesTeasePokes = [
-    "Wait… you’re going too fast 😳",
-    "Hmm? You really want YES that badly? 😏",
-    "Not so easy~ 😌",
-    "You didn’t even play with me yet 👀",
-    "Almost there… but not yet 💖",
-
-    // ✨ 新增三句
-    "You’re getting impatient huh? 😏",
-    "I like how determined you are 💕",
-    "But I still wanna tease you a bit more 😌"
+    "Wait… that was too easy 😳",
+    "Hmm? No hesitation at all? 😏",
+    "You didn’t even think about it 👀",
+    "Are you sure? I might tease you more 😌",
+    "Okay… but I’m watching you 💕",
+    "You really like me huh 😳",
+    "Careful… I might fall for you too fast 💖"
 ]
 
 // =========================
-// NO MESSAGES
+// 💔 NO（變成假哭 + 好玩，不是虐）
 // =========================
 const noMessages = [
-    "No… really? 🥺",
-    "You’re breaking my heart 😤",
-    "Please don’t do this 💔",
-    "I thought you liked me 😢",
-    "This actually hurts… 🥀",
-    "Okay… I’m running away 😭"
+    "Oh no… I’m hurt 😢 (just kidding)",
+    "You said NO… I’ll pretend I’m crying 🥺",
+    "That was mean… or was it? 😏",
+    "I’m going to be dramatic now 💔✨",
+    "Why are you doing this to me 😤 (I’m fine)",
+    "Okay… I’m slowly walking away 👀"
 ]
+
+// =========================
+// 🏃 最後 NO 才會出現
+// =========================
+const lastNoMessage = "Okay… this time I’m really leaving 😳 catch me if you can haha 😏"
 
 // =========================
 // STATE
@@ -77,7 +61,7 @@ let runawayEnabled = false
 let musicStarted = false
 
 // =========================
-// MUSIC
+// 🎵 音樂
 // =========================
 function startMusic() {
     if (!music || musicStarted) return
@@ -89,39 +73,34 @@ function startMusic() {
 
 document.addEventListener("click", startMusic, { once: true })
 
+// =========================
+// 🔊 toggle
+// =========================
 window.toggleMusic = function () {
     if (!music) return
     if (music.paused) {
         music.play()
-        musicToggle.textContent = "🔊"
+        document.getElementById('music-toggle').textContent = "🔊"
     } else {
         music.pause()
-        musicToggle.textContent = "🔇"
+        document.getElementById('music-toggle').textContent = "🔇"
     }
 }
 
 // =========================
-// YES
+// 💖 YES CLICK
 // =========================
 yesBtn.addEventListener("click", () => {
 
     startMusic()
 
-    if (!runawayEnabled) {
-        showToast(yesTeasePokes[Math.min(yesIndex, yesTeasePokes.length - 1)])
-        yesIndex++
-        return
-    }
+    showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
+    yesIndex++
 
-    showToast("Okay… 💖")
-
-    setTimeout(() => {
-        window.location.href = "yes.html"
-    }, 800)
 })
 
 // =========================
-// NO
+// 💔 NO CLICK
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -129,37 +108,43 @@ noBtn.addEventListener("click", () => {
 
     noIndex++
 
-    const isLastNo = noIndex >= 6
+    const lastIndex = noMessages.length - 1
 
-    const msg1 = noMessages[Math.min(noIndex, noMessages.length - 1)]
-    const msg2 = storyLines[Math.min(noIndex, storyLines.length - 1)]
+    // 🧠 最後 NO 特別處理
+    if (noIndex > lastIndex) {
+        showToast(lastNoMessage)
 
+        if (!runawayEnabled) {
+            enableRunaway()
+            runawayEnabled = true
+        }
+        return
+    }
+
+    // 💬 一般 NO
+    const msg1 = noMessages[noIndex - 1]
+    const msg2 = "😏"
     showToast(msg1 + " " + msg2)
 
-    // YES 變大
+    // 🎬 GIF 永遠輪
+    if (catGif) {
+        catGif.src = gifStages[noIndex % gifStages.length]
+    }
+
+    // 💖 YES 變大（輕微成長感）
     const size = parseFloat(getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
-
-    // GIF（正常輪播）
-    catGif.src = gifStages[Math.min(noIndex, gifStages.length - 1)]
-
-    // 💥 只在最後 NO 觸發 runaway
-    if (isLastNo && !runawayEnabled) {
-
-        showToast("Catch me if you can 😏")
-
-        enableRunaway()
-        runawayEnabled = true
-    }
 })
 
 // =========================
-// RUNAWAY
+// 🏃 RUNAWAY（最後才啟動）
 // =========================
 function enableRunaway() {
 
     noBtn.addEventListener("mouseenter", runAway)
     noBtn.addEventListener("touchstart", runAway, { passive: true })
+
+    showToast("You’re really chasing me now 😳")
 }
 
 function runAway() {
@@ -177,7 +162,7 @@ function runAway() {
 }
 
 // =========================
-// TOAST
+// 💬 TOAST
 // =========================
 function showToast(msg) {
 
