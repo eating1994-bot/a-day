@@ -1,29 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YES ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 💥 必須有 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>She said YES ❤️</h1>
+
+    <button id="music-toggle" onclick="toggleMusic()">🔊</button>
+</div>
+
+<audio id="bg-music" loop>
+    <source src="music/beabadoobee-glue-song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
 let musicPlaying = false
 
 function safeConfetti(){
-    if (typeof confetti !== "function") return
+    if(typeof confetti !== "function") return
 
     confetti({
-        particleCount: 40,
-        spread: 60,
-        startVelocity: 20,
-        origin: { y: 0.7 },
-        colors: ["#fff", "#ffe680", "#ffdf80", "#ffd966"]
+        particleCount: 60,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#fff","#ffe680","#ff69b4","#ffdf00"]
     })
 }
 
 function createPetal(){
-    const petal = document.createElement("div")
-    petal.classList.add("petal")
+    const p = document.createElement("div")
+    p.innerText = "💖"
+    p.style.position = "fixed"
+    p.style.left = Math.random()*100 + "vw"
+    p.style.top = "-10px"
+    p.style.fontSize = "20px"
 
-    petal.innerText = ["🌼","💛","✨"][Math.floor(Math.random()*3)]
+    document.body.appendChild(p)
 
-    petal.style.left = Math.random()*100 + "vw"
-    petal.style.animationDuration = (Math.random()*3 + 3) + "s"
-
-    document.body.appendChild(petal)
-
-    setTimeout(() => petal.remove(), 7000)
+    let y = 0
+    const fall = setInterval(()=>{
+        y += 2
+        p.style.top = y + "px"
+        if(y > window.innerHeight){
+            clearInterval(fall)
+            p.remove()
+        }
+    },20)
 }
 
 function startMusic(){
@@ -42,10 +73,10 @@ function toggleMusic(){
 
     if(music.paused){
         music.play()
-        if(btn) btn.textContent = "🔊"
+        btn.textContent = "🔊"
     }else{
         music.pause()
-        if(btn) btn.textContent = "🔇"
+        btn.textContent = "🔇"
     }
 }
 
@@ -53,10 +84,14 @@ window.addEventListener("load", () => {
 
     safeConfetti()
     setInterval(safeConfetti, 4000)
-    setInterval(createPetal, 300)
+    setInterval(createPetal, 500)
 
     startMusic()
 })
 
-// unlock audio
 document.addEventListener("click", startMusic, { once:true })
+
+</script>
+
+</body>
+</html>
