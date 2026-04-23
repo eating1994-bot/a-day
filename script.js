@@ -9,7 +9,7 @@ const toast = document.getElementById('tease-toast')
 if (!yesBtn || !noBtn) return
 
 // =========================
-// 🎬 GIF（全部都會輪到）
+// 🎬 GIF（不再循環，避免重複）
 // =========================
 const gifStages = [
     "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
@@ -23,7 +23,7 @@ const gifStages = [
 ]
 
 // =========================
-// 💖 YES（變成撩人 + 不會太快結束）
+// 💖 YES
 // =========================
 const yesTeasePokes = [
     "Wait… that was too easy 😳",
@@ -36,7 +36,7 @@ const yesTeasePokes = [
 ]
 
 // =========================
-// 💔 NO（變成假哭 + 好玩，不是虐）
+// 💔 NO（假哭但好玩）
 // =========================
 const noMessages = [
     "Oh no… I’m hurt 😢 (just kidding)",
@@ -44,12 +44,10 @@ const noMessages = [
     "That was mean… or was it? 😏",
     "I’m going to be dramatic now 💔✨",
     "Why are you doing this to me 😤 (I’m fine)",
-    "Okay… I’m slowly walking away 👀"
+    "Okay… I might actually leave 😭"
 ]
 
-// =========================
-// 🏃 最後 NO 才會出現
-// =========================
+// 🏃 最後一句
 const lastNoMessage = "Okay… this time I’m really leaving 😳 catch me if you can haha 😏"
 
 // =========================
@@ -88,7 +86,7 @@ window.toggleMusic = function () {
 }
 
 // =========================
-// 💖 YES CLICK
+// 💖 YES
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -96,11 +94,10 @@ yesBtn.addEventListener("click", () => {
 
     showToast(yesTeasePokes[yesIndex % yesTeasePokes.length])
     yesIndex++
-
 })
 
 // =========================
-// 💔 NO CLICK
+// 💔 NO（修正核心）
 // =========================
 noBtn.addEventListener("click", () => {
 
@@ -108,30 +105,29 @@ noBtn.addEventListener("click", () => {
 
     noIndex++
 
-    const lastIndex = noMessages.length - 1
+    // ⭐ 最後 NO 才特別事件
+    if (noIndex >= noMessages.length) {
 
-    // 🧠 最後 NO 特別處理
-    if (noIndex > lastIndex) {
         showToast(lastNoMessage)
 
         if (!runawayEnabled) {
             enableRunaway()
             runawayEnabled = true
         }
+
         return
     }
 
     // 💬 一般 NO
     const msg1 = noMessages[noIndex - 1]
-    const msg2 = "😏"
-    showToast(msg1 + " " + msg2)
+    showToast(msg1 + " 😏")
 
-    // 🎬 GIF 永遠輪
-    if (catGif) {
-        catGif.src = gifStages[noIndex % gifStages.length]
+    // 🎬 GIF（重點修正：不再用 %）
+    if (catGif && noIndex - 1 < gifStages.length) {
+        catGif.src = gifStages[noIndex - 1]
     }
 
-    // 💖 YES 變大（輕微成長感）
+    // 💖 YES 變大（成長感）
     const size = parseFloat(getComputedStyle(yesBtn).fontSize)
     yesBtn.style.fontSize = Math.min(size * 1.08, 52) + "px"
 })
@@ -144,7 +140,7 @@ function enableRunaway() {
     noBtn.addEventListener("mouseenter", runAway)
     noBtn.addEventListener("touchstart", runAway, { passive: true })
 
-    showToast("You’re really chasing me now 😳")
+    showToast("Catch me if you can haha 😏")
 }
 
 function runAway() {
