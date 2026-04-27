@@ -3,7 +3,6 @@ const noBtn = document.getElementById("no-btn");
 const catGif = document.getElementById("cat-gif");
 const teaseToast = document.getElementById("tease-toast");
 const buttonsWrap = document.getElementById("buttons-wrap");
-const runawayText = document.getElementById("runaway-text");
 const music = document.getElementById("bg-music");
 const musicToggle = document.getElementById("music-toggle");
 
@@ -35,72 +34,36 @@ function showToast(message) {
   }, 1400);
 }
 
-function getCenterPositionFromStyles(button, wrapRect) {
-  const left = parseFloat(button.style.left || 0);
-  const top = parseFloat(button.style.top || 0);
-  const width = button.offsetWidth;
-  const height = button.offsetHeight;
-
-  return {
-    x: wrapRect.left + left + width / 2,
-    y: wrapRect.top + top + height / 2
-  };
-}
-
-function getDistance(pos1, pos2) {
-  return Math.hypot(pos1.x - pos2.x, pos1.y - pos2.y);
-}
-
-function placeNoButtonSafely() {
-  const wrapRect = buttonsWrap.getBoundingClientRect();
-  const yesRect = yesBtn.getBoundingClientRect();
-
-  const btnWidth = noBtn.offsetWidth;
-  const btnHeight = noBtn.offsetHeight;
-
-  const minX = wrapRect.width * 0.58;
-  const maxX = wrapRect.width - btnWidth;
-  const maxY = wrapRect.height - btnHeight;
-
-  const yesCenter = {
-    x: yesRect.left + yesRect.width / 2,
-    y: yesRect.top + yesRect.height / 2
-  };
-
-  let tries = 0;
-  let placed = false;
-
-  while (tries < 50 && !placed) {
-    const randomX = minX + Math.random() * Math.max(1, (maxX - minX));
-    const randomY = Math.random() * Math.max(1, maxY);
-
-    noBtn.style.position = "absolute";
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
-    noBtn.style.right = "auto";
-
-    const noCenter = getCenterPositionFromStyles(noBtn, wrapRect);
-    const distance = getDistance(yesCenter, noCenter);
-
-    if (distance > 140) {
-      placed = true;
-    }
-
-    tries++;
-  }
-}
-
-function moveNoButton(event) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
+function moveNoButton(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   noCount++;
 
-  placeNoButtonSafely();
+  const wrap = buttonsWrap;
+  const wrapWidth = wrap.clientWidth;
+  const wrapHeight = wrap.clientHeight;
 
-  const scale = 1 + Math.min(noCount * 0.05, 0.2);
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+
+  // 👉 關鍵：限制在右邊，避免碰到 Yes
+  const minX = wrapWidth * 0.55;
+  const maxX = wrapWidth - btnWidth;
+  const maxY = wrapHeight - btnHeight;
+
+  const x = minX + Math.random() * (maxX - minX);
+  const y = Math.random() * maxY;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+  noBtn.style.right = "auto";
+
+  // 👉 Yes 小幅變大
+  const scale = 1 + Math.min(noCount * 0.04, 0.15);
   yesBtn.style.transform = `scale(${scale})`;
 
   const msg = teaseMessages[Math.min(noCount - 1, teaseMessages.length - 1)];
@@ -112,31 +75,6 @@ function moveNoButton(event) {
   if (noCount >= 5) {
     noBtn.textContent = "Fine 😳";
   }
-
-  if (noCount >= 7) {
-    noBtn.style.opacity = "0.75";
-  }
-}
-
-function pushNoAwayIfTooClose() {
-  const yesRect = yesBtn.getBoundingClientRect();
-  const noRect = noBtn.getBoundingClientRect();
-
-  const yesCenter = {
-    x: yesRect.left + yesRect.width / 2,
-    y: yesRect.top + yesRect.height / 2
-  };
-
-  const noCenter = {
-    x: noRect.left + noRect.width / 2,
-    y: noRect.top + noRect.height / 2
-  };
-
-  const distance = getDistance(yesCenter, noCenter);
-
-  if (distance < 130) {
-    placeNoButtonSafely();
-  }
 }
 
 function startMusic() {
@@ -146,8 +84,8 @@ function startMusic() {
 
   music.play().then(() => {
     musicStarted = true;
-    let vol = 0;
 
+    let vol = 0;
     const fade = setInterval(() => {
       vol += 0.03;
       if (vol >= 0.3) {
@@ -156,7 +94,7 @@ function startMusic() {
       }
       music.volume = vol;
     }, 80);
-  }).catch((err) => {
+  }).catch(err => {
     console.log("play blocked:", err);
   });
 }
@@ -173,21 +111,22 @@ function toggleMusic() {
   }
 }
 
+// 👉 Yes 跳頁
 yesBtn.addEventListener("click", () => {
   window.location.href = "yes.html";
 });
 
+// 👉 No 逃跑（維持原本玩法）
 noBtn.addEventListener("click", moveNoButton);
 noBtn.addEventListener("mouseenter", moveNoButton);
 noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
 
-document.addEventListener("mousemove", pushNoAwayIfTooClose);
-document.addEventListener("touchmove", pushNoAwayIfTooClose);
-
+// 👉 音樂需要互動才能播
 document.addEventListener("click", startMusic, { once: true });
 document.addEventListener("touchstart", startMusic, { once: true });
 document.addEventListener("keydown", startMusic, { once: true });
 
+// 👉 初始位置（右邊）
 window.addEventListener("load", () => {
   noBtn.style.left = `${buttonsWrap.clientWidth - noBtn.offsetWidth}px`;
   noBtn.style.top = "40px";
