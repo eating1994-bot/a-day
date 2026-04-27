@@ -57,9 +57,9 @@ let runawayEnabled = false
 // MUSIC
 // =========================
 function startMusic() {
-if (!music) return
-music.volume = 0.3
-music.play().catch(() => {})
+    if (!music) return
+    music.volume = 0.3
+    music.play().catch(() => {})
 }
 
 document.addEventListener("click", startMusic, { once: true })
@@ -68,49 +68,43 @@ document.addEventListener("click", startMusic, { once: true })
 // TOAST
 // =========================
 function showToast(msg) {
-if (!toast) return
+    if (!toast) return
 
-```
-toast.textContent = msg
-toast.classList.add("show")
+    toast.textContent = msg
+    toast.classList.add("show")
 
-clearTimeout(toast._t)
-toast._t = setTimeout(() => {
-    toast.classList.remove("show")
-}, 2000)
-```
-
+    clearTimeout(toast._t)
+    toast._t = setTimeout(() => {
+        toast.classList.remove("show")
+    }, 2000)
 }
 
 // =========================
-// YES（不變）
+// YES（保留你的原本邏輯）
 // =========================
 yesBtn.addEventListener("click", () => {
 
-```
-startMusic()
+    startMusic()
 
-if (!runawayEnabled) {
+    if (!runawayEnabled) {
 
-    yesIndex++
+        yesIndex++
 
-    if (yesIndex >= yesTease.length) {
-        showToast("Try clicking NO 👀")
-        yesIndex = yesTease.length - 1
+        if (yesIndex >= yesTease.length) {
+            showToast("Try clicking NO 👀")
+            yesIndex = yesTease.length - 1
+            return
+        }
+
+        showToast(yesTease[yesIndex])
         return
     }
 
-    showToast(yesTease[yesIndex])
-    return
-}
+    showToast("Okay… 💖")
 
-showToast("Okay… 💖")
-
-setTimeout(() => {
-    window.location.href = "yes.html"
-}, 800)
-```
-
+    setTimeout(() => {
+        window.location.href = "yes.html"
+    }, 800)
 })
 
 // =========================
@@ -118,91 +112,80 @@ setTimeout(() => {
 // =========================
 noBtn.addEventListener("click", () => {
 
-```
-startMusic()
+    startMusic()
 
-noIndex++
+    noIndex++
 
-const lastStage = gifStages.length - 1
-const stage = Math.min(noIndex, lastStage)
+    const lastStage = gifStages.length - 1
+    const stage = Math.min(noIndex, lastStage)
 
-catGif.src = gifStages[stage] + "?v=" + Date.now()
-showToast(noMessages[stage])
+    catGif.src = gifStages[stage] + "?v=" + Date.now()
+    showToast(noMessages[stage])
 
-const baseSize = 24
-const maxSize = 80
-const progress = noIndex / lastStage
-const eased = Math.pow(progress, 1.5)
-const newSize = baseSize + (maxSize - baseSize) * eased
+    const baseSize = 24
+    const maxSize = 80
+    const progress = noIndex / lastStage
+    const eased = Math.pow(progress, 1.5)
+    const newSize = baseSize + (maxSize - baseSize) * eased
 
-yesBtn.style.fontSize = newSize + "px"
-yesBtn.style.transition = "0.3s ease"
+    yesBtn.style.fontSize = newSize + "px"
+    yesBtn.style.transition = "0.3s ease"
 
-if (stage === lastStage && !runawayEnabled) {
-    enableRunaway()
-    runawayEnabled = true
-}
-```
-
+    if (stage === lastStage && !runawayEnabled) {
+        enableRunaway()
+        runawayEnabled = true
+    }
 })
 
 // =========================
 // RUNAWAY
 // =========================
 function enableRunaway() {
+    showToast("No way 🤓")
 
-```
-showToast("No way 🤓")
-
-noBtn.addEventListener("mouseenter", moveNo)
-noBtn.addEventListener("pointerdown", moveNo)
-noBtn.addEventListener("touchstart", moveNo, { passive: false })
-```
-
+    noBtn.addEventListener("mouseenter", moveNo)
+    noBtn.addEventListener("pointerdown", moveNo)
+    noBtn.addEventListener("touchstart", moveNo, { passive: false })
 }
 
 // =========================
-// MOVE（修正版本）
+// MOVE
 // =========================
 function moveNo(e) {
 
-```
-if (e) {
-    e.preventDefault()
-    e.stopPropagation()
-}
+    if (e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
 
-const wrapRect = buttonsWrap.getBoundingClientRect()
-const btnWidth = noBtn.offsetWidth
-const btnHeight = noBtn.offsetHeight
+    const wrapRect = buttonsWrap.getBoundingClientRect()
+    const btnWidth = noBtn.offsetWidth
+    const btnHeight = noBtn.offsetHeight
 
-// 👉 只在右邊活動
-const minLeft = wrapRect.width * 0.58
-const maxLeft = wrapRect.width - btnWidth
-const maxTop = wrapRect.height - btnHeight
+    // 只在右邊活動
+    const minLeft = wrapRect.width * 0.58
+    const maxLeft = wrapRect.width - btnWidth
+    const maxTop = wrapRect.height - btnHeight
 
-let left = minLeft + Math.random() * Math.max(1, (maxLeft - minLeft))
-let top = Math.random() * Math.max(1, maxTop)
+    let left = minLeft + Math.random() * Math.max(1, (maxLeft - minLeft))
+    let top = Math.random() * Math.max(1, maxTop)
 
-noBtn.style.position = "absolute"
-noBtn.style.left = left + "px"
-noBtn.style.top = top + "px"
-noBtn.style.transform = "none"
-noBtn.style.right = "auto"
+    noBtn.style.position = "absolute"
+    noBtn.style.left = left + "px"
+    noBtn.style.top = top + "px"
+    noBtn.style.transform = "none"
+    noBtn.style.right = "auto"
 
-// ⭐ 讓文字跟在下面
-if (runawayText) {
-    runawayText.textContent = "Catch me no way 😏"
-
-    runawayText.style.position = "absolute"
-    runawayText.style.left = left + "px"
-    runawayText.style.top = (top + btnHeight + 6) + "px"
-    runawayText.style.width = btnWidth + "px"
-    runawayText.style.textAlign = "center"
-    runawayText.style.transform = "none"
-}
-```
-
+    // 讓文字跟在 No 下面
+    if (runawayText) {
+        runawayText.textContent = "Catch me no way 😏"
+        runawayText.style.left = left + "px"
+        runawayText.style.top = (top + btnHeight + 6) + "px"
+        runawayText.style.width = btnWidth + "px"
+        runawayText.style.textAlign = "center"
+        runawayText.style.transform = "none"
+        runawayText.style.opacity = "1"
+    }
 }
 
 })
