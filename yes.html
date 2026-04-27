@@ -48,6 +48,9 @@ body{
     height: 50px;
     font-size: 20px;
     cursor: pointer;
+    background: #fff4c4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
 }
 </style>
 </head>
@@ -82,7 +85,6 @@ body{
 
 </div>
 
-<!-- 🎵 音樂（已換好） -->
 <audio id="bg-music" loop>
     <source src="music/welbornworks-summer-392467.mp3" type="audio/mpeg">
 </audio>
@@ -93,9 +95,7 @@ body{
 let music = null
 let started = false
 
-// 點擊後播放（手機一定要）
 function startMusic() {
-
     if (!music) {
         music = document.getElementById("bg-music")
     }
@@ -122,7 +122,6 @@ function startMusic() {
     })
 }
 
-// 必須有使用者互動
 document.addEventListener("click", startMusic, { once: true })
 document.addEventListener("touchstart", startMusic, { once: true })
 document.addEventListener("keydown", startMusic, { once: true })
