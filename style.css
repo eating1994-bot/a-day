@@ -148,18 +148,20 @@ h1 {
     font-size: 20px;
 }
 
-/* runaway text */
+/* runaway text：這裡是關鍵修正 */
 #runaway-text {
-    position: fixed;
+    position: absolute;
     font-size: 1rem;
     font-weight: 700;
     color: #e91e8c;
     z-index: 1000;
     pointer-events: none;
     transition: 0.12s ease;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    opacity: 0;
+    left: 0;
+    top: 0;
+    transform: none;
+    white-space: nowrap;
 }
 
 /* 手機版 */
