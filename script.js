@@ -35,41 +35,53 @@ function showToast(message) {
   }, 1400);
 }
 
-function getDistanceBetweenCenters(el1, el2) {
-  const r1 = el1.getBoundingClientRect();
-  const r2 = el2.getBoundingClientRect();
+function getCenterPositionFromStyles(button, wrapRect) {
+  const left = parseFloat(button.style.left || 0);
+  const top = parseFloat(button.style.top || 0);
+  const width = button.offsetWidth;
+  const height = button.offsetHeight;
 
-  const x1 = r1.left + r1.width / 2;
-  const y1 = r1.top + r1.height / 2;
-  const x2 = r2.left + r2.width / 2;
-  const y2 = r2.top + r2.height / 2;
+  return {
+    x: wrapRect.left + left + width / 2,
+    y: wrapRect.top + top + height / 2
+  };
+}
 
-  return Math.hypot(x1 - x2, y1 - y2);
+function getDistance(pos1, pos2) {
+  return Math.hypot(pos1.x - pos2.x, pos1.y - pos2.y);
 }
 
 function placeNoButtonSafely() {
   const wrapRect = buttonsWrap.getBoundingClientRect();
+  const yesRect = yesBtn.getBoundingClientRect();
+
   const btnWidth = noBtn.offsetWidth;
   const btnHeight = noBtn.offsetHeight;
 
-  const minX = wrapRect.width * 0.58; // 只在右半邊偏右活動
+  const minX = wrapRect.width * 0.58;
   const maxX = wrapRect.width - btnWidth;
   const maxY = wrapRect.height - btnHeight;
+
+  const yesCenter = {
+    x: yesRect.left + yesRect.width / 2,
+    y: yesRect.top + yesRect.height / 2
+  };
 
   let tries = 0;
   let placed = false;
 
-  while (tries < 40 && !placed) {
+  while (tries < 50 && !placed) {
     const randomX = minX + Math.random() * Math.max(1, (maxX - minX));
     const randomY = Math.random() * Math.max(1, maxY);
 
     noBtn.style.position = "absolute";
     noBtn.style.left = `${randomX}px`;
     noBtn.style.top = `${randomY}px`;
+    noBtn.style.right = "auto";
 
-    const distance = getDistanceBetweenCenters(yesBtn, noBtn);
+    const noCenter = getCenterPositionFromStyles(noBtn, wrapRect);
+    const distance = getDistance(yesCenter, noCenter);
 
-    // 距離太近就重抽位置
     if (distance > 140) {
       placed = true;
     }
@@ -78,7 +90,12 @@ function placeNoButtonSafely() {
   }
 }
 
-function moveNoButton() {
+function moveNoButton(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   noCount++;
 
   placeNoButtonSafely();
@@ -102,7 +119,20 @@ function moveNoButton() {
 }
 
 function pushNoAwayIfTooClose() {
-  const distance = getDistanceBetweenCenters(yesBtn, noBtn);
+  const yesRect = yesBtn.getBoundingClientRect();
+  const noRect = noBtn.getBoundingClientRect();
+
+  const yesCenter = {
+    x: yesRect.left + yesRect.width / 2,
+    y: yesRect.top + yesRect.height / 2
+  };
+
+  const noCenter = {
+    x: noRect.left + noRect.width / 2,
+    y: noRect.top + noRect.height / 2
+  };
+
+  const distance = getDistance(yesCenter, noCenter);
 
   if (distance < 130) {
     placeNoButtonSafely();
@@ -149,9 +179,8 @@ yesBtn.addEventListener("click", () => {
 
 noBtn.addEventListener("click", moveNoButton);
 noBtn.addEventListener("mouseenter", moveNoButton);
-noBtn.addEventListener("touchstart", moveNoButton);
+noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
 
-// 只要太靠近 Yes，就自動彈開
 document.addEventListener("mousemove", pushNoAwayIfTooClose);
 document.addEventListener("touchmove", pushNoAwayIfTooClose);
 
@@ -159,7 +188,8 @@ document.addEventListener("click", startMusic, { once: true });
 document.addEventListener("touchstart", startMusic, { once: true });
 document.addEventListener("keydown", startMusic, { once: true });
 
-// 初始化先放一次安全位置
 window.addEventListener("load", () => {
-  placeNoButtonSafely();
+  noBtn.style.left = `${buttonsWrap.clientWidth - noBtn.offsetWidth}px`;
+  noBtn.style.top = "40px";
+  noBtn.style.right = "auto";
 });
