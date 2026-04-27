@@ -96,7 +96,7 @@ function showToast(msg) {
 }
 
 // =========================
-// YES（保留你的原本邏輯）
+// YES
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -173,34 +173,48 @@ function moveNo(e) {
         e.stopPropagation()
     }
 
+    noBtn.textContent = "Catch me no way 😏"
+
     const wrapRect = buttonsWrap.getBoundingClientRect()
     const yesRect = yesBtn.getBoundingClientRect()
+    const btnWidth = noBtn.offsetWidth
     const btnHeight = noBtn.offsetHeight
 
-    // 先把按鈕文字改長，再重新量寬
-    noBtn.textContent = "Catch me no way 😏"
-    const btnWidth = noBtn.offsetWidth
-
-    // Yes 目前右邊界（buttons 區塊內）
+    const yesLeftInsideWrap = yesRect.left - wrapRect.left
     const yesRightInsideWrap = yesRect.right - wrapRect.left
+    const yesTopInsideWrap = yesRect.top - wrapRect.top
+    const yesBottomInsideWrap = yesRect.bottom - wrapRect.top
 
-    // 安全距離，避免 No 壓到 Yes
-    const safetyGap = 24
-
-    const minLeft = Math.min(
-        wrapRect.width - btnWidth,
-        yesRightInsideWrap + safetyGap
-    )
-
+    const safetyGap = 18
     const maxLeft = wrapRect.width - btnWidth
     const maxTop = wrapRect.height - btnHeight
 
-    let left = minLeft
-    if (maxLeft > minLeft) {
-        left = minLeft + Math.random() * (maxLeft - minLeft)
-    }
+    let left = 0
+    let top = 0
+    let tries = 0
+    let valid = false
 
-    let top = Math.random() * Math.max(1, maxTop)
+    while (tries < 40 && !valid) {
+        left = Math.random() * Math.max(1, maxLeft)
+        top = Math.random() * Math.max(1, maxTop)
+
+        const noLeft = left
+        const noRight = left + btnWidth
+        const noTop = top
+        const noBottom = top + btnHeight
+
+        const overlapsYes =
+            noRight > (yesLeftInsideWrap - safetyGap) &&
+            noLeft < (yesRightInsideWrap + safetyGap) &&
+            noBottom > (yesTopInsideWrap - safetyGap) &&
+            noTop < (yesBottomInsideWrap + safetyGap)
+
+        if (!overlapsYes) {
+            valid = true
+        }
+
+        tries++
+    }
 
     noBtn.style.position = "absolute"
     noBtn.style.left = left + "px"
