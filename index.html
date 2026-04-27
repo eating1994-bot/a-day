@@ -1,52 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 1 Year Anniversary 🥔🥓🏳️‍🌈</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You 💛</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <link rel="stylesheet" href="style.css">
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #FFF6D6, #FFE7A3, #FFF0C9);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      color: #5a4700;
+    }
+
+    .container {
+      width: min(92vw, 560px);
+      text-align: center;
+      background: rgba(255, 250, 235, 0.68);
+      backdrop-filter: blur(6px);
+      border-radius: 28px;
+      padding: 36px 22px 42px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.10);
+      animation: fadeIn 1.2s ease-in-out;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title {
+      font-size: 2rem;
+      margin: 0 0 12px;
+      color: #7a5a00;
+    }
+
+    .subtitle {
+      font-size: 1.08rem;
+      line-height: 1.7;
+      margin: 0 0 18px;
+      color: #6a5200;
+    }
+
+    .gif-container img {
+      width: 190px;
+      max-width: 72%;
+      margin: 10px 0 16px;
+      border-radius: 18px;
+    }
+
+    .button-area {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      position: absolute;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 26px;
+      min-width: 120px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    #yes-btn {
+      left: 50%;
+      top: 110px;
+      transform: translateX(-140px);
+      background: #ffcc70;
+      color: #5a3e00;
+    }
+
+    #yes-btn:hover {
+      background: #ffd98f;
+    }
+
+    #no-btn {
+      left: 50%;
+      top: 110px;
+      transform: translateX(20px);
+      background: #fff4d9;
+      color: #7b5b00;
+    }
+
+    .tiny-note {
+      min-height: 28px;
+      margin-top: 10px;
+      font-size: 0.96rem;
+      color: #8a6c18;
+    }
+
+    .float-item {
+      position: fixed;
+      bottom: -20px;
+      pointer-events: none;
+      animation: floatUp 4.5s linear forwards;
+      opacity: 0.9;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-115vh) rotate(20deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 18px 36px;
+      }
+
+      .title {
+        font-size: 1.7rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .button-area {
+        height: 220px;
+      }
+
+      #yes-btn {
+        top: 125px;
+        transform: translateX(-128px);
+      }
+
+      #no-btn {
+        top: 125px;
+        transform: translateX(8px);
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="hearts-bg"></div>
+  <div class="container">
+    <h1 class="title">Do you want to see my surprise? 💌</h1>
 
-    <div class="container">
-
-        <h1>
-           <span class="line1">Happy 1 Year Anniversary ❤️</span>
-           <span class="line2">Will you still be my love 😍?</span>
-        </h1>
-
-        <div class="gif-container">
-            <img id="cat-gif"
-                 src="https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif">
-        </div>
-
-        <!-- 🔘 buttons -->
-        <div class="buttons">
-            <button id="yes-btn">Yes</button>
-            <button id="no-btn">No</button>
-        </div>
-
-        <!-- 💬 toast -->
-        <div id="tease-toast"></div>
-
+    <div class="gif-container">
+      <img src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" alt="cute gif">
     </div>
 
-    <!-- ⚠️ runaway text：不要預先寫內容（避免 JS 提前觸發） -->
-    <div id="runaway-text" style="position:fixed; pointer-events:none;"></div>
+    <p class="subtitle">
+      I made something for you 💛<br>
+      Choose carefully... but also correctly 🐥
+    </p>
 
-    <!-- 🎵 音樂 -->
-    <audio id="bg-music" loop>
-        <source src="music/beabadoobee - Glue Song (Lyrics).mp3" type="audio/mpeg">
-    </audio>
+    <div class="button-area" id="button-area">
+      <button class="btn" id="yes-btn" onclick="goYes()">Yes ❣️</button>
+      <button class="btn" id="no-btn" onclick="moveNo()">No 🙈</button>
+    </div>
 
-    <button id="music-toggle" onclick="toggleMusic()" title="Toggle music">🔊</button>
+    <div class="tiny-note" id="tiny-note"></div>
+  </div>
 
-    <script src="script.js"></script>
+  <script>
+    const noBtn = document.getElementById("no-btn");
+    const yesBtn = document.getElementById("yes-btn");
+    const buttonArea = document.getElementById("button-area");
+    const note = document.getElementById("tiny-note");
+
+    let noCount = 0;
+
+    const messages = [
+      "really? 🥺",
+      "are you sure... 🐥",
+      "hmm try again 💭",
+      "you know the right answer 😌",
+      "okay okay... just press yes 💛"
+    ];
+
+    function moveNo() {
+      noCount++;
+
+      note.textContent = messages[Math.min(noCount - 1, messages.length - 1)];
+
+      const areaRect = buttonArea.getBoundingClientRect();
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+
+      const maxX = areaRect.width - btnWidth;
+      const maxY = areaRect.height - btnHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.transform = "translateX(0)";
+
+      const scale = 1 + Math.min(noCount * 0.08, 0.35);
+
+      if (window.innerWidth <= 480) {
+        yesBtn.style.transform = `translateX(-128px) scale(${scale})`;
+      } else {
+        yesBtn.style.transform = `translateX(-140px) scale(${scale})`;
+      }
+
+      if (noCount >= 5) {
+        noBtn.textContent = "Fine 😳";
+      }
+
+      if (noCount >= 7) {
+        noBtn.style.opacity = "0.65";
+      }
+    }
+
+    function goYes() {
+      window.location.href = "yes.html";
+    }
+
+    function createFloatItem() {
+      const item = document.createElement("div");
+      item.className = "float-item";
+      const icons = ["💛", "✨", "🌼", "💌"];
+      item.textContent = icons[Math.floor(Math.random() * icons.length)];
+      item.style.left = Math.random() * 100 + "vw";
+      item.style.fontSize = (14 + Math.random() * 16) + "px";
+      document.body.appendChild(item);
+      setTimeout(() => item.remove(), 4500);
+    }
+
+    setInterval(createFloatItem, 700);
+  </script>
 </body>
 </html>
