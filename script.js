@@ -97,14 +97,13 @@ function showToast(msg) {
 }
 
 // =========================
-// YES（保留你的原本邏輯）
+// YES
 // =========================
 yesBtn.addEventListener("click", () => {
 
     startMusic()
 
     if (!runawayEnabled) {
-
         yesIndex++
 
         if (yesIndex >= yesTease.length) {
@@ -176,15 +175,30 @@ function moveNo(e) {
     }
 
     const wrapRect = buttonsWrap.getBoundingClientRect()
+    const yesRect = yesBtn.getBoundingClientRect()
     const btnWidth = noBtn.offsetWidth
     const btnHeight = noBtn.offsetHeight
 
-    // 只在右邊活動
-    const minLeft = wrapRect.width * 0.58
+    // Yes 目前在 buttonsWrap 裡的右邊界
+    const yesRightInsideWrap = yesRect.right - wrapRect.left
+
+    // 安全距離，避免 No 壓到 Yes
+    const safetyGap = 24
+
+    // No 最左位置 = Yes 右邊 + 安全距離
+    const minLeft = Math.min(
+        wrapRect.width - btnWidth,
+        yesRightInsideWrap + safetyGap
+    )
+
     const maxLeft = wrapRect.width - btnWidth
     const maxTop = wrapRect.height - btnHeight
 
-    let left = minLeft + Math.random() * Math.max(1, (maxLeft - minLeft))
+    let left = minLeft
+    if (maxLeft > minLeft) {
+        left = minLeft + Math.random() * (maxLeft - minLeft)
+    }
+
     let top = Math.random() * Math.max(1, maxTop)
 
     noBtn.style.position = "absolute"
