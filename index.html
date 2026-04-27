@@ -26,7 +26,6 @@
       width: min(92vw, 560px);
       text-align: center;
       background: rgba(255, 250, 235, 0.68);
-      backdrop-filter: blur(6px);
       border-radius: 28px;
       padding: 36px 22px 42px;
       box-shadow: 0 12px 34px rgba(0, 0, 0, 0.10);
@@ -63,7 +62,7 @@
     .button-area {
       position: relative;
       width: 100%;
-      height: 190px;
+      height: 170px;
       margin-top: 18px;
     }
 
@@ -76,17 +75,13 @@
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, background 0.2s ease;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
     }
 
     #yes-btn {
       left: 50%;
-      top: 110px;
+      top: 90px;
       transform: translateX(-140px);
       background: #ffcc70;
       color: #5a3e00;
@@ -98,14 +93,14 @@
 
     #no-btn {
       left: 50%;
-      top: 110px;
+      top: 90px;
       transform: translateX(20px);
       background: #fff4d9;
       color: #7b5b00;
     }
 
     .tiny-note {
-      min-height: 28px;
+      min-height: 24px;
       margin-top: 10px;
       font-size: 0.96rem;
       color: #8a6c18;
@@ -141,16 +136,16 @@
       }
 
       .button-area {
-        height: 220px;
+        height: 200px;
       }
 
       #yes-btn {
-        top: 125px;
+        top: 105px;
         transform: translateX(-128px);
       }
 
       #no-btn {
-        top: 125px;
+        top: 105px;
         transform: translateX(8px);
       }
     }
@@ -195,24 +190,21 @@
 
     function moveNo() {
       noCount++;
-
       note.textContent = messages[Math.min(noCount - 1, messages.length - 1)];
 
-      const areaRect = buttonArea.getBoundingClientRect();
+      const areaWidth = buttonArea.clientWidth;
+      const areaHeight = buttonArea.clientHeight;
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
 
-      const maxX = areaRect.width - btnWidth;
-      const maxY = areaRect.height - btnHeight;
-
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const x = Math.random() * (areaWidth - btnWidth);
+      const y = Math.random() * (areaHeight - btnHeight);
 
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
-      noBtn.style.transform = "translateX(0)";
+      noBtn.style.transform = "none";
 
-      const scale = 1 + Math.min(noCount * 0.08, 0.35);
+      const scale = 1 + Math.min(noCount * 0.05, 0.2);
 
       if (window.innerWidth <= 480) {
         yesBtn.style.transform = `translateX(-128px) scale(${scale})`;
@@ -222,10 +214,6 @@
 
       if (noCount >= 5) {
         noBtn.textContent = "Fine 😳";
-      }
-
-      if (noCount >= 7) {
-        noBtn.style.opacity = "0.65";
       }
     }
 
