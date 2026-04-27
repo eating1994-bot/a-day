@@ -1,129 +1,204 @@
-const yesBtn = document.getElementById("yes-btn");
-const noBtn = document.getElementById("no-btn");
-const catGif = document.getElementById("cat-gif");
-const teaseToast = document.getElementById("tease-toast");
-const buttonsWrap = document.getElementById("buttons-wrap");
-const music = document.getElementById("bg-music");
-const musicToggle = document.getElementById("music-toggle");
+document.addEventListener("DOMContentLoaded", () => {
 
-let noCount = 0;
-let musicStarted = false;
+const catGif = document.getElementById('cat-gif')
+const yesBtn = document.getElementById('yes-btn')
+const noBtn = document.getElementById('no-btn')
+const music = document.getElementById('bg-music')
+const toast = document.getElementById('tease-toast')
+const runawayText = document.getElementById('runaway-text')
+const buttonsWrap = document.getElementById('buttons-wrap')
 
-const teaseMessages = [
-  "really? 🥺",
-  "are you sure? 🐥",
-  "think again 💭",
-  "ehhh press yes 😌",
-  "okay okay... just say yes 💛"
-];
+if (!yesBtn || !noBtn || !catGif || !buttonsWrap) return
 
-const gifStates = [
-  "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
-  "https://media.tenor.com/3xQH3dTJ4J8AAAAi/bubu-dudu-sseeyall.gif",
-  "https://media.tenor.com/XR9rX3S0UX0AAAAi/bubu-dudu.gif",
-  "https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif"
-];
+// =========================
+// GIF
+// =========================
+const gifStages = [
+    "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
+    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
+]
 
-function showToast(message) {
-  teaseToast.textContent = message;
-  teaseToast.classList.add("show");
+// =========================
+// TEXT
+// =========================
+const noMessages = [
+    "No… really? 🥺",
+    "You’re breaking my heart 😤",
+    "Please don’t do this 💔",
+    "I thought you liked me 😢",
+    "This actually hurts… 🥀",
+    "Okay… I’m scared 😭",
+    "I think I’ll run away… 😶‍🌫️"
+]
 
-  clearTimeout(showToast._timer);
-  showToast._timer = setTimeout(() => {
-    teaseToast.classList.remove("show");
-  }, 1400);
-}
+const yesTease = [
+    "Wait… too fast 😳",
+    "Not so easy~ 😌",
+    "You’re impatient huh 😏",
+    "I like your effort 💕",
+    "Almost there… 💖",
+    "But not yet 😌"
+]
 
-function moveNoButton(e) {
-  if (e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
+// =========================
+// STATE
+// =========================
+let noIndex = 0
+let yesIndex = 0
+let runawayEnabled = false
 
-  noCount++;
-
-  const wrapWidth = buttonsWrap.clientWidth;
-  const wrapHeight = buttonsWrap.clientHeight;
-
-  const btnWidth = noBtn.offsetWidth;
-  const btnHeight = noBtn.offsetHeight;
-
-  // 只在右半邊活動，避免貼到 Yes
-  const minX = wrapWidth * 0.55;
-  const maxX = wrapWidth - btnWidth;
-  const maxY = wrapHeight - btnHeight;
-
-  const x = minX + Math.random() * Math.max(1, (maxX - minX));
-  const y = Math.random() * Math.max(1, maxY);
-
-  noBtn.style.position = "absolute";
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-  noBtn.style.right = "auto";
-
-  // Yes 稍微變大
-  const scale = 1 + Math.min(noCount * 0.04, 0.15);
-  yesBtn.style.transform = `scale(${scale})`;
-
-  const msg = teaseMessages[Math.min(noCount - 1, teaseMessages.length - 1)];
-  showToast(msg);
-
-  const gifIndex = Math.min(noCount, gifStates.length - 1);
-  catGif.src = gifStates[gifIndex];
-
-  if (noCount >= 5) {
-    noBtn.textContent = "Fine 😳";
-  }
-}
-
+// =========================
+// MUSIC
+// =========================
 function startMusic() {
-  if (!music || musicStarted) return;
-
-  music.volume = 0;
-
-  music.play().then(() => {
-    musicStarted = true;
-
-    let vol = 0;
-    const fade = setInterval(() => {
-      vol += 0.03;
-      if (vol >= 0.3) {
-        vol = 0.3;
-        clearInterval(fade);
-      }
-      music.volume = vol;
-    }, 80);
-  }).catch((err) => {
-    console.log("play blocked:", err);
-  });
+    if (!music) return
+    music.volume = 0.3
+    music.play().catch(() => {})
 }
 
-function toggleMusic() {
-  if (!music) return;
+document.addEventListener("click", startMusic, { once: true })
 
-  if (music.paused) {
-    music.play();
-    musicToggle.textContent = "🔊";
-  } else {
-    music.pause();
-    musicToggle.textContent = "🔇";
-  }
+// =========================
+// TOAST
+// =========================
+function showToast(msg) {
+    if (!toast) return
+
+    toast.textContent = msg
+    toast.classList.add("show")
+
+    clearTimeout(toast._t)
+    toast._t = setTimeout(() => {
+        toast.classList.remove("show")
+    }, 2000)
 }
 
+// =========================
+// YES（保留你的原本邏輯）
+// =========================
 yesBtn.addEventListener("click", () => {
-  window.location.href = "yes.html";
-});
 
-noBtn.addEventListener("click", moveNoButton);
-noBtn.addEventListener("mouseenter", moveNoButton);
-noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
+    startMusic()
 
-document.addEventListener("click", startMusic, { once: true });
-document.addEventListener("touchstart", startMusic, { once: true });
-document.addEventListener("keydown", startMusic, { once: true });
+    if (!runawayEnabled) {
 
-window.addEventListener("load", () => {
-  noBtn.style.left = `${buttonsWrap.clientWidth - noBtn.offsetWidth}px`;
-  noBtn.style.top = "40px";
-  noBtn.style.right = "auto";
-});
+        yesIndex++
+
+        if (yesIndex >= yesTease.length) {
+            showToast("Try clicking NO 👀")
+            yesIndex = yesTease.length - 1
+            return
+        }
+
+        showToast(yesTease[yesIndex])
+        return
+    }
+
+    // ⭐ 最後結局
+    showToast("Okay… 💖")
+
+    setTimeout(() => {
+        window.location.href = "yes.html"
+    }, 800)
+})
+
+// =========================
+// NO（保留你的平滑成長邏輯）
+// =========================
+noBtn.addEventListener("click", () => {
+
+    startMusic()
+
+    noIndex++
+
+    const lastStage = gifStages.length - 1
+    const stage = Math.min(noIndex, lastStage)
+
+    // 🎬 換圖
+    catGif.src = gifStages[stage] + "?v=" + Date.now()
+
+    // 💬 對話
+    showToast(noMessages[stage])
+
+    // ⭐ 平滑變大
+    const baseSize = 24
+    const maxSize = 80
+    const progress = noIndex / lastStage
+    const eased = Math.pow(progress, 1.5)
+    const newSize = baseSize + (maxSize - baseSize) * eased
+
+    yesBtn.style.fontSize = newSize + "px"
+    yesBtn.style.transition = "0.3s ease"
+
+    // ⭐ 最後才 runaway
+    if (stage === lastStage && !runawayEnabled) {
+        enableRunaway()
+        runawayEnabled = true
+    }
+})
+
+// =========================
+// RUNAWAY
+// =========================
+function enableRunaway() {
+    showToast("No way 🤓")
+
+    noBtn.addEventListener("mouseenter", moveNo)
+    noBtn.addEventListener("pointerdown", moveNo)
+    noBtn.addEventListener("touchstart", moveNo, { passive: false })
+}
+
+// =========================
+// MOVE（保留你的玩法，只修位置）
+// =========================
+function moveNo(e) {
+    if (e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
+    const wrapRect = buttonsWrap.getBoundingClientRect()
+    const yesRect = yesBtn.getBoundingClientRect()
+    const btnWidth = noBtn.offsetWidth
+    const btnHeight = noBtn.offsetHeight
+
+    // 讓 No 盡量出現在右半邊，避免貼到 Yes
+    const minLeft = wrapRect.width * 0.58
+    const maxLeft = wrapRect.width - btnWidth
+    const maxTop = wrapRect.height - btnHeight
+
+    let left = minLeft + Math.random() * Math.max(1, (maxLeft - minLeft))
+    let top = Math.random() * Math.max(1, maxTop)
+
+    noBtn.style.position = "absolute"
+    noBtn.style.left = left + "px"
+    noBtn.style.top = top + "px"
+    noBtn.style.transform = "none"
+    noBtn.style.right = "auto"
+
+    // 如果還是太靠近 Yes，再往右推一點
+    const noRect = noBtn.getBoundingClientRect()
+    const yesCenterX = yesRect.left + yesRect.width / 2
+    const noCenterX = noRect.left + noRect.width / 2
+
+    if (Math.abs(noCenterX - yesCenterX) < 120) {
+        left = Math.min(maxLeft, left + 50)
+        noBtn.style.left = left + "px"
+    }
+
+    if (runawayText) {
+        runawayText.textContent = "Catch me no way 😏"
+        runawayText.style.position = "absolute"
+        runawayText.style.left = Math.min(wrapRect.width - 20, left + 10) + "px"
+        runawayText.style.top = Math.max(0, top - 28) + "px"
+        runawayText.style.transform = "none"
+    }
+}
+
+})
