@@ -10,8 +10,54 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body{
+    margin: 0;
+    min-height: 100vh;
     background: linear-gradient(135deg, #FFF6D6, #FFE7A3, #FFF0C9);
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    color: #5a4700;
+}
+
+.container {
+    width: min(92vw, 760px);
+    margin: 40px auto;
+    text-align: center;
+    background: rgba(255, 250, 235, 0.68);
+    backdrop-filter: blur(6px);
+    border-radius: 28px;
+    padding: 36px 22px 42px;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.10);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.yes-title {
+    font-size: 2.1rem;
+    color: #7a5a00;
+    margin: 0 0 18px;
+}
+
+.yes-message {
+    font-size: 1.12rem;
+    line-height: 1.9;
+    color: #5a4700;
+    margin: 18px 0;
+}
+
+.gif-container img {
+    width: 200px;
+    max-width: 72%;
+    border-radius: 18px;
+    margin: 8px 0 12px;
 }
 
 .petal {
@@ -29,28 +75,35 @@ body{
     }
 }
 
-.container {
-    animation: fadeIn 1.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
 #music-toggle {
     position: fixed;
     right: 20px;
     bottom: 20px;
     border: none;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
     cursor: pointer;
     background: #fff4c4;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10000;
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 24px auto;
+        padding: 30px 18px 34px;
+    }
+
+    .yes-title {
+        font-size: 1.75rem;
+    }
+
+    .yes-message {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
 }
 </style>
 </head>
@@ -62,7 +115,7 @@ body{
     <h1 class="yes-title">1 Year Together ❣️🥳</h1>
 
     <div class="gif-container">
-        <img src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" width="200">
+        <img src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" width="200" alt="cute gif">
     </div>
 
     <p class="yes-message">
