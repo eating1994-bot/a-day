@@ -42,27 +42,26 @@ function moveNoButton(e) {
 
   noCount++;
 
-  const wrap = buttonsWrap;
-  const wrapWidth = wrap.clientWidth;
-  const wrapHeight = wrap.clientHeight;
+  const wrapWidth = buttonsWrap.clientWidth;
+  const wrapHeight = buttonsWrap.clientHeight;
 
   const btnWidth = noBtn.offsetWidth;
   const btnHeight = noBtn.offsetHeight;
 
-  // 👉 關鍵：限制在右邊，避免碰到 Yes
+  // 只在右半邊活動，避免貼到 Yes
   const minX = wrapWidth * 0.55;
   const maxX = wrapWidth - btnWidth;
   const maxY = wrapHeight - btnHeight;
 
-  const x = minX + Math.random() * (maxX - minX);
-  const y = Math.random() * maxY;
+  const x = minX + Math.random() * Math.max(1, (maxX - minX));
+  const y = Math.random() * Math.max(1, maxY);
 
   noBtn.style.position = "absolute";
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
   noBtn.style.right = "auto";
 
-  // 👉 Yes 小幅變大
+  // Yes 稍微變大
   const scale = 1 + Math.min(noCount * 0.04, 0.15);
   yesBtn.style.transform = `scale(${scale})`;
 
@@ -94,7 +93,7 @@ function startMusic() {
       }
       music.volume = vol;
     }, 80);
-  }).catch(err => {
+  }).catch((err) => {
     console.log("play blocked:", err);
   });
 }
@@ -111,22 +110,18 @@ function toggleMusic() {
   }
 }
 
-// 👉 Yes 跳頁
 yesBtn.addEventListener("click", () => {
   window.location.href = "yes.html";
 });
 
-// 👉 No 逃跑（維持原本玩法）
 noBtn.addEventListener("click", moveNoButton);
 noBtn.addEventListener("mouseenter", moveNoButton);
 noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
 
-// 👉 音樂需要互動才能播
 document.addEventListener("click", startMusic, { once: true });
 document.addEventListener("touchstart", startMusic, { once: true });
 document.addEventListener("keydown", startMusic, { once: true });
 
-// 👉 初始位置（右邊）
 window.addEventListener("load", () => {
   noBtn.style.left = `${buttonsWrap.clientWidth - noBtn.offsetWidth}px`;
   noBtn.style.top = "40px";
