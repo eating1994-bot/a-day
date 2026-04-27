@@ -37,6 +37,18 @@ body{
     from {opacity: 0; transform: translateY(10px);}
     to {opacity: 1; transform: translateY(0);}
 }
+
+#music-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+}
 </style>
 </head>
 
@@ -70,9 +82,9 @@ body{
 
 </div>
 
-<!-- 🎵 音樂 -->
+<!-- 🎵 音樂（已換好） -->
 <audio id="bg-music" loop>
-    <source src="music/glue-song.mp3" type="audio/mpeg">
+    <source src="music/welbornworks-summer-392467.mp3" type="audio/mpeg">
 </audio>
 
 <button id="music-toggle" onclick="toggleMusic()">🔊</button>
@@ -81,9 +93,7 @@ body{
 let music = null
 let started = false
 
-// =========================
-// 🎵 MUSIC (CLICK TO START MODE)
-// =========================
+// 點擊後播放（手機一定要）
 function startMusic() {
 
     if (!music) {
@@ -96,9 +106,7 @@ function startMusic() {
 
     music.play().then(() => {
         started = true
-        console.log("🎵 music started")
 
-        // 🌊 fade-in
         let vol = 0
         const fade = setInterval(() => {
             vol += 0.03
@@ -114,14 +122,11 @@ function startMusic() {
     })
 }
 
-// 👉 跟你成功版本一樣：user gesture 才播
+// 必須有使用者互動
 document.addEventListener("click", startMusic, { once: true })
 document.addEventListener("touchstart", startMusic, { once: true })
 document.addEventListener("keydown", startMusic, { once: true })
 
-// =========================
-// 🔇 toggle
-// =========================
 function toggleMusic(){
     if (!music) music = document.getElementById("bg-music")
 
@@ -136,9 +141,6 @@ function toggleMusic(){
     }
 }
 
-// =========================
-// 💥 confetti
-// =========================
 function softFire(){
     if(typeof confetti !== "function") return
 
@@ -146,19 +148,15 @@ function softFire(){
         particleCount: 40,
         spread: 60,
         startVelocity: 20,
-        origin: { y: 0.7 },
-        colors: ["#fff", "#ffe680", "#ffdf80", "#ffd966"]
+        origin: { y: 0.7 }
     })
 }
 
-// =========================
-// 🌼 petals
-// =========================
 function createPetal(){
     const petal = document.createElement("div")
     petal.classList.add("petal")
 
-    const flowers = ["🌼","🌼","💛","✨"]
+    const flowers = ["🌸","🌼","💛","✨"]
     petal.innerText = flowers[Math.floor(Math.random()*flowers.length)]
 
     petal.style.left = Math.random() * 100 + "vw"
@@ -170,15 +168,10 @@ function createPetal(){
     setTimeout(()=>petal.remove(), 7000)
 }
 
-// =========================
-// 🚀 INIT（不在這裡播音樂！）
-// =========================
 window.addEventListener("load", () => {
-
     softFire()
     setInterval(softFire, 4000)
     setInterval(createPetal, 300)
-
 })
 </script>
 
