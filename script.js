@@ -5,7 +5,6 @@ const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
-const runawayText = document.getElementById('runaway-text')
 const buttonsWrap = document.getElementById('buttons-wrap')
 const musicToggle = document.getElementById('music-toggle')
 
@@ -15,36 +14,36 @@ if (!yesBtn || !noBtn || !catGif || !buttonsWrap) return
 // GIF
 // =========================
 const gifStages = [
-"https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
-"https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
-"https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
-"https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
-"https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
-"https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
-"https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
-"https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
+    "https://media.tenor.com/r_2wMCBMnesAAAAi/bubu-bubu-dudu-love.gif",
+    "https://media.tenor.com/sogH3VkgFVEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/jK5dZwjdK6kAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/QOztKKB0fSEAAAAi/bubu-dudu-sseeyall.gif",
+    "https://media.tenor.com/Q9VuGIKQqEMAAAAi/love-bear.gif",
+    "https://media.tenor.com/U_C0g0kIAMIAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/sWXhCC4A2woAAAAi/bubu-bubu-dudu.gif",
+    "https://media.tenor.com/2gyJjtOUFMcAAAAi/sseeyall-bubu-dudu.gif"
 ]
 
 // =========================
 // TEXT
 // =========================
 const noMessages = [
-"No… really? 🥺",
-"You’re breaking my heart 😤",
-"Please don’t do this 💔",
-"I thought you liked me 😢",
-"This actually hurts… 🥀",
-"Okay… I’m scared 😭",
-"I think I’ll run away… 😶‍🌫️"
+    "No… really? 🥺",
+    "You’re breaking my heart 😤",
+    "Please don’t do this 💔",
+    "I thought you liked me 😢",
+    "This actually hurts… 🥀",
+    "Okay… I’m scared 😭",
+    "I think I’ll run away… 😶‍🌫️"
 ]
 
 const yesTease = [
-"Wait… too fast 😳",
-"Not so easy~ 😌",
-"You’re impatient huh 😏",
-"I like your effort 💕",
-"Almost there… 💖",
-"But not yet 😌"
+    "Wait… too fast 😳",
+    "Not so easy~ 😌",
+    "You’re impatient huh 😏",
+    "I like your effort 💕",
+    "Almost there… 💖",
+    "But not yet 😌"
 ]
 
 // =========================
@@ -90,14 +89,14 @@ function showToast(msg) {
     toast.textContent = msg
     toast.classList.add("show")
 
-    clearTimeout(toast._t)
-    toast._t = setTimeout(() => {
+    clearTimeout(showToast._timer)
+    showToast._timer = setTimeout(() => {
         toast.classList.remove("show")
     }, 2000)
 }
 
 // =========================
-// YES
+// YES（保留你的原本邏輯）
 // =========================
 yesBtn.addEventListener("click", () => {
 
@@ -176,16 +175,18 @@ function moveNo(e) {
 
     const wrapRect = buttonsWrap.getBoundingClientRect()
     const yesRect = yesBtn.getBoundingClientRect()
-    const btnWidth = noBtn.offsetWidth
     const btnHeight = noBtn.offsetHeight
 
-    // Yes 目前在 buttonsWrap 裡的右邊界
+    // 先把按鈕文字改長，再重新量寬
+    noBtn.textContent = "Catch me no way 😏"
+    const btnWidth = noBtn.offsetWidth
+
+    // Yes 目前右邊界（buttons 區塊內）
     const yesRightInsideWrap = yesRect.right - wrapRect.left
 
     // 安全距離，避免 No 壓到 Yes
     const safetyGap = 24
 
-    // No 最左位置 = Yes 右邊 + 安全距離
     const minLeft = Math.min(
         wrapRect.width - btnWidth,
         yesRightInsideWrap + safetyGap
@@ -206,17 +207,6 @@ function moveNo(e) {
     noBtn.style.top = top + "px"
     noBtn.style.transform = "none"
     noBtn.style.right = "auto"
-
-    // 讓文字跟在 No 下面
-    if (runawayText) {
-        runawayText.textContent = "Catch me no way 😏"
-        runawayText.style.left = left + "px"
-        runawayText.style.top = (top + btnHeight + 6) + "px"
-        runawayText.style.width = btnWidth + "px"
-        runawayText.style.textAlign = "center"
-        runawayText.style.transform = "none"
-        runawayText.style.opacity = "1"
-    }
 }
 
 })
