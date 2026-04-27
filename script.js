@@ -7,6 +7,7 @@ const music = document.getElementById('bg-music')
 const toast = document.getElementById('tease-toast')
 const runawayText = document.getElementById('runaway-text')
 const buttonsWrap = document.getElementById('buttons-wrap')
+const musicToggle = document.getElementById('music-toggle')
 
 if (!yesBtn || !noBtn || !catGif || !buttonsWrap) return
 
@@ -61,6 +62,22 @@ function startMusic() {
     music.volume = 0.3
     music.play().catch(() => {})
 }
+
+function toggleMusic() {
+    if (!music) return
+
+    if (music.paused) {
+        music.play().then(() => {
+            music.volume = 0.3
+            if (musicToggle) musicToggle.textContent = "🔊"
+        }).catch(() => {})
+    } else {
+        music.pause()
+        if (musicToggle) musicToggle.textContent = "🔇"
+    }
+}
+
+window.toggleMusic = toggleMusic
 
 document.addEventListener("click", startMusic, { once: true })
 
