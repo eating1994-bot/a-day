@@ -10,47 +10,45 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 40%, #FFD1DC 100%);
+    background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 42%, #FFD1DC 100%);
     position: relative;
     overflow: hidden;
 }
 
-/* 🌙 柔光層 */
+/* 柔光 */
 body::before {
     content: "";
     position: absolute;
     inset: 0;
     background:
         radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.6), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.4), transparent 45%);
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.35), transparent 45%);
     pointer-events: none;
 }
 
-/* 💖 背景層 */
+/* 背景層預留 */
 .hearts-bg {
     position: fixed;
     inset: 0;
     pointer-events: none;
 }
 
-/* =========================
-   主內容
-========================= */
-
+/* 主內容 */
 .container {
     position: relative;
-    text-align: center;
-    padding: 40px 20px;
     z-index: 2;
+    text-align: center;
+    padding: 36px 20px;
+    width: min(92vw, 640px);
 }
 
-/* 💖 標題 */
+/* 標題 */
 h1 {
-    font-size: 2.4rem;
+    font-size: 2.35rem;
     color: #C2185B;
     font-weight: 900;
-    margin-bottom: 20px;
-    line-height: 1.3;
+    line-height: 1.28;
+    margin-bottom: 18px;
 }
 
 .line1,
@@ -58,9 +56,9 @@ h1 {
     display: block;
 }
 
-/* 🎞 GIF */
+/* GIF */
 .gif-container {
-    margin: 20px auto;
+    margin: 18px auto 8px;
     display: flex;
     justify-content: center;
 }
@@ -71,12 +69,12 @@ h1 {
     object-fit: contain;
 }
 
-/* 🔘 按鈕區 */
+/* 按鈕區 */
 .buttons {
     position: relative;
     width: 360px;
     height: 160px;
-    margin: 30px auto 0;
+    margin: 24px auto 0;
 }
 
 /* 共用按鈕 */
@@ -85,69 +83,76 @@ h1 {
     position: absolute;
     border: none;
     cursor: pointer;
-    transition: transform 0.18s ease, left 0.18s ease, top 0.18s ease, opacity 0.18s ease, font-size 0.3s ease;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
-    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    transition:
+        left 0.18s ease,
+        top 0.18s ease,
+        transform 0.18s ease,
+        font-size 0.28s ease,
+        padding 0.28s ease,
+        opacity 0.18s ease;
 }
 
-/* YES：一開始放中間偏左 */
+/* Yes：一開始在中間偏左，但整體仍置中 */
 #yes-btn {
     top: 50%;
     left: 50%;
-    transform: translate(-115%, -50%);
+    transform: translate(-108%, -50%);
     background: #4CAF50;
     color: white;
-    font-size: 1.3rem;
+    font-size: 1.28rem;
     font-weight: 900;
-    padding: 16px 36px;
+    padding: 16px 34px;
     border-radius: 18px;
     z-index: 2;
 }
 
-/* NO：一開始放中間偏右 */
+/* No：一開始在中間偏右 */
 #no-btn {
     top: 50%;
     left: 50%;
-    transform: translate(15%, -50%);
+    transform: translate(8%, -50%);
     background: #e74c3c;
     color: white;
     font-size: 1rem;
-    font-weight: 700;
-    padding: 10px 22px;
+    font-weight: 800;
+    padding: 11px 22px;
     border-radius: 12px;
     z-index: 3;
 }
 
-/* 💬 toast */
+/* 提示字 */
 #tease-toast {
     margin-top: 14px;
-    font-size: 1rem;
-    color: #E91E8C;
-    font-weight: 700;
-    opacity: 0;
-    transition: 0.2s ease;
     min-height: 24px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #E91E8C;
+    opacity: 0;
+    transition: opacity 0.22s ease;
 }
 
 #tease-toast.show {
     opacity: 1;
 }
 
-/* 🔊 音樂按鈕 */
+/* 音樂按鈕 */
 #music-toggle {
     position: fixed;
-    bottom: 20px;
     right: 20px;
+    bottom: 20px;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
     border: none;
-    background: rgba(255,255,255,0.85);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.88);
+    font-size: 20px;
     cursor: pointer;
     z-index: 20;
-    font-size: 20px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* 手機版 */
@@ -167,14 +172,18 @@ h1 {
     }
 
     #yes-btn {
-        padding: 14px 30px;
-        font-size: 1.15rem;
-        transform: translate(-108%, -50%);
+        font-size: 1.14rem;
+        padding: 14px 28px;
+        transform: translate(-102%, -50%);
     }
 
     #no-btn {
-        padding: 10px 18px;
         font-size: 0.92rem;
-        transform: translate(10%, -50%);
+        padding: 10px 18px;
+        transform: translate(4%, -50%);
+    }
+
+    #tease-toast {
+        font-size: 0.95rem;
     }
 }
