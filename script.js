@@ -96,6 +96,29 @@ function showToast(msg) {
 }
 
 // =========================
+// KEEP NO AWAY (前期修正重點)
+// =========================
+function keepNoAwayFromYes() {
+    const wrapRect = buttonsWrap.getBoundingClientRect()
+    const yesRect = yesBtn.getBoundingClientRect()
+    const btnWidth = noBtn.offsetWidth
+
+    const yesRightInsideWrap = yesRect.right - wrapRect.left
+    const gap = 18
+
+    let left = yesRightInsideWrap + gap
+    const maxLeft = wrapRect.width - btnWidth
+
+    if (left > maxLeft) {
+        left = maxLeft
+    }
+
+    noBtn.style.position = "absolute"
+    noBtn.style.left = left + "px"
+    noBtn.style.right = "auto"
+}
+
+// =========================
 // YES
 // =========================
 yesBtn.addEventListener("click", () => {
@@ -146,6 +169,13 @@ noBtn.addEventListener("click", () => {
     yesBtn.style.fontSize = newSize + "px"
     yesBtn.style.transition = "0.3s ease"
 
+    // ⭐ 前期每次都把 No 往右推開，避免壓到 Yes
+    if (!runawayEnabled) {
+        requestAnimationFrame(() => {
+            keepNoAwayFromYes()
+        })
+    }
+
     if (stage === lastStage && !runawayEnabled) {
         enableRunaway()
         runawayEnabled = true
@@ -161,10 +191,13 @@ function enableRunaway() {
     noBtn.addEventListener("mouseenter", moveNo)
     noBtn.addEventListener("pointerdown", moveNo)
     noBtn.addEventListener("touchstart", moveNo, { passive: false })
+
+    // 一開啟就先跑一次
+    moveNo()
 }
 
 // =========================
-// MOVE
+// MOVE（runaway 後才自由跑）
 // =========================
 function moveNo(e) {
 
@@ -175,46 +208,16 @@ function moveNo(e) {
 
     noBtn.textContent = "Catch me no way 😏"
 
-    const wrapRect = buttonsWrap.getBoundingClientRect()
-    const yesRect = yesBtn.getBoundingClientRect()
+    const wrapWidth = buttonsWrap.clientWidth
+    const wrapHeight = buttonsWrap.clientHeight
     const btnWidth = noBtn.offsetWidth
     const btnHeight = noBtn.offsetHeight
 
-    const yesLeftInsideWrap = yesRect.left - wrapRect.left
-    const yesRightInsideWrap = yesRect.right - wrapRect.left
-    const yesTopInsideWrap = yesRect.top - wrapRect.top
-    const yesBottomInsideWrap = yesRect.bottom - wrapRect.top
+    const maxLeft = Math.max(1, wrapWidth - btnWidth)
+    const maxTop = Math.max(1, wrapHeight - btnHeight)
 
-    const safetyGap = 18
-    const maxLeft = wrapRect.width - btnWidth
-    const maxTop = wrapRect.height - btnHeight
-
-    let left = 0
-    let top = 0
-    let tries = 0
-    let valid = false
-
-    while (tries < 40 && !valid) {
-        left = Math.random() * Math.max(1, maxLeft)
-        top = Math.random() * Math.max(1, maxTop)
-
-        const noLeft = left
-        const noRight = left + btnWidth
-        const noTop = top
-        const noBottom = top + btnHeight
-
-        const overlapsYes =
-            noRight > (yesLeftInsideWrap - safetyGap) &&
-            noLeft < (yesRightInsideWrap + safetyGap) &&
-            noBottom > (yesTopInsideWrap - safetyGap) &&
-            noTop < (yesBottomInsideWrap + safetyGap)
-
-        if (!overlapsYes) {
-            valid = true
-        }
-
-        tries++
-    }
+    const left = Math.random() * maxLeft
+    const top = Math.random() * maxTop
 
     noBtn.style.position = "absolute"
     noBtn.style.left = left + "px"
@@ -222,5 +225,14 @@ function moveNo(e) {
     noBtn.style.transform = "none"
     noBtn.style.right = "auto"
 }
+
+// =========================
+// INIT
+// =========================
+window.addEventListener("load", () => {
+    // 先把 No 放在靠近 Yes 但不重疊的位置
+    keepNoAwayFromYes()
+    noBtn.style.top = "47px"
+})
 
 })
