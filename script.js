@@ -88,11 +88,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1800);
     }
 
+    function setButtonSizes(stageProgress) {
+        const yesFont = 1.1 + stageProgress * 0.38;   // rem
+        const noFont = 1.1 - stageProgress * 0.3;     // rem
+
+        const yesPadY = 13 + stageProgress * 4;       // px
+        const yesPadX = 28 + stageProgress * 8;
+
+        const noPadY = Math.max(8, 13 - stageProgress * 5);
+        const noPadX = Math.max(14, 28 - stageProgress * 10);
+
+        yesBtn.style.fontSize = `${yesFont}rem`;
+        yesBtn.style.padding = `${yesPadY}px ${yesPadX}px`;
+
+        noBtn.style.fontSize = `${noFont}rem`;
+        noBtn.style.padding = `${noPadY}px ${noPadX}px`;
+    }
+
     function keepNoAwayFromYes() {
         const wrapRect = buttonsWrap.getBoundingClientRect();
         const yesRect = yesBtn.getBoundingClientRect();
         const btnWidth = noBtn.offsetWidth;
-        const gap = 14;
+        const gap = 12;
 
         const yesRightInsideWrap = yesRect.right - wrapRect.left;
         let left = yesRightInsideWrap + gap;
@@ -175,17 +192,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const lastStage = gifStages.length - 1;
         const stage = Math.min(noIndex, lastStage);
+        const progress = stage / lastStage;
 
         catGif.src = `${gifStages[stage]}?v=${Date.now()}`;
         showToast(noMessages[stage]);
 
-        const baseSize = 24;
-        const maxSize = 62;
-        const progress = noIndex / lastStage;
-        const eased = Math.pow(progress, 1.35);
-        const newSize = baseSize + (maxSize - baseSize) * eased;
-
-        yesBtn.style.fontSize = `${newSize}px`;
+        setButtonSizes(progress);
 
         if (!runawayEnabled) {
             requestAnimationFrame(() => {
@@ -200,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     window.addEventListener("load", () => {
+        setButtonSizes(0);
         keepNoAwayFromYes();
     });
 });
