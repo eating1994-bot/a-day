@@ -15,18 +15,18 @@ body {
     overflow: hidden;
 }
 
-/* 柔光 */
+/* 柔光層 */
 body::before {
     content: "";
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.6), transparent 40%),
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.60), transparent 40%),
         radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.35), transparent 45%);
     pointer-events: none;
 }
 
-/* 背景層預留 */
+/* 背景層 */
 .hearts-bg {
     position: fixed;
     inset: 0;
@@ -38,8 +38,8 @@ body::before {
     position: relative;
     z-index: 2;
     text-align: center;
-    padding: 36px 20px;
     width: min(92vw, 640px);
+    padding: 36px 20px;
 }
 
 /* 標題 */
@@ -58,7 +58,7 @@ h1 {
 
 /* GIF */
 .gif-container {
-    margin: 18px auto 8px;
+    margin: 18px auto 10px;
     display: flex;
     justify-content: center;
 }
@@ -72,8 +72,8 @@ h1 {
 /* 按鈕區 */
 .buttons {
     position: relative;
-    width: 360px;
-    height: 160px;
+    width: 380px;
+    height: 170px;
     margin: 24px auto 0;
 }
 
@@ -96,11 +96,11 @@ h1 {
         opacity 0.18s ease;
 }
 
-/* Yes：一開始在中間偏左，但整體仍置中 */
+/* 初始排版：整組置中 */
 #yes-btn {
     top: 50%;
-    left: 50%;
-    transform: translate(-108%, -50%);
+    left: calc(50% - 10px);
+    transform: translate(-100%, -50%);
     background: #4CAF50;
     color: white;
     font-size: 1.28rem;
@@ -110,11 +110,10 @@ h1 {
     z-index: 2;
 }
 
-/* No：一開始在中間偏右 */
 #no-btn {
     top: 50%;
-    left: 50%;
-    transform: translate(8%, -50%);
+    left: calc(50% + 10px);
+    transform: translate(0%, -50%);
     background: #e74c3c;
     color: white;
     font-size: 1rem;
@@ -124,7 +123,7 @@ h1 {
     z-index: 3;
 }
 
-/* 提示字 */
+/* Toast */
 #tease-toast {
     margin-top: 14px;
     min-height: 24px;
@@ -167,20 +166,18 @@ h1 {
     }
 
     .buttons {
-        width: 300px;
-        height: 180px;
+        width: 310px;
+        height: 185px;
     }
 
     #yes-btn {
         font-size: 1.14rem;
         padding: 14px 28px;
-        transform: translate(-102%, -50%);
     }
 
     #no-btn {
         font-size: 0.92rem;
         padding: 10px 18px;
-        transform: translate(4%, -50%);
     }
 
     #tease-toast {
