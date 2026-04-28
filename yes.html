@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>1 Year Together 🎉</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
@@ -14,52 +16,78 @@
     box-sizing: border-box;
 }
 
-body{
+body {
     display: block !important;
     overflow-y: auto !important;
     margin: 0;
     min-height: 100vh;
-    background: linear-gradient(135deg, #FFF6D6, #FFE7A3, #FFF0C9);
-    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #FFF6D6 0%, #FFE7A3 45%, #FFF0C9 100%);
+    font-family: 'Nunito', sans-serif;
     overflow-x: hidden;
     color: #5a4700;
+    position: relative;
+}
+
+/* 柔光背景 */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 18% 25%, rgba(255,255,255,0.55), transparent 36%),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,0.35), transparent 42%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .container {
+    position: relative;
+    z-index: 2;
     width: min(92vw, 760px);
-    margin: 40px auto;
+    margin: 44px auto;
     text-align: center;
-    background: rgba(255, 250, 235, 0.68);
-    backdrop-filter: blur(6px);
-    border-radius: 28px;
-    padding: 36px 22px 42px;
-    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.10);
-    animation: fadeIn 1.5s ease-in-out;
+    background: rgba(255, 251, 240, 0.82);
+    backdrop-filter: blur(8px);
+    border-radius: 30px;
+    padding: 40px 26px 46px;
+    box-shadow: 0 14px 36px rgba(125, 96, 20, 0.12);
+    animation: fadeIn 1.2s ease-in-out;
+    border: 1px solid rgba(255,255,255,0.35);
 }
 
 @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .yes-title {
-    font-size: 2.1rem;
+    font-size: 2.2rem;
+    line-height: 1.2;
     color: #7a5a00;
     margin: 0 0 18px;
+    font-weight: 900;
+    letter-spacing: 0.2px;
 }
 
-.yes-message {
-    font-size: 1.12rem;
-    line-height: 1.9;
-    color: #5a4700;
-    margin: 18px 0;
+.gif-container {
+    margin: 6px 0 14px;
 }
 
 .gif-container img {
-    width: 200px;
+    width: 210px;
     max-width: 72%;
     border-radius: 18px;
-    margin: 8px 0 12px;
+    margin: 0;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,0.08));
+}
+
+.yes-message {
+    font-size: 1.08rem;
+    line-height: 2;
+    color: #5a4700;
+    margin: 18px auto;
+    max-width: 600px;
+    font-weight: 700;
 }
 
 .petal {
@@ -79,32 +107,52 @@ body{
 
 #music-toggle {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
+    right: 18px;
+    bottom: 18px;
     border: none;
     border-radius: 50%;
     width: 52px;
     height: 52px;
     font-size: 22px;
     cursor: pointer;
-    background: #fff4c4;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 248, 212, 0.95);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     z-index: 10000;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+#music-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 480px) {
     .container {
-        margin: 24px auto;
+        margin: 22px auto 26px;
         padding: 30px 18px 34px;
+        border-radius: 24px;
     }
 
     .yes-title {
-        font-size: 1.75rem;
+        font-size: 1.8rem;
+        margin-bottom: 14px;
+    }
+
+    .gif-container img {
+        width: 180px;
+        max-width: 76%;
     }
 
     .yes-message {
         font-size: 1rem;
-        line-height: 1.8;
+        line-height: 1.9;
+        margin: 16px auto;
+    }
+
+    #music-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
     }
 }
 </style>
@@ -181,12 +229,12 @@ document.addEventListener("click", startMusic, { once: true })
 document.addEventListener("touchstart", startMusic, { once: true })
 document.addEventListener("keydown", startMusic, { once: true })
 
-function toggleMusic(){
+function toggleMusic() {
     if (!music) music = document.getElementById("bg-music")
 
     if (!music) return
 
-    if (music.paused){
+    if (music.paused) {
         music.play()
         document.getElementById("music-toggle").textContent = "🔊"
     } else {
@@ -195,37 +243,38 @@ function toggleMusic(){
     }
 }
 
-function softFire(){
-    if(typeof confetti !== "function") return
+function softFire() {
+    if (typeof confetti !== "function") return
 
     confetti({
-        particleCount: 40,
-        spread: 60,
+        particleCount: 36,
+        spread: 58,
         startVelocity: 20,
-        origin: { y: 0.7 }
+        origin: { y: 0.72 },
+        scalar: 0.9
     })
 }
 
-function createPetal(){
+function createPetal() {
     const petal = document.createElement("div")
     petal.classList.add("petal")
 
-    const flowers = ["🌸","🌼","💛","✨"]
-    petal.innerText = flowers[Math.floor(Math.random()*flowers.length)]
+    const flowers = ["🌸", "🌼", "💛", "✨"]
+    petal.innerText = flowers[Math.floor(Math.random() * flowers.length)]
 
     petal.style.left = Math.random() * 100 + "vw"
-    petal.style.animationDuration = (Math.random()*3 + 3) + "s"
-    petal.style.fontSize = (Math.random()*18 + 12) + "px"
+    petal.style.animationDuration = (Math.random() * 3 + 4) + "s"
+    petal.style.fontSize = (Math.random() * 16 + 12) + "px"
 
     document.body.appendChild(petal)
 
-    setTimeout(()=>petal.remove(), 7000)
+    setTimeout(() => petal.remove(), 8000)
 }
 
 window.addEventListener("load", () => {
     softFire()
-    setInterval(softFire, 4000)
-    setInterval(createPetal, 300)
+    setInterval(softFire, 4500)
+    setInterval(createPetal, 360)
 })
 </script>
 
