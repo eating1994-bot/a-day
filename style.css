@@ -15,6 +15,7 @@ body {
     overflow: hidden;
 }
 
+/* 柔光層 */
 body::before {
     content: "";
     position: absolute;
@@ -25,27 +26,30 @@ body::before {
     pointer-events: none;
 }
 
+/* 背景層 */
 .hearts-bg {
     position: fixed;
     inset: 0;
     pointer-events: none;
 }
 
+/* 主內容 */
 .container {
     position: relative;
     z-index: 2;
     text-align: center;
     width: min(92vw, 640px);
-    padding: 22px 20px 34px;
-    transform: translateY(-18px);
+    padding: 18px 20px 24px;
+    transform: translateY(-22px);
 }
 
+/* 標題 */
 h1 {
-    font-size: 2.05rem;
+    font-size: 2rem;
     color: #C2185B;
     font-weight: 900;
-    line-height: 1.28;
-    margin-bottom: 14px;
+    line-height: 1.24;
+    margin-bottom: 10px;
 }
 
 .line1,
@@ -53,25 +57,28 @@ h1 {
     display: block;
 }
 
+/* GIF */
 .gif-container {
-    margin: 10px auto 6px;
+    margin: 6px auto 2px;
     display: flex;
     justify-content: center;
 }
 
 #cat-gif {
-    width: 200px;
-    height: 200px;
+    width: 190px;
+    height: 190px;
     object-fit: contain;
 }
 
+/* 按鈕區 */
 .buttons {
     position: relative;
-    width: 400px;
-    height: 170px;
-    margin: 10px auto 0;
+    width: 360px;
+    height: 120px;
+    margin: 2px auto 0;
 }
 
+/* 共用按鈕 */
 #yes-btn,
 #no-btn {
     position: absolute;
@@ -82,32 +89,28 @@ h1 {
     white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
-
-    /* 一開始先做成對稱 */
-    min-width: 132px;
-    min-height: 56px;
-    padding: 13px 28px;
+    min-width: 128px;
+    min-height: 54px;
+    padding: 13px 26px;
     border-radius: 16px;
-
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     font-weight: 800;
-
     transition:
         left 0.20s ease,
         top 0.20s ease,
         transform 0.20s ease,
         font-size 0.28s ease,
         padding 0.28s ease,
-        box-shadow 0.20s ease,
-        opacity 0.20s ease,
         min-width 0.28s ease,
         min-height 0.28s ease,
-        border-radius 0.28s ease;
+        border-radius 0.28s ease,
+        box-shadow 0.20s ease,
+        opacity 0.20s ease;
 }
 
-/* Yes：同尺寸但更吸引人 */
+/* Yes：主角，但一開始仍保持對稱舒服 */
 #yes-btn {
-    left: calc(50% - 146px);
+    left: calc(50% - 142px);
     background: linear-gradient(135deg, #69c36d, #46aa4a);
     color: white;
     z-index: 2;
@@ -119,7 +122,7 @@ h1 {
     box-shadow: 0 10px 22px rgba(76, 175, 80, 0.30);
 }
 
-/* No：同尺寸，但弱一點 */
+/* No */
 #no-btn {
     left: calc(50% + 14px);
     background: #ef7f73;
@@ -128,10 +131,11 @@ h1 {
     box-shadow: 0 8px 18px rgba(239, 127, 115, 0.18);
 }
 
+/* Teasing / toast */
 #tease-toast {
-    margin-top: 10px;
-    min-height: 24px;
-    font-size: 1rem;
+    margin-top: 2px;
+    min-height: 22px;
+    font-size: 0.95rem;
     font-weight: 800;
     color: #E91E8C;
     opacity: 0;
@@ -142,6 +146,7 @@ h1 {
     opacity: 1;
 }
 
+/* 音樂按鈕 */
 #music-toggle {
     position: fixed;
     right: 20px;
@@ -157,39 +162,45 @@ h1 {
     box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
+/* 手機版 */
 @media (max-width: 480px) {
     .container {
         width: min(94vw, 360px);
-        padding: 16px 14px 28px;
+        padding: 14px 12px 20px;
         transform: translateY(-12px);
     }
 
     h1 {
-        font-size: 1.75rem;
-        margin-bottom: 12px;
+        font-size: 1.72rem;
+        margin-bottom: 8px;
     }
 
     #cat-gif {
-        width: 180px;
-        height: 180px;
+        width: 172px;
+        height: 172px;
+    }
+
+    .gif-container {
+        margin: 4px auto 0;
     }
 
     .buttons {
-        width: 320px;
-        height: 180px;
+        width: 300px;
+        height: 112px;
+        margin-top: 0;
     }
 
     #yes-btn,
     #no-btn {
-        min-width: 118px;
-        min-height: 52px;
-        font-size: 0.98rem;
+        min-width: 116px;
+        min-height: 50px;
+        font-size: 0.96rem;
         padding: 12px 22px;
         border-radius: 15px;
     }
 
     #yes-btn {
-        left: calc(50% - 132px);
+        left: calc(50% - 128px);
     }
 
     #no-btn {
@@ -197,6 +208,7 @@ h1 {
     }
 
     #tease-toast {
-        font-size: 0.95rem;
+        margin-top: 2px;
+        font-size: 0.9rem;
     }
 }
