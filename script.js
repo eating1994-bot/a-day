@@ -78,30 +78,53 @@ document.addEventListener("DOMContentLoaded", () => {
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
             toast.classList.remove("show");
-        }, 1800);
+        }, 1700);
     }
 
     function setButtonSizes(stageProgress) {
-        const yesFont = 1.2 + stageProgress * 0.42;
-        const noFont = 1.05 - stageProgress * 0.22;
+        const yesFont = 1.02 + stageProgress * 0.42;
+        const noFont = 1.02 - stageProgress * 0.20;
 
-        const yesPadY = 15 + stageProgress * 5;
-        const yesPadX = 32 + stageProgress * 10;
+        const yesPadY = 13 + stageProgress * 5;
+        const yesPadX = 26 + stageProgress * 10;
 
         const noPadY = Math.max(8, 13 - stageProgress * 3);
-        const noPadX = Math.max(16, 28 - stageProgress * 6);
+        const noPadX = Math.max(16, 26 - stageProgress * 6);
+
+        const yesMinWidth = 128 + stageProgress * 24;
+        const noMinWidth = Math.max(90, 128 - stageProgress * 26);
+
+        const yesMinHeight = 54 + stageProgress * 4;
+        const noMinHeight = Math.max(40, 54 - stageProgress * 8);
+
+        const yesRadius = 16 + stageProgress * 2;
+        const noRadius = Math.max(10, 16 - stageProgress * 3);
 
         yesBtn.style.fontSize = `${yesFont}rem`;
         yesBtn.style.padding = `${yesPadY}px ${yesPadX}px`;
+        yesBtn.style.minWidth = `${yesMinWidth}px`;
+        yesBtn.style.minHeight = `${yesMinHeight}px`;
+        yesBtn.style.borderRadius = `${yesRadius}px`;
 
         noBtn.style.fontSize = `${noFont}rem`;
         noBtn.style.padding = `${noPadY}px ${noPadX}px`;
+        noBtn.style.minWidth = `${noMinWidth}px`;
+        noBtn.style.minHeight = `${noMinHeight}px`;
+        noBtn.style.borderRadius = `${noRadius}px`;
     }
 
     function placeNoNeatly() {
-        const wrapWidth = buttonsWrap.clientWidth;
+        const wrapRect = buttonsWrap.getBoundingClientRect();
+        const yesRect = yesBtn.getBoundingClientRect();
         const btnWidth = noBtn.offsetWidth;
-        const left = Math.min(wrapWidth - btnWidth - 6, wrapWidth * 0.58);
+        const gap = 8;
+
+        const yesRightInsideWrap = yesRect.right - wrapRect.left;
+        let left = yesRightInsideWrap + gap;
+        const maxLeft = wrapRect.width - btnWidth - 4;
+
+        if (left > maxLeft) left = maxLeft;
+        if (left < 0) left = 0;
 
         noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
@@ -109,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.transform = "translateY(-50%)";
     }
 
-    // runaway：範圍放大，但不會飛到整個頁面失控
     function moveNo(e) {
         if (e) {
             e.preventDefault();
@@ -121,10 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
 
-        // 以視窗為基準，但限制在中間主要區域
         const paddingX = 16;
-        const paddingTop = 110;
-        const paddingBottom = 90;
+        const paddingTop = 90;
+        const paddingBottom = 80;
 
         const areaWidth = window.innerWidth - paddingX * 2;
         const areaHeight = window.innerHeight - paddingTop - paddingBottom;
@@ -147,9 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.addEventListener("pointerdown", moveNo);
         noBtn.addEventListener("touchstart", moveNo, { passive: false });
 
-        // 比之前快，但還不至於亂到失控
         runawayTimer = setInterval(moveNo, 200);
-
         moveNo();
     }
 
@@ -206,6 +225,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("load", () => {
         setButtonSizes(0);
-        placeNoNeatly();
     });
 });
