@@ -89,7 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setButtonSizes(stageProgress) {
-        const yesFont = 1.2 + stageProgress * 0.30;
+        // 一開始 Yes 稍大，No 也不至於太小
+        const yesFont = 1.2 + stageProgress * 0.28;
         const noFont = 1.05 - stageProgress * 0.22;
 
         const yesPadY = 15 + stageProgress * 4;
@@ -105,11 +106,11 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.padding = `${noPadY}px ${noPadX}px`;
     }
 
+    // 前期只把 No 稍微推到 Yes 右邊，不破壞整體置中感
     function placeNoNeatly() {
         const wrapWidth = buttonsWrap.clientWidth;
         const btnWidth = noBtn.offsetWidth;
-
-        const left = Math.min(wrapWidth - btnWidth - 4, wrapWidth * 0.56);
+        const left = Math.min(wrapWidth - btnWidth - 6, wrapWidth * 0.58);
 
         noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
 
-        const padding = 6;
+        const padding = 8;
         const maxLeft = Math.max(1, wrapWidth - btnWidth - padding * 2);
         const maxTop = Math.max(1, wrapHeight - btnHeight - padding * 2);
 
