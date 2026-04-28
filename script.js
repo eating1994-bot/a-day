@@ -77,7 +77,6 @@ function toggleMusic() {
 }
 
 window.toggleMusic = toggleMusic
-
 document.addEventListener("click", startMusic, { once: true })
 
 // =========================
@@ -96,7 +95,7 @@ function showToast(msg) {
 }
 
 // =========================
-// KEEP NO AWAY (前期修正重點)
+// 前期：把 No 推到 Yes 右邊，避免壓到
 // =========================
 function keepNoAwayFromYes() {
     const wrapRect = buttonsWrap.getBoundingClientRect()
@@ -109,12 +108,12 @@ function keepNoAwayFromYes() {
     let left = yesRightInsideWrap + gap
     const maxLeft = wrapRect.width - btnWidth
 
-    if (left > maxLeft) {
-        left = maxLeft
-    }
+    if (left > maxLeft) left = maxLeft
 
     noBtn.style.position = "absolute"
     noBtn.style.left = left + "px"
+    noBtn.style.top = "50%"
+    noBtn.style.transform = "translateY(-50%)"
     noBtn.style.right = "auto"
 }
 
@@ -161,15 +160,13 @@ noBtn.addEventListener("click", () => {
     showToast(noMessages[stage])
 
     const baseSize = 24
-    const maxSize = 80
+    const maxSize = 68
     const progress = noIndex / lastStage
     const eased = Math.pow(progress, 1.5)
     const newSize = baseSize + (maxSize - baseSize) * eased
 
     yesBtn.style.fontSize = newSize + "px"
-    yesBtn.style.transition = "0.3s ease"
 
-    // ⭐ 前期每次都把 No 往右推開，避免壓到 Yes
     if (!runawayEnabled) {
         requestAnimationFrame(() => {
             keepNoAwayFromYes()
@@ -192,15 +189,13 @@ function enableRunaway() {
     noBtn.addEventListener("pointerdown", moveNo)
     noBtn.addEventListener("touchstart", moveNo, { passive: false })
 
-    // 一開啟就先跑一次
     moveNo()
 }
 
 // =========================
-// MOVE（runaway 後才自由跑）
+// MOVE：runaway 後自由亂跑
 // =========================
 function moveNo(e) {
-
     if (e) {
         e.preventDefault()
         e.stopPropagation()
@@ -230,9 +225,7 @@ function moveNo(e) {
 // INIT
 // =========================
 window.addEventListener("load", () => {
-    // 先把 No 放在靠近 Yes 但不重疊的位置
     keepNoAwayFromYes()
-    noBtn.style.top = "47px"
 })
 
 })
