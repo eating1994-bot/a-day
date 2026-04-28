@@ -41,7 +41,7 @@ body::before {
 }
 
 h1 {
-    font-size: 2.3rem;
+    font-size: 2.05rem;
     color: #C2185B;
     font-weight: 900;
     line-height: 1.28;
@@ -75,11 +75,23 @@ h1 {
 #yes-btn,
 #no-btn {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     border: none;
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
+
+    /* 一開始先做成對稱 */
+    min-width: 132px;
+    min-height: 56px;
+    padding: 13px 28px;
+    border-radius: 16px;
+
+    font-size: 1.05rem;
+    font-weight: 800;
+
     transition:
         left 0.20s ease,
         top 0.20s ease,
@@ -87,42 +99,33 @@ h1 {
         font-size 0.28s ease,
         padding 0.28s ease,
         box-shadow 0.20s ease,
-        opacity 0.20s ease;
+        opacity 0.20s ease,
+        min-width 0.28s ease,
+        min-height 0.28s ease,
+        border-radius 0.28s ease;
 }
 
-/* Yes：中心點固定，所以變大不會飄 */
+/* Yes：同尺寸但更吸引人 */
 #yes-btn {
-    top: 50%;
-    left: 42%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #66bb6a, #43a047);
+    left: calc(50% - 146px);
+    background: linear-gradient(135deg, #69c36d, #46aa4a);
     color: white;
-    font-size: 1.2rem;
-    font-weight: 900;
-    padding: 15px 32px;
-    border-radius: 18px;
     z-index: 2;
-    box-shadow: 0 10px 22px rgba(76, 175, 80, 0.30);
+    box-shadow: 0 8px 18px rgba(76, 175, 80, 0.24);
 }
 
 #yes-btn:hover {
-    transform: translate(-50%, -50%) scale(1.05);
-    box-shadow: 0 12px 26px rgba(76, 175, 80, 0.36);
+    transform: translateY(-50%) scale(1.04);
+    box-shadow: 0 10px 22px rgba(76, 175, 80, 0.30);
 }
 
-/* No：初始也用中心點固定 */
+/* No：同尺寸，但弱一點 */
 #no-btn {
-    top: 50%;
-    left: 58%;
-    transform: translate(-50%, -50%);
-    background: #eb5b4a;
+    left: calc(50% + 14px);
+    background: #ef7f73;
     color: white;
-    font-size: 1.05rem;
-    font-weight: 800;
-    padding: 13px 28px;
-    border-radius: 18px;
     z-index: 3;
-    box-shadow: 0 8px 18px rgba(235, 91, 74, 0.22);
+    box-shadow: 0 8px 18px rgba(239, 127, 115, 0.18);
 }
 
 #tease-toast {
@@ -162,7 +165,7 @@ h1 {
     }
 
     h1 {
-        font-size: 1.95rem;
+        font-size: 1.75rem;
         margin-bottom: 12px;
     }
 
@@ -176,20 +179,21 @@ h1 {
         height: 180px;
     }
 
-    #yes-btn {
-        left: 41%;
-        font-size: 1.1rem;
-        padding: 14px 26px;
+    #yes-btn,
+    #no-btn {
+        min-width: 118px;
+        min-height: 52px;
+        font-size: 0.98rem;
+        padding: 12px 22px;
+        border-radius: 15px;
     }
 
-    #yes-btn:hover {
-        transform: translate(-50%, -50%) scale(1.04);
+    #yes-btn {
+        left: calc(50% - 132px);
     }
 
     #no-btn {
-        left: 59%;
-        font-size: 0.96rem;
-        padding: 12px 22px;
+        left: calc(50% + 10px);
     }
 
     #tease-toast {
