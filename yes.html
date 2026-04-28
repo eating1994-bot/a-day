@@ -11,13 +11,9 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html, body {
-    height: 100%;
-}
+html, body { height: 100%; }
 
 body {
     margin: 0;
@@ -43,7 +39,7 @@ body::before {
     pointer-events: none;
 }
 
-/* 主卡片 */
+/* 卡片 */
 .container {
     width: min(92vw, 720px);
     text-align: center;
@@ -60,7 +56,6 @@ body::before {
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* 標題 */
 .yes-title {
     font-size: clamp(1.6rem, 4vw, 2.1rem);
     font-weight: 900;
@@ -73,14 +68,12 @@ body::before {
     opacity: 0.9;
 }
 
-/* GIF */
 .gif-container img {
     width: clamp(120px, 22vh, 170px);
     border-radius: 16px;
     margin: 6px 0;
 }
 
-/* 文字 */
 .yes-message {
     font-size: 0.95rem;
     line-height: 1.5;
@@ -118,6 +111,22 @@ body::before {
     font-size: 1rem;
 }
 
+/* 花瓣 */
+.petal {
+    position: fixed;
+    top: -10vh;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 1000;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(120vh) rotate(360deg);
+    }
+}
+
 /* 音樂按鈕 */
 #music-toggle {
     position: fixed;
@@ -131,13 +140,13 @@ body::before {
     background: rgba(255,255,255,0.9);
     box-shadow: 0 6px 14px rgba(0,0,0,0.12);
     cursor: pointer;
+    z-index: 1001;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Tap 提示 -->
 <div id="tap-overlay">
     <div class="tap-card">
         <div class="tap-title">Tap to open the surprise ✨</div>
@@ -184,6 +193,7 @@ body::before {
 <script>
 let music = null
 let started = false
+let effectsStarted = false
 
 function startMusic() {
     if (!music) music = document.getElementById("bg-music")
@@ -192,6 +202,7 @@ function startMusic() {
     music.volume = 0
     music.play().then(() => {
         started = true
+        document.getElementById("music-toggle").textContent = "🔊"
 
         let vol = 0
         const fade = setInterval(() => {
@@ -217,18 +228,57 @@ function toggleMusic(){
     }
 }
 
-function startExperience(){
-    document.getElementById("tap-overlay").classList.add("hidden")
-    startMusic()
+function fireOnce(){
+    if (typeof confetti !== "function") return
 
     confetti({
-        particleCount: 40,
-        spread: 60,
-        origin: { y: 0.7 }
+        particleCount: 50,
+        spread: 65,
+        startVelocity: 22,
+        origin: { x: 0.18, y: 0.72 }
+    })
+
+    confetti({
+        particleCount: 50,
+        spread: 65,
+        startVelocity: 22,
+        origin: { x: 0.82, y: 0.72 }
     })
 }
 
+function createPetal(){
+    const petal = document.createElement("div")
+    petal.classList.add("petal")
+
+    const flowers = ["🌸","🌼","💛","✨"]
+    petal.innerText = flowers[Math.floor(Math.random()*flowers.length)]
+
+    petal.style.left = Math.random() * 100 + "vw"
+    petal.style.animationDuration = (Math.random()*3 + 4) + "s"
+    petal.style.fontSize = (Math.random()*16 + 12) + "px"
+
+    document.body.appendChild(petal)
+
+    setTimeout(()=>petal.remove(),8000)
+}
+
+function startEffects(){
+    if (effectsStarted) return
+    effectsStarted = true
+
+    fireOnce()
+    setInterval(createPetal, 420)
+}
+
+function startExperience(){
+    document.getElementById("tap-overlay").classList.add("hidden")
+    startMusic()
+    startEffects()
+}
+
 document.addEventListener("click", startExperience, { once: true })
+document.addEventListener("touchstart", startExperience, { once: true })
+document.addEventListener("keydown", startExperience, { once: true })
 </script>
 
 </body>
