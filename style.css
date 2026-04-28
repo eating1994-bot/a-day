@@ -74,28 +74,29 @@ h1 {
 /* 🔘 按鈕區 */
 .buttons {
     position: relative;
-    width: 340px;
-    height: 150px;
+    width: 360px;
+    height: 160px;
     margin: 30px auto 0;
 }
 
 /* 共用按鈕 */
 #yes-btn,
 #no-btn {
+    position: absolute;
     border: none;
     cursor: pointer;
-    transition: transform 0.18s ease, left 0.18s ease, top 0.18s ease, opacity 0.18s ease;
+    transition: transform 0.18s ease, left 0.18s ease, top 0.18s ease, opacity 0.18s ease, font-size 0.3s ease;
     box-shadow: 0 8px 18px rgba(0,0,0,0.12);
     user-select: none;
     -webkit-user-select: none;
     white-space: nowrap;
 }
 
-/* YES */
+/* YES：一開始放中間偏左 */
 #yes-btn {
-    position: absolute;
-    left: 58px;
-    top: 42px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-115%, -50%);
     background: #4CAF50;
     color: white;
     font-size: 1.3rem;
@@ -105,11 +106,11 @@ h1 {
     z-index: 2;
 }
 
-/* NO */
+/* NO：一開始放中間偏右 */
 #no-btn {
-    position: absolute;
-    left: 190px;
-    top: 47px;
+    top: 50%;
+    left: 50%;
+    transform: translate(15%, -50%);
     background: #e74c3c;
     color: white;
     font-size: 1rem;
@@ -162,20 +163,18 @@ h1 {
 
     .buttons {
         width: 300px;
-        height: 170px;
+        height: 180px;
     }
 
     #yes-btn {
-        left: 38px;
-        top: 48px;
         padding: 14px 30px;
         font-size: 1.15rem;
+        transform: translate(-108%, -50%);
     }
 
     #no-btn {
-        left: 154px;
-        top: 52px;
         padding: 10px 18px;
         font-size: 0.92rem;
+        transform: translate(10%, -50%);
     }
 }
