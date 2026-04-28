@@ -15,7 +15,6 @@ body {
     overflow: hidden;
 }
 
-/* 柔光層 */
 body::before {
     content: "";
     position: absolute;
@@ -26,7 +25,12 @@ body::before {
     pointer-events: none;
 }
 
-/* 主內容 */
+.hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
 .container {
     position: relative;
     z-index: 2;
@@ -36,7 +40,6 @@ body::before {
     transform: translateY(-20px);
 }
 
-/* 標題 */
 h1 {
     font-size: 2.3rem;
     color: #C2185B;
@@ -50,7 +53,6 @@ h1 {
     display: block;
 }
 
-/* GIF */
 .gif-container {
     margin: 10px auto 6px;
     display: flex;
@@ -63,18 +65,13 @@ h1 {
     object-fit: contain;
 }
 
-/* ========================= */
-/* 按鈕區（關鍵修正） */
-/* ========================= */
-
 .buttons {
     position: relative;
-    width: 380px;
-    height: 160px;
+    width: 390px;
+    height: 165px;
     margin: 10px auto 0;
 }
 
-/* 共用 */
 #yes-btn,
 #no-btn {
     position: absolute;
@@ -92,11 +89,10 @@ h1 {
         box-shadow 0.2s ease;
 }
 
-/* YES（主角） */
 #yes-btn {
     top: 50%;
     left: 50%;
-    transform: translate(-130%, -50%);  /* ← 重點：拉開距離 */
+    transform: translate(-118%, -50%);
     background: linear-gradient(135deg, #66bb6a, #43a047);
     color: white;
     font-size: 1.2rem;
@@ -104,28 +100,27 @@ h1 {
     padding: 15px 32px;
     border-radius: 18px;
     z-index: 2;
-    box-shadow: 0 10px 22px rgba(76,175,80,0.3);
+    box-shadow: 0 10px 22px rgba(76,175,80,0.30);
 }
 
 #yes-btn:hover {
-    transform: translate(-130%, -50%) scale(1.05);
+    transform: translate(-118%, -50%) scale(1.05);
 }
 
-/* NO（配角） */
 #no-btn {
     top: 50%;
     left: 50%;
-    transform: translate(30%, -50%);  /* ← 重點：確保不重疊 */
+    transform: translate(18%, -50%);
     background: #eb5b4a;
     color: white;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 800;
-    padding: 10px 20px;
-    border-radius: 12px;
+    padding: 13px 28px;
+    border-radius: 18px;
     z-index: 3;
+    box-shadow: 0 8px 18px rgba(235,91,74,0.22);
 }
 
-/* Toast */
 #tease-toast {
     margin-top: 10px;
     min-height: 24px;
@@ -140,7 +135,6 @@ h1 {
     opacity: 1;
 }
 
-/* 音樂按鈕 */
 #music-toggle {
     position: fixed;
     right: 20px;
@@ -156,9 +150,7 @@ h1 {
     box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
-/* 手機版 */
 @media (max-width: 480px) {
-
     h1 {
         font-size: 1.9rem;
     }
@@ -169,19 +161,19 @@ h1 {
     }
 
     .buttons {
-        width: 300px;
-        height: 160px;
+        width: 310px;
+        height: 170px;
     }
 
     #yes-btn {
-        transform: translate(-115%, -50%);
+        transform: translate(-108%, -50%);
         font-size: 1.1rem;
         padding: 14px 26px;
     }
 
     #no-btn {
-        transform: translate(25%, -50%);
-        font-size: 0.9rem;
-        padding: 10px 16px;
+        transform: translate(14%, -50%);
+        font-size: 0.98rem;
+        padding: 12px 22px;
     }
 }
