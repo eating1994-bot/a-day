@@ -89,14 +89,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setButtonSizes(stageProgress) {
-        const yesFont = 1.1 + stageProgress * 0.38;   // rem
-        const noFont = 1.1 - stageProgress * 0.3;     // rem
+        // Yes：本來就稍微大一點，之後再慢慢放大
+        const yesFont = 1.2 + stageProgress * 0.34;
+        const yesPadY = 15 + stageProgress * 4;
+        const yesPadX = 32 + stageProgress * 8;
 
-        const yesPadY = 13 + stageProgress * 4;       // px
-        const yesPadX = 28 + stageProgress * 8;
-
-        const noPadY = Math.max(8, 13 - stageProgress * 5);
-        const noPadX = Math.max(14, 28 - stageProgress * 10);
+        // No：本來接近 Yes，但會慢慢縮小
+        const noFont = 0.98 - stageProgress * 0.22;
+        const noPadY = Math.max(8, 10 - stageProgress * 2);
+        const noPadX = Math.max(14, 20 - stageProgress * 4);
 
         yesBtn.style.fontSize = `${yesFont}rem`;
         yesBtn.style.padding = `${yesPadY}px ${yesPadX}px`;
@@ -105,18 +106,17 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.padding = `${noPadY}px ${noPadX}px`;
     }
 
-    function keepNoAwayFromYes() {
+    // 前期只做「微調」，不破壞置中排版
+    function nudgeNoAwayFromYes() {
         const wrapRect = buttonsWrap.getBoundingClientRect();
         const yesRect = yesBtn.getBoundingClientRect();
         const btnWidth = noBtn.offsetWidth;
-        const gap = 12;
 
         const yesRightInsideWrap = yesRect.right - wrapRect.left;
-        let left = yesRightInsideWrap + gap;
+        const desiredLeft = yesRightInsideWrap + 8;
         const maxLeft = wrapRect.width - btnWidth - 4;
 
-        if (left > maxLeft) left = maxLeft;
-        if (left < 0) left = 0;
+        const left = Math.max(0, Math.min(desiredLeft, maxLeft));
 
         noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
 
-        const padding = 8;
+        const padding = 6;
         const maxLeft = Math.max(1, wrapWidth - btnWidth - padding * 2);
         const maxTop = Math.max(1, wrapHeight - btnHeight - padding * 2);
 
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!runawayEnabled) {
             requestAnimationFrame(() => {
-                keepNoAwayFromYes();
+                nudgeNoAwayFromYes();
             });
         }
 
@@ -213,6 +213,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("load", () => {
         setButtonSizes(0);
-        keepNoAwayFromYes();
     });
 });
