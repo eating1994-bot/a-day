@@ -111,6 +111,48 @@ body::before {
     font-weight: 700;
 }
 
+/* 提示層 */
+#tap-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 248, 220, 0.35);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9998;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#tap-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.tap-card {
+    background: rgba(255, 251, 240, 0.92);
+    border: 1px solid rgba(255,255,255,0.45);
+    box-shadow: 0 10px 26px rgba(125, 96, 20, 0.12);
+    border-radius: 22px;
+    padding: 18px 22px;
+    text-align: center;
+    max-width: min(82vw, 320px);
+}
+
+.tap-title {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #7a5a00;
+    margin-bottom: 6px;
+}
+
+.tap-subtitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #8a6a12;
+    opacity: 0.9;
+}
+
 .petal {
     position: fixed;
     top: -10vh;
@@ -203,6 +245,19 @@ body::before {
         margin: 8px auto;
     }
 
+    .tap-card {
+        padding: 16px 18px;
+        border-radius: 18px;
+    }
+
+    .tap-title {
+        font-size: 1rem;
+    }
+
+    .tap-subtitle {
+        font-size: 0.9rem;
+    }
+
     #music-toggle {
         width: 48px;
         height: 48px;
@@ -213,6 +268,13 @@ body::before {
 </head>
 
 <body>
+
+<div id="tap-overlay">
+    <div class="tap-card">
+        <div class="tap-title">Tap to open my surprise ✨</div>
+        <div class="tap-subtitle">and turn on the music 💛</div>
+    </div>
+</div>
 
 <div class="container yes-container">
 
@@ -254,6 +316,7 @@ body::before {
 <script>
 let music = null
 let started = false
+let overlayClosed = false
 
 function startMusic() {
     if (!music) {
@@ -266,6 +329,7 @@ function startMusic() {
 
     music.play().then(() => {
         started = true
+        document.getElementById("music-toggle").textContent = "🔊"
 
         let vol = 0
         const fade = setInterval(() => {
@@ -282,9 +346,34 @@ function startMusic() {
     })
 }
 
-document.addEventListener("click", startMusic, { once: true })
-document.addEventListener("touchstart", startMusic, { once: true })
-document.addEventListener("keydown", startMusic, { once: true })
+function softFire() {
+    if (typeof confetti !== "function") return
+
+    confetti({
+        particleCount: 30,
+        spread: 54,
+        startVelocity: 18,
+        origin: { y: 0.72 },
+        scalar: 0.85
+    })
+}
+
+function closeOverlayAndStart() {
+    if (overlayClosed) return
+    overlayClosed = true
+
+    const overlay = document.getElementById("tap-overlay")
+    if (overlay) {
+        overlay.classList.add("hidden")
+    }
+
+    startMusic()
+    softFire()
+}
+
+document.addEventListener("click", closeOverlayAndStart, { once: true })
+document.addEventListener("touchstart", closeOverlayAndStart, { once: true })
+document.addEventListener("keydown", closeOverlayAndStart, { once: true })
 
 function toggleMusic() {
     if (!music) music = document.getElementById("bg-music")
@@ -298,18 +387,6 @@ function toggleMusic() {
         music.pause()
         document.getElementById("music-toggle").textContent = "🔇"
     }
-}
-
-function softFire() {
-    if (typeof confetti !== "function") return
-
-    confetti({
-        particleCount: 30,
-        spread: 54,
-        startVelocity: 18,
-        origin: { y: 0.72 },
-        scalar: 0.85
-    })
 }
 
 function createPetal() {
@@ -329,7 +406,6 @@ function createPetal() {
 }
 
 window.addEventListener("load", () => {
-    softFire()
     setInterval(softFire, 5000)
     setInterval(createPetal, 420)
 })
