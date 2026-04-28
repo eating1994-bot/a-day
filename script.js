@@ -89,15 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setButtonSizes(stageProgress) {
-        // Yes：本來就稍微大一點，之後再慢慢放大
-        const yesFont = 1.2 + stageProgress * 0.34;
+        const yesFont = 1.2 + stageProgress * 0.30;
+        const noFont = 1.05 - stageProgress * 0.22;
+
         const yesPadY = 15 + stageProgress * 4;
         const yesPadX = 32 + stageProgress * 8;
 
-        // No：本來接近 Yes，但會慢慢縮小
-        const noFont = 0.98 - stageProgress * 0.22;
-        const noPadY = Math.max(8, 10 - stageProgress * 2);
-        const noPadX = Math.max(14, 20 - stageProgress * 4);
+        const noPadY = Math.max(8, 13 - stageProgress * 4);
+        const noPadX = Math.max(14, 28 - stageProgress * 8);
 
         yesBtn.style.fontSize = `${yesFont}rem`;
         yesBtn.style.padding = `${yesPadY}px ${yesPadX}px`;
@@ -106,17 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.padding = `${noPadY}px ${noPadX}px`;
     }
 
-    // 前期只做「微調」，不破壞置中排版
-    function nudgeNoAwayFromYes() {
-        const wrapRect = buttonsWrap.getBoundingClientRect();
-        const yesRect = yesBtn.getBoundingClientRect();
+    function placeNoNeatly() {
+        const wrapWidth = buttonsWrap.clientWidth;
         const btnWidth = noBtn.offsetWidth;
 
-        const yesRightInsideWrap = yesRect.right - wrapRect.left;
-        const desiredLeft = yesRightInsideWrap + 8;
-        const maxLeft = wrapRect.width - btnWidth - 4;
-
-        const left = Math.max(0, Math.min(desiredLeft, maxLeft));
+        const left = Math.min(wrapWidth - btnWidth - 4, wrapWidth * 0.56);
 
         noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
@@ -201,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!runawayEnabled) {
             requestAnimationFrame(() => {
-                nudgeNoAwayFromYes();
+                placeNoNeatly();
             });
         }
 
@@ -213,5 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("load", () => {
         setButtonSizes(0);
+        placeNoNeatly();
     });
 });
