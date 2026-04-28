@@ -89,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setButtonSizes(stageProgress) {
-        // 一開始 Yes 稍大，No 也不至於太小
         const yesFont = 1.2 + stageProgress * 0.28;
         const noFont = 1.05 - stageProgress * 0.22;
 
@@ -106,11 +105,19 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.padding = `${noPadY}px ${noPadX}px`;
     }
 
-    // 前期只把 No 稍微推到 Yes 右邊，不破壞整體置中感
+    // 前期只把 No 放到 Yes 的右邊，Yes 本身不動
     function placeNoNeatly() {
-        const wrapWidth = buttonsWrap.clientWidth;
+        const wrapRect = buttonsWrap.getBoundingClientRect();
+        const yesRect = yesBtn.getBoundingClientRect();
         const btnWidth = noBtn.offsetWidth;
-        const left = Math.min(wrapWidth - btnWidth - 6, wrapWidth * 0.58);
+        const gap = 12;
+
+        const yesRightInsideWrap = yesRect.right - wrapRect.left;
+        let left = yesRightInsideWrap + gap;
+        const maxLeft = wrapRect.width - btnWidth - 6;
+
+        if (left > maxLeft) left = maxLeft;
+        if (left < 0) left = 0;
 
         noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
