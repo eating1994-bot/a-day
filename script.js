@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.addEventListener("touchstart", moveNo, { passive: false });
 
         // 👉 自動亂動（更難抓）
-        setInterval(moveNo, 220);
+        setInterval(moveNo, 120);
 
         moveNo();
     }
