@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let runawayEnabled = false;
     let toastTimer = null;
     let musicStarted = false;
+    let runawayTimer = null;
 
     function startMusic() {
         if (musicStarted) return;
@@ -81,11 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setButtonSizes(stageProgress) {
-        const yesFont = 1.05 + stageProgress * 0.26;
-        const noFont = 1.05 - stageProgress * 0.18;
+        const yesFont = 1.2 + stageProgress * 0.42;
+        const noFont = 1.05 - stageProgress * 0.22;
 
-        const yesPadY = 13 + stageProgress * 4;
-        const yesPadX = 28 + stageProgress * 8;
+        const yesPadY = 15 + stageProgress * 5;
+        const yesPadX = 32 + stageProgress * 10;
 
         const noPadY = Math.max(8, 13 - stageProgress * 3);
         const noPadX = Math.max(16, 28 - stageProgress * 6);
@@ -108,34 +109,46 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.transform = "translateY(-50%)";
     }
 
-    // 🚀 更快 runaway
-    function moveNo() {
+    // runaway：範圍放大，但不會飛到整個頁面失控
+    function moveNo(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
         noBtn.textContent = "Catch me no way 😏";
 
-        const wrapWidth = buttonsWrap.clientWidth;
-        const wrapHeight = buttonsWrap.clientHeight;
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
 
-        const left = Math.random() * (wrapWidth - btnWidth);
-        const top = Math.random() * (wrapHeight - btnHeight);
+        // 以視窗為基準，但限制在中間主要區域
+        const paddingX = 16;
+        const paddingTop = 110;
+        const paddingBottom = 90;
 
+        const areaWidth = window.innerWidth - paddingX * 2;
+        const areaHeight = window.innerHeight - paddingTop - paddingBottom;
+
+        const maxLeft = Math.max(1, areaWidth - btnWidth);
+        const maxTop = Math.max(1, areaHeight - btnHeight);
+
+        const left = paddingX + Math.random() * maxLeft;
+        const top = paddingTop + Math.random() * maxTop;
+
+        noBtn.style.position = "fixed";
         noBtn.style.left = `${left}px`;
         noBtn.style.top = `${top}px`;
         noBtn.style.transform = "none";
+        noBtn.style.right = "auto";
     }
 
     function enableRunaway() {
-        showToast("No way 🤓");
-
-        // 👉 關鍵：滑過就跑（更靈敏）
         noBtn.addEventListener("mouseover", moveNo);
-
-        // 👉 點不到的版本（手機）
+        noBtn.addEventListener("pointerdown", moveNo);
         noBtn.addEventListener("touchstart", moveNo, { passive: false });
 
-        // 👉 自動亂動（更難抓）
-        setInterval(moveNo, 160);
+        // 比之前快，但還不至於亂到失控
+        runawayTimer = setInterval(moveNo, 180);
 
         moveNo();
     }
@@ -157,6 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         showToast("Okay… 💖");
+
+        if (runawayTimer) clearInterval(runawayTimer);
 
         setTimeout(() => {
             window.location.href = "yes.html";
