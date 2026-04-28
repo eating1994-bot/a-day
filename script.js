@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.addEventListener("touchstart", moveNo, { passive: false });
 
         // 比之前快，但還不至於亂到失控
-        runawayTimer = setInterval(moveNo, 180);
+        runawayTimer = setInterval(moveNo, 200);
 
         moveNo();
     }
