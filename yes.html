@@ -51,26 +51,40 @@ body::before {
     border-radius: 30px;
     padding: 40px 26px 46px;
     box-shadow: 0 14px 36px rgba(125, 96, 20, 0.12);
-    animation: fadeIn 1.2s ease-in-out;
+    animation: fadeIn 1.25s ease-in-out;
     border: 1px solid rgba(255,255,255,0.35);
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .yes-title {
     font-size: 2.2rem;
     line-height: 1.2;
     color: #7a5a00;
-    margin: 0 0 18px;
+    margin: 0 0 14px;
     font-weight: 900;
     letter-spacing: 0.2px;
 }
 
+.soft-intro {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #8a6a12;
+    opacity: 0.88;
+    margin: 0 0 14px;
+}
+
 .gif-container {
-    margin: 6px 0 14px;
+    margin: 6px 0 16px;
 }
 
 .gif-container img {
@@ -135,7 +149,12 @@ body::before {
 
     .yes-title {
         font-size: 1.8rem;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
+    }
+
+    .soft-intro {
+        font-size: 0.96rem;
+        margin-bottom: 12px;
     }
 
     .gif-container img {
@@ -164,6 +183,8 @@ body::before {
 
     <h1 class="yes-title">1 Year Together ❣️🥳</h1>
 
+    <p class="soft-intro">Hey… 💛</p>
+
     <div class="gif-container">
         <img src="https://media.tenor.com/0cNM_9li440AAAAi/dudu-giving-flowers-bubu-flowers.gif" width="200" alt="cute gif">
     </div>
@@ -182,8 +203,9 @@ body::before {
     </p>
 
     <p class="yes-message">
-        I love you 💝🥓<br>
-        And this is just the beginning of many more years together 💗✈️🏠
+        I love you 💝🥓<br><br>
+        And this is just the beginning<br>
+        of many more years together 💗✈️🏠
     </p>
 
 </div>
