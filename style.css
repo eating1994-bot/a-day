@@ -87,17 +87,19 @@ h1 {
     user-select: none;
     -webkit-user-select: none;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+
+    /* 🚀 只用 transform（關鍵優化） */
     transition:
-        left 0.18s ease,
-        top 0.18s ease,
         transform 0.18s ease,
         font-size 0.28s ease,
         padding 0.28s ease,
         opacity 0.18s ease,
         box-shadow 0.18s ease;
+
+    will-change: transform;
 }
 
-/* Yes：一開始更大、更靠中間，像主要選項 */
+/* Yes */
 #yes-btn {
     top: 50%;
     left: 50%;
@@ -112,11 +114,11 @@ h1 {
 }
 
 #yes-btn:hover {
-    transform: translate(-72%, -50%) scale(1.04);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+    transform: translate(-72%, -50%) scale(1.05);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
 }
 
-/* No：小一點、偏旁邊，像次要選項 */
+/* No（之後你 JS 要改位置時，請改 transform，不要改 left/top） */
 #no-btn {
     top: 50%;
     left: 50%;
@@ -184,7 +186,7 @@ h1 {
     }
 
     #yes-btn:hover {
-        transform: translate(-68%, -50%) scale(1.03);
+        transform: translate(-68%, -50%) scale(1.04);
     }
 
     #no-btn {
