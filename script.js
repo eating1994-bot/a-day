@@ -68,15 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.toggleMusic = toggleMusic;
-
     document.addEventListener("click", startMusic, { once: true });
-
-    if (musicToggle) {
-        musicToggle.addEventListener("click", (e) => {
-            e.stopPropagation();
-            toggleMusic();
-        });
-    }
 
     function showToast(msg) {
         toast.textContent = msg;
@@ -89,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setButtonSizes(stageProgress) {
-        // 一開始對稱，之後 Yes 變大、No 變小
         const yesFont = 1.05 + stageProgress * 0.26;
         const noFont = 1.05 - stageProgress * 0.18;
 
@@ -99,55 +90,26 @@ document.addEventListener("DOMContentLoaded", () => {
         const noPadY = Math.max(8, 13 - stageProgress * 3);
         const noPadX = Math.max(16, 28 - stageProgress * 6);
 
-        const yesMinWidth = 132 + stageProgress * 20;
-        const noMinWidth = Math.max(92, 132 - stageProgress * 24);
-
-        const yesMinHeight = 56 + stageProgress * 4;
-        const noMinHeight = Math.max(42, 56 - stageProgress * 8);
-
-        const yesRadius = 16 + stageProgress * 2;
-        const noRadius = Math.max(10, 16 - stageProgress * 3);
-
         yesBtn.style.fontSize = `${yesFont}rem`;
         yesBtn.style.padding = `${yesPadY}px ${yesPadX}px`;
-        yesBtn.style.minWidth = `${yesMinWidth}px`;
-        yesBtn.style.minHeight = `${yesMinHeight}px`;
-        yesBtn.style.borderRadius = `${yesRadius}px`;
 
         noBtn.style.fontSize = `${noFont}rem`;
         noBtn.style.padding = `${noPadY}px ${noPadX}px`;
-        noBtn.style.minWidth = `${noMinWidth}px`;
-        noBtn.style.minHeight = `${noMinHeight}px`;
-        noBtn.style.borderRadius = `${noRadius}px`;
     }
 
-    // 前期只把 No 輕輕推到 Yes 右邊，不破壞一開始的對稱感
     function placeNoNeatly() {
-        const wrapRect = buttonsWrap.getBoundingClientRect();
-        const yesRect = yesBtn.getBoundingClientRect();
+        const wrapWidth = buttonsWrap.clientWidth;
         const btnWidth = noBtn.offsetWidth;
-        const gap = 10;
-
-        const yesRightInsideWrap = yesRect.right - wrapRect.left;
-        let left = yesRightInsideWrap + gap;
-        const maxLeft = wrapRect.width - btnWidth - 6;
-
-        if (left > maxLeft) left = maxLeft;
-        if (left < 0) left = 0;
+        const left = Math.min(wrapWidth - btnWidth - 6, wrapWidth * 0.58);
 
         noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
         noBtn.style.top = "50%";
         noBtn.style.transform = "translateY(-50%)";
-        noBtn.style.right = "auto";
     }
 
-    function moveNo(e) {
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
+    // 🚀 更快 runaway
+    function moveNo() {
         noBtn.textContent = "Catch me no way 😏";
 
         const wrapWidth = buttonsWrap.clientWidth;
@@ -155,26 +117,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
 
-        const padding = 8;
-        const maxLeft = Math.max(1, wrapWidth - btnWidth - padding * 2);
-        const maxTop = Math.max(1, wrapHeight - btnHeight - padding * 2);
+        const left = Math.random() * (wrapWidth - btnWidth);
+        const top = Math.random() * (wrapHeight - btnHeight);
 
-        const left = padding + Math.random() * maxLeft;
-        const top = padding + Math.random() * maxTop;
-
-        noBtn.style.position = "absolute";
         noBtn.style.left = `${left}px`;
         noBtn.style.top = `${top}px`;
         noBtn.style.transform = "none";
-        noBtn.style.right = "auto";
     }
 
     function enableRunaway() {
         showToast("No way 🤓");
 
-        noBtn.addEventListener("mouseenter", moveNo);
-        noBtn.addEventListener("pointerdown", moveNo);
+        // 👉 關鍵：滑過就跑（更靈敏）
+        noBtn.addEventListener("mouseover", moveNo);
+
+        // 👉 點不到的版本（手機）
         noBtn.addEventListener("touchstart", moveNo, { passive: false });
+
+        // 👉 自動亂動（更難抓）
+        setInterval(moveNo, 450);
 
         moveNo();
     }
@@ -230,5 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("load", () => {
         setButtonSizes(0);
+        placeNoNeatly();
     });
 });
