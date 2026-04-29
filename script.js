@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let toastTimer = null;
     let musicStarted = false;
     let runawayTimer = null;
+    let stickyToastActive = false;
 
     function startMusic() {
         if (musicStarted) return;
@@ -72,13 +73,29 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", startMusic, { once: true });
 
     function showToast(msg) {
+        stickyToastActive = false;
         toast.textContent = msg;
         toast.classList.add("show");
 
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
-            toast.classList.remove("show");
+            if (!stickyToastActive) {
+                toast.classList.remove("show");
+            }
         }, 1700);
+    }
+
+    function showStickyToast(msg) {
+        stickyToastActive = true;
+        clearTimeout(toastTimer);
+        toast.textContent = msg;
+        toast.classList.add("show");
+    }
+
+    function clearStickyToast() {
+        stickyToastActive = false;
+        clearTimeout(toastTimer);
+        toast.classList.remove("show");
     }
 
     function setButtonSizes(stageProgress) {
@@ -163,8 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function enableRunaway() {
-        // ⭐ 新增提示（你要的）
-        showToast("Now only Yes works 😌");
+        showStickyToast("Now only Yes works 😌");
 
         noBtn.addEventListener("mouseover", moveNo);
         noBtn.addEventListener("pointerdown", moveNo);
@@ -191,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        clearStickyToast();
         showToast("💖");
 
         if (runawayTimer) clearInterval(runawayTimer);
