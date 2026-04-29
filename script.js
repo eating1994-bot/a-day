@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!stickyToastActive) {
                 toast.classList.remove("show");
             }
-        }, 1700);
+        }, 17000);
     }
 
     function showStickyToast(msg) {
