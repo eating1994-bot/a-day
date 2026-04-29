@@ -22,12 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const noMessages = [
         "No… really? 🥺",
-        "You’re breaking my heart 😤",
-        "Please don’t do this 💔",
-        "I thought you liked me 😢",
-        "This actually hurts… 🥀",
-        "Okay… I’m scared 😭",
-        "I think I’ll run away… 😶‍🌫️"
+        "Are you sure? 😳",
+        "That hurts a little 😢",
+        "You don’t like me anymore? 🥹",
+        "Okay… now I’m sad 😭",
+        "Wait… don’t do this 😣",
+        "Fine 😤 I’m running away!"
     ];
 
     const yesTease = [
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
             e.stopPropagation();
         }
 
-        noBtn.textContent = "Catch me no way 😏";
+        noBtn.textContent = "No 😏 Catch me!";
 
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
@@ -160,15 +160,18 @@ document.addEventListener("DOMContentLoaded", () => {
         noBtn.style.left = `${left}px`;
         noBtn.style.top = `${top}px`;
         noBtn.style.transform = "none";
-        noBtn.style.right = "auto";
     }
 
     function enableRunaway() {
+        // ⭐ 新增提示（你要的）
+        showToast("Now only Yes works 😌");
+
         noBtn.addEventListener("mouseover", moveNo);
         noBtn.addEventListener("pointerdown", moveNo);
         noBtn.addEventListener("touchstart", moveNo, { passive: false });
 
         runawayTimer = setInterval(moveNo, 200);
+
         moveNo();
     }
 
@@ -188,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        showToast("Okay… 💖");
+        showToast("💖");
 
         if (runawayTimer) clearInterval(runawayTimer);
 
