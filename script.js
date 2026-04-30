@@ -32,11 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const yesTease = [
         "Wait… too fast 😳",
-        "Not so easy~ 😌",
-        "You’re impatient huh 😏",
-        "I like your effort 💕",
-        "Almost there… 💖",
-        "But not yet 😌"
+        "You need to try harder 😏",
+        "I need a bit more time 💭",
+        "You’re rushing me 😝",
+        "Not convinced yet 😌",
+        "Keep going~ you’re close 💕"
     ];
 
     let noIndex = 0;
